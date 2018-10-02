@@ -1,3 +1,4 @@
+#目前没有使用这个配置文件，因为24行的配置有问题，导致出现org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): 错误。
 spring:
   datasource:
     name: test
@@ -20,8 +21,8 @@ spring:
     maxOpenPreparedStatements: 20
 
     ## mybatis配置
-    mapper-locations: classpath:mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
-    type-aliases-package: com.axcc.model  # 注意：对应实体类的路径
+    mapperLocations: classpath:mapper/*.xml
+    typeAliasesPackage: com.axcc.model
 
     #pagehelper分页插件
     pagehelper:

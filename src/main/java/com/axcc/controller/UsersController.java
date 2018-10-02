@@ -2,9 +2,10 @@ package com.axcc.controller;
 
 import com.axcc.model.Users;
 import com.axcc.service.UserService;
-import org.mybatis.spring.annotation.MapperScan;
+import com.axcc.utils.BaseResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,14 +25,23 @@ import java.util.Map;
 @RestController
 public class UsersController {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     UserService userService;
 
+    /**
+     * 根据用户ID查询用户信息
+     */
     @RequestMapping(value="/users/{id}",method = RequestMethod.GET)
     public Map<String,Object> users(@PathVariable int id){
+        logger.info("users---start");
         Users users = userService.selectUserById(id);
         Map<String,Object> result = new HashMap<String, Object>();
-        result.put("code", users.getLoginName());
+        result.put("info", users);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        logger.info("users---end");
         return result;
     }
 }
