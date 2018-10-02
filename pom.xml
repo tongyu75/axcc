@@ -23,7 +23,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<spring-boot-admin.version>2.0.3</spring-boot-admin.version>
-		<jackson.version>2.5.0</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -76,6 +75,11 @@
 			<artifactId>spring-restdocs-mockmvc</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.2.3</version>
+		</dependency>
 
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
@@ -124,7 +128,27 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.3.2</version>
+				<configuration>
+					<configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+					<verbose>true</verbose>
+					<overwrite>true</overwrite>
+				</configuration>
+			</plugin>
 		</plugins>
+		<!--<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					&lt;!&ndash;<include>**/*.properties</include>&ndash;&gt;
+					<include>mapper/*.xml</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>-->
 	</build>
 
 

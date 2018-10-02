@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class FirstController {
+public class TestController {
 
     @RequestMapping(value="/hello",produces="text/html;charset=UTF-8",method = RequestMethod.GET)
     public String hello(){
