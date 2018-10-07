@@ -10,5 +10,7 @@ import java.util.List;
 public interface UserService {
     Users selectUserById(int id);
 
+    Users selectUserByBean(Users bean);
+
     List<Users> findAllUser(int pageNum, int pageSize);
 }

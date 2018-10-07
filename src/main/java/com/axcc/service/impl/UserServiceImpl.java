@@ -16,11 +16,19 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Resource
-    private UsersDao usersMapper;
+    private UsersDao usersDao;
+
+    @Override
+    public Users selectUserByBean(Users bean) {
+
+        return usersDao.selectUserByBean(bean);
+    }
+
 
     @Override
     public Users selectUserById(int id) {
-        return usersMapper.selectUserByPrimaryKey(id);
+
+        return usersDao.selectUserByPrimaryKey(id);
     }
 
     /*
@@ -33,6 +41,6 @@ public class UserServiceImpl implements UserService {
     public List<Users> findAllUser(int pageNum, int pageSize) {
         //将参数传给这个方法就可以实现物理分页了，非常简单。
         PageHelper.startPage(pageNum, pageSize);
-        return usersMapper.selectAllUser();
+        return usersDao.selectAllUser();
     }
 }

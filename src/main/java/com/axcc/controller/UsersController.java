@@ -31,6 +31,32 @@ public class UsersController {
     UserService userService;
 
     /**
+     * 用户登录
+     * @param phone 手机号
+     * @param pwd 密码
+     */
+    @RequestMapping(value="/login/{phone}/{pwd}",method = RequestMethod.GET)
+    public Map<String,Object> login(@PathVariable String phone, @PathVariable String pwd){
+        logger.info("login---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Users paramUsers = new Users();
+        paramUsers.setLoginName(phone);
+        paramUsers.setPassword(pwd);
+        Users users = userService.selectUserByBean(paramUsers);
+        if (users != null) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+            result.put("result", users);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("login---end" + result.toString());
+        return result;
+    }
+
+    /**
      * 根据用户ID查询用户信息
      */
     @RequestMapping(value="/users/{id}",method = RequestMethod.GET)
