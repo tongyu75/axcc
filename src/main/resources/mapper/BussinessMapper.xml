@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.axcc.dao.BussinessDao" >
+  <resultMap id="BaseResultMap" type="com.axcc.model.Bussiness" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="wait_num" property="waitNum" jdbcType="INTEGER" />
+    <result column="buy_money" property="buyMoney" jdbcType="REAL" />
+    <result column="buy_type" property="buyType" jdbcType="INTEGER" />
+    <result column="buy_status" property="buyStatus" jdbcType="INTEGER" />
+    <result column="check_status" property="checkStatus" jdbcType="INTEGER" />
+    <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+    <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
+    <result column="pay_tine" property="payTine" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status, 
+    check_time, pay_status, pay_tine
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from bussiness
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bussiness
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.axcc.model.Bussiness" >
+    insert into bussiness (id, user_id, agent_id, 
+      admin_id, wait_num, buy_money, 
+      buy_type, buy_status, check_status, 
+      check_time, pay_status, pay_tine
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER}, 
+      #{adminId,jdbcType=INTEGER}, #{waitNum,jdbcType=INTEGER}, #{buyMoney,jdbcType=REAL}, 
+      #{buyType,jdbcType=INTEGER}, #{buyStatus,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, 
+      #{checkTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=INTEGER}, #{payTine,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.axcc.model.Bussiness" >
+    insert into bussiness
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="agentId != null" >
+        agent_id,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="waitNum != null" >
+        wait_num,
+      </if>
+      <if test="buyMoney != null" >
+        buy_money,
+      </if>
+      <if test="buyType != null" >
+        buy_type,
+      </if>
+      <if test="buyStatus != null" >
+        buy_status,
+      </if>
+      <if test="checkStatus != null" >
+        check_status,
+      </if>
+      <if test="checkTime != null" >
+        check_time,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="payTine != null" >
+        pay_tine,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="waitNum != null" >
+        #{waitNum,jdbcType=INTEGER},
+      </if>
+      <if test="buyMoney != null" >
+        #{buyMoney,jdbcType=REAL},
+      </if>
+      <if test="buyType != null" >
+        #{buyType,jdbcType=INTEGER},
+      </if>
+      <if test="buyStatus != null" >
+        #{buyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null" >
+        #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkTime != null" >
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="payTine != null" >
+        #{payTine,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.axcc.model.Bussiness" >
+    update bussiness
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="waitNum != null" >
+        wait_num = #{waitNum,jdbcType=INTEGER},
+      </if>
+      <if test="buyMoney != null" >
+        buy_money = #{buyMoney,jdbcType=REAL},
+      </if>
+      <if test="buyType != null" >
+        buy_type = #{buyType,jdbcType=INTEGER},
+      </if>
+      <if test="buyStatus != null" >
+        buy_status = #{buyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null" >
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkTime != null" >
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="payTine != null" >
+        pay_tine = #{payTine,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.axcc.model.Bussiness" >
+    update bussiness
+    set user_id = #{userId,jdbcType=INTEGER},
+      agent_id = #{agentId,jdbcType=INTEGER},
+      admin_id = #{adminId,jdbcType=INTEGER},
+      wait_num = #{waitNum,jdbcType=INTEGER},
+      buy_money = #{buyMoney,jdbcType=REAL},
+      buy_type = #{buyType,jdbcType=INTEGER},
+      buy_status = #{buyStatus,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      check_time = #{checkTime,jdbcType=TIMESTAMP},
+      pay_status = #{payStatus,jdbcType=INTEGER},
+      pay_tine = #{payTine,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
