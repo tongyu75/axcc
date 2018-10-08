@@ -87,7 +87,7 @@ CREATE TABLE `message` (
   `contents` varchar(500) NOT NULL COMMENT '信息内容',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '修改时间',
-  `is_delete` int(2) NOT NULL COMMENT '删除标志，0：未删除，1：已删除',
+  `is_delete` int(2) DEFAULT '0' COMMENT '删除标志，0：未删除，1：已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='信息发布表';
 
@@ -135,7 +135,7 @@ CREATE TABLE `users` (
   `user_role` int(2) NOT NULL DEFAULT '2' COMMENT '用户角色（0：管理员，1：代理员，2：普通会员）',
   `create_time` datetime NOT NULL COMMENT '注册时间',
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
-  `is_delete` int(2) DEFAULT NULL COMMENT '删除标志（0：未删除；1：已删除）',
+  `is_delete` int(2) DEFAULT '0' COMMENT '删除标志（0：未删除；1：已删除）',
   `description` varchar(200) DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';

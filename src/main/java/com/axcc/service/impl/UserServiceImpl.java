@@ -20,16 +20,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Users selectUserByBean(Users bean) {
-
         return usersDao.selectUserByBean(bean);
     }
 
 
     @Override
     public Users selectUserById(int id) {
-
         return usersDao.selectUserByPrimaryKey(id);
     }
+
+    @Override
+    public int resetPassword(Users bean) {
+        return usersDao.resetPassword(bean);
+    }
+
+    @Override
+    public int insertUserForBean(Users bean) {
+        return usersDao.insertUserForBean(bean);
+    }
+
 
     /*
      * 这个方法中用到了我们开头配置依赖的分页插件pagehelper

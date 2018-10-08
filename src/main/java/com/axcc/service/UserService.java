@@ -12,5 +12,10 @@ public interface UserService {
 
     Users selectUserByBean(Users bean);
 
+    int resetPassword(Users bean);
+
+    int insertUserForBean(Users bean);
+
+
     List<Users> findAllUser(int pageNum, int pageSize);
 }

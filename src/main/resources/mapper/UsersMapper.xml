@@ -24,13 +24,13 @@
     id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr, 
     parent_id, original, user_role, create_time, update_time, is_delete, description
   </sql>
-  <select id="selectUserByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectUserByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from users
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectUserByBean" resultMap="BaseResultMap" parameterType="com.axcc.model.Users" >
+  <select id="selectUserByBean" parameterType="com.axcc.model.Users" resultMap="BaseResultMap">
     select
     id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr,
     parent_id, original, user_role, create_time, update_time, is_delete, description
@@ -87,6 +87,19 @@
       and is_delete = 0
     </where>
   </select>
+  <update id="resetPassword" parameterType="com.axcc.model.Users">
+    update users
+    <set>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where login_name = #{loginName,jdbcType=VARCHAR}
+  </update>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -111,7 +124,7 @@
       #{userRole,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
       #{isDelete,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.axcc.model.Users">
+  <insert id="insertUserForBean" parameterType="com.axcc.model.Users">
     insert into users
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
