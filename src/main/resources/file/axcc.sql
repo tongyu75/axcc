@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50528
-Source Host           : localhost:3306
+Source Server         : 47.105.71.191
+Source Server Version : 50723
+Source Host           : 47.105.71.191:3306
 Source Database       : axcc
 
 Target Server Type    : MYSQL
-Target Server Version : 50528
+Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-10-07 21:16:26
+Date: 2018-10-09 23:00:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -137,6 +137,7 @@ CREATE TABLE `users` (
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   `is_delete` int(2) DEFAULT '0' COMMENT '删除标志（0：未删除；1：已删除）',
   `description` varchar(200) DEFAULT NULL COMMENT '描述',
+  `proxy_area` varchar(50) DEFAULT NULL COMMENT '代理区域',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
