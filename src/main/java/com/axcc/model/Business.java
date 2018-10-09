@@ -2,7 +2,7 @@ package com.axcc.model;
 
 import java.util.Date;
 
-public class Bussiness {
+public class Business {
     private Integer id;
 
     private Integer userId;
