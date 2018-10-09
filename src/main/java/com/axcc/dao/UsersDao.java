@@ -15,6 +15,12 @@ public interface UsersDao {
 
     Users selectUserByPrimaryKey(Integer id);
 
+    Users selectUserByBean(Users record);
+
+    int insertUserForBean(Users record);
+
+    int resetPassword(Users record);
+
     int updateByPrimaryKeySelective(Users record);
 
     int updateByPrimaryKey(Users record);

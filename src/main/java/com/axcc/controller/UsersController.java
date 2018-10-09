@@ -6,11 +6,9 @@ import com.axcc.utils.BaseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +27,93 @@ public class UsersController {
 
     @Autowired
     UserService userService;
+
+    /**
+     * 用户登录
+     * @param phone 手机号
+     * @param pwd 密码
+     */
+    @RequestMapping(value="/login/{phone}/{pwd}",method = RequestMethod.GET)
+    public Map<String,Object> login(@PathVariable String phone, @PathVariable String pwd){
+        logger.info("login---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Users paramUsers = new Users();
+        paramUsers.setLoginName(phone);
+        paramUsers.setPassword(pwd);
+        Users users = userService.selectUserByBean(paramUsers);
+        if (users != null) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+            result.put("result", users);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("login---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 会员注册
+     * @param phone 手机号
+     * @param userName 会员名称
+     * @param parentId 推荐人手机号
+     * @param pwd 密码
+     */
+    @RequestMapping(value="/user",method = RequestMethod.POST)
+    public Map<String,Object> password(@RequestParam(value = "phone", required = true) String phone,
+                                       @RequestParam(value = "userName", required = true) String userName,
+                                       @RequestParam(value = "parentId", required = true) String parentId,
+                                       @RequestParam(value = "pwd", required = true) String pwd){
+        logger.info("user---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Users paramUsers = new Users();
+        paramUsers.setLoginName(phone);
+        paramUsers.setUserName(userName);
+        paramUsers.setPassword(pwd);
+        paramUsers.setParentId(parentId);
+        Date date = new Date();
+        paramUsers.setCreateTime(date);
+        paramUsers.setUpdateTime(date);
+        int value = userService.insertUserForBean(paramUsers);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("user---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 重置密码
+     * @param phone 手机号
+     * @param pwd 密码
+     */
+    @RequestMapping(value="/resetPwd",method = RequestMethod.PUT)
+    public Map<String,Object> resetPwd(@RequestParam(value = "phone", required = true) String phone, @RequestParam(value = "pwd", required = true) String pwd){
+        logger.info("password---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Users paramUsers = new Users();
+        paramUsers.setLoginName(phone);
+        paramUsers.setPassword(pwd);
+        paramUsers.setUpdateTime(new Date());
+        int value = userService.resetPassword(paramUsers);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("password---end" + result.toString());
+        return result;
+    }
 
     /**
      * 根据用户ID查询用户信息

@@ -1,82 +1,310 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.axcc.dao.UsersDao" >
-  <resultMap id="BaseResultMap" type="com.axcc.model.Users" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="login_name" property="loginName" jdbcType="INTEGER" />
-    <result column="user_name" property="userName" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.axcc.dao.UsersDao">
+  <resultMap id="BaseResultMap" type="com.axcc.model.Users">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="card" jdbcType="VARCHAR" property="card" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="bank_card" jdbcType="VARCHAR" property="bankCard" />
+    <result column="bank_addr" jdbcType="VARCHAR" property="bankAddr" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="original" jdbcType="VARCHAR" property="original" />
+    <result column="user_role" jdbcType="INTEGER" property="userRole" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, login_name, user_name, is_deleted
+  <sql id="Base_Column_List">
+    id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr, 
+    parent_id, original, user_role, create_time, update_time, is_delete, description
   </sql>
-  <select id="selectUserByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectUserByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from users
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <select id="selectUserByBean" parameterType="com.axcc.model.Users" resultMap="BaseResultMap">
+    select
+    id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr,
+    parent_id, original, user_role, create_time, update_time, is_delete, description
+    from users
+    <where>
+      <if test="loginName != null">
+        and login_name = #{loginName,jdbcType=VARCHAR}
+      </if>
+      <if test="userName != null">
+        and user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="realName != null">
+        and real_name = #{realName,jdbcType=VARCHAR}
+      </if>
+      <if test="password != null">
+        and password = #{password,jdbcType=VARCHAR}
+      </if>
+      <if test="sex != null">
+        and sex = #{sex,jdbcType=INTEGER}
+      </if>
+      <if test="card != null">
+        and card = #{card,jdbcType=VARCHAR}
+      </if>
+      <if test="image != null">
+        and image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null">
+        and bank_card = #{bankCard,jdbcType=VARCHAR}
+      </if>
+      <if test="bankAddr != null">
+        and bank_addr = #{bankAddr,jdbcType=VARCHAR}
+      </if>
+      <if test="parentId != null">
+        and parent_id = #{parentId,jdbcType=VARCHAR}
+      </if>
+      <if test="original != null">
+        and original = #{original,jdbcType=VARCHAR}
+      </if>
+      <if test="userRole != null">
+        and user_role = #{userRole,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null">
+        and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="isDelete != null">
+        and is_delete = #{isDelete,jdbcType=INTEGER}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+      and is_delete = 0
+    </where>
+  </select>
+  <update id="resetPassword" parameterType="com.axcc.model.Users">
+    update users
+    <set>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where login_name = #{loginName,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from users
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.axcc.model.Users" >
+  <insert id="insert" parameterType="com.axcc.model.Users">
     insert into users (id, login_name, user_name,
-      is_deleted)
-    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
-      #{isDeleted,jdbcType=INTEGER})
+      real_name, password, sex,
+      card, image, bank_card,
+      bank_addr, parent_id, original,
+      user_role, create_time, update_time,
+      is_delete, description)
+    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+      #{realName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
+      #{card,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR},
+      #{bankAddr,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{original,jdbcType=VARCHAR},
+      #{userRole,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{isDelete,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.axcc.model.Users" >
+  <insert id="insertUserForBean" parameterType="com.axcc.model.Users">
     insert into users
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="loginName != null" >
+      <if test="loginName != null">
         login_name,
       </if>
-      <if test="userName != null" >
+      <if test="userName != null">
         user_name,
       </if>
-      <if test="isDeleted != null" >
-        is_deleted,
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="card != null">
+        card,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="bankCard != null">
+        bank_card,
+      </if>
+      <if test="bankAddr != null">
+        bank_addr,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="original != null">
+        original,
+      </if>
+      <if test="userRole != null">
+        user_role,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="description != null">
+        description,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="loginName != null" >
-        #{loginName,jdbcType=INTEGER},
+      <if test="loginName != null">
+        #{loginName,jdbcType=VARCHAR},
       </if>
-      <if test="userName != null" >
+      <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="isDeleted != null" >
-        #{isDeleted,jdbcType=INTEGER},
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="card != null">
+        #{card,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null">
+        #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAddr != null">
+        #{bankAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="original != null">
+        #{original,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null">
+        #{userRole,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.axcc.model.Users" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.axcc.model.Users">
     update users
-    <set >
-      <if test="loginName != null" >
-        login_name = #{loginName,jdbcType=INTEGER},
+    <set>
+      <if test="loginName != null">
+        login_name = #{loginName,jdbcType=VARCHAR},
       </if>
-      <if test="userName != null" >
+      <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="isDeleted != null" >
-        is_deleted = #{isDeleted,jdbcType=INTEGER},
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="card != null">
+        card = #{card,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null">
+        bank_card = #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAddr != null">
+        bank_addr = #{bankAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="original != null">
+        original = #{original,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null">
+        user_role = #{userRole,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.axcc.model.Users" >
+  <update id="updateByPrimaryKey" parameterType="com.axcc.model.Users">
     update users
-    set login_name = #{loginName,jdbcType=INTEGER},
+    set login_name = #{loginName,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=INTEGER}
+      real_name = #{realName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      card = #{card,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      bank_card = #{bankCard,jdbcType=VARCHAR},
+      bank_addr = #{bankAddr,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      original = #{original,jdbcType=VARCHAR},
+      user_role = #{userRole,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
