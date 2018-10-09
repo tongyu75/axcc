@@ -37,6 +37,8 @@ public class Users {
 
     private String description;
 
+    private String proxyArea;
+
     public Integer getId() {
         return id;
     }
@@ -171,5 +173,13 @@ public class Users {
 
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
+    }
+
+    public String getProxyArea() {
+        return proxyArea;
+    }
+
+    public void setProxyArea(String proxyArea) {
+        this.proxyArea = proxyArea;
     }
 }
