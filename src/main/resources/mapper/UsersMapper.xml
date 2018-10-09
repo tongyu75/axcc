@@ -19,10 +19,11 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
     <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="proxy_area" jdbcType="VARCHAR" property="proxyArea" />
   </resultMap>
   <sql id="Base_Column_List">
     id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr, 
-    parent_id, original, user_role, create_time, update_time, is_delete, description
+    parent_id, original, user_role, create_time, update_time, is_delete, description, proxy_area
   </sql>
   <select id="selectUserByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -84,6 +85,9 @@
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
       </if>
+      <if test="proxyArea != null">
+        and proxy_area = #{proxyArea,jdbcType=VARCHAR}
+      </if>
       and is_delete = 0
     </where>
   </select>
@@ -116,13 +120,13 @@
       card, image, bank_card,
       bank_addr, parent_id, original,
       user_role, create_time, update_time,
-      is_delete, description)
+      is_delete, description, proxy_area)
     values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
       #{realName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
       #{card,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR},
       #{bankAddr,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{original,jdbcType=VARCHAR},
       #{userRole,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
-      #{isDelete,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR})
+      #{isDelete,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{proxyArea,jdbcType=VARCHAR})
   </insert>
   <insert id="insertUserForBean" parameterType="com.axcc.model.Users">
     insert into users
@@ -178,6 +182,9 @@
       <if test="description != null">
         description,
       </if>
+      <if test="proxyArea != null">
+        proxy_area,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -230,6 +237,9 @@
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="proxyArea != null">
+        #{proxyArea,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
