@@ -8,14 +8,19 @@ import java.util.List;
  * Created by tongshr on 2018/10/02.
  */
 public interface UserService {
-    Users selectUserById(int id);
+    Users getUserById(int id);
 
-    Users selectUserByBean(Users bean);
+    Users getUserByBean(Users bean);
 
     int resetPassword(Users bean);
 
     int insertUserForBean(Users bean);
 
+    int updateUserForBean(Users bean);
+
+    List<Users> listUserByBean(Users bean, int pageNum, int pageSize);
+
+    int countUserByBean(Users bean);
 
     List<Users> findAllUser(int pageNum, int pageSize);
 }

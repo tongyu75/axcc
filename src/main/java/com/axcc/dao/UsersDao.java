@@ -7,19 +7,26 @@ import java.util.List;
 
 @Mapper
 public interface UsersDao {
+
+    Users getUserById(Integer id);
+
+    Users getUserByBean(Users record);
+
+    List<Users> listUserByBean(Users bean);
+
+    int countUserByBean(Users bean);
+
+    int insertUserForBean(Users record);
+
+    int updateUserForBean(Users record);
+
+    int resetPassword(Users record);
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(Users record);
 
     int insertSelective(Users record);
-
-    Users selectUserByPrimaryKey(Integer id);
-
-    Users selectUserByBean(Users record);
-
-    int insertUserForBean(Users record);
-
-    int resetPassword(Users record);
 
     int updateByPrimaryKeySelective(Users record);
 

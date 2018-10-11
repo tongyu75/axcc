@@ -19,26 +19,43 @@ public class UserServiceImpl implements UserService {
     private UsersDao usersDao;
 
     @Override
-    public Users selectUserByBean(Users bean) {
-        return usersDao.selectUserByBean(bean);
+    public Users getUserByBean(Users bean) {
+
+        return usersDao.getUserByBean(bean);
     }
 
-
     @Override
-    public Users selectUserById(int id) {
-        return usersDao.selectUserByPrimaryKey(id);
+    public Users getUserById(int id) {
+        return usersDao.getUserById(id);
     }
 
     @Override
     public int resetPassword(Users bean) {
+
         return usersDao.resetPassword(bean);
     }
 
     @Override
     public int insertUserForBean(Users bean) {
+
         return usersDao.insertUserForBean(bean);
     }
 
+    @Override
+    public int updateUserForBean(Users bean) {
+        return usersDao.updateUserForBean(bean);
+    }
+
+    @Override
+    public int countUserByBean(Users bean) {
+        return usersDao.countUserByBean(bean);
+    }
+
+    @Override
+    public List<Users> listUserByBean(Users bean, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return usersDao.listUserByBean(bean);
+    }
 
     /*
      * 这个方法中用到了我们开头配置依赖的分页插件pagehelper
