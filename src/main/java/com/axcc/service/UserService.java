@@ -23,4 +23,6 @@ public interface UserService {
     int countUserByBean(Users bean);
 
     List<Users> findAllUser(int pageNum, int pageSize);
+
+    List<Map<String,Object>> findAllApply(int pageNum, int pageSize);
 }

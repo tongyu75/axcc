@@ -33,4 +33,6 @@ public interface UsersDao {
     int updateByPrimaryKey(Users record);
 
     List<Users> selectAllUser();
+
+    list<Map<String,Object>> findAllApply();
 }

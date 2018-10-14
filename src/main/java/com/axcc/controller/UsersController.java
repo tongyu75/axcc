@@ -219,6 +219,90 @@ public class UsersController {
     }
 
     /**
+     * 获取会员列表
+     *
+     */
+    @RequestMapping(value="/memberList",method = RequestMethod.POST)
+    public Map<String,Object> memberList(@RequestParam(value="pageNum") int pageNum,
+                                         @RequestParam(value="pageSize") int pageSize,
+                                         @RequestParam(value="loginName") String loginName){
+        logger.info("listmember");
+        //返回值
+        Map<String,Object> result = new HashMap<String,Object>();
+        //查询条件
+        Users user = new Users();
+        if(!"".equals(loginName) && null != loginName){
+            user.setLoginName(loginName);
+        }
+        user.setUserRole(2);
+        //查询记录总数
+        int count = userService.countUserByBean(user);
+        //查询记录
+        List<Users> listUser = userService.listUserByBean(user,pageNum,pageSize);
+        result.put("code",BaseResult.SUCCESS_CODE);
+        result.put("msg",BaseResult.SUCCESS_MSG);
+        result.put("info",listUser);
+        result.put("total",count);
+        logger.info("listMember---end"+result.toString());
+        return result;
+    }
+
+    /**
+     * 会员详情
+     * @param id 会员ID
+     */
+    @RequestMapping(value="/member/{id}",method = RequestMethod.GET)
+    public Map<String,Object> memberDetail(@PathVariable int id){
+        logger.info("member---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Users user = userService.getUserById(id);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", user);
+        logger.info("member---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 会员删除
+     * @param id 会员ID
+     */
+    @RequestMapping(value="/member/{id}",method = RequestMethod.DELETE)
+    public Map<String,Object> memberDelete(@PathVariable int id){
+        logger.info("member---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Users user = new Users();
+        user.setId(id);
+        // 逻辑删除
+        user.setIsDelete(1);
+        int value = userService.updateUserForBean(user);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("member---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 获取会员申请列表
+     *
+     */
+    @RequestMapping(value="/apply/{pageNum}/{pageSize}",method=RequestMethod.GET)
+    public Map<String,Object> applyList(@PathVariable int pageNum,@PathVariable int pageSize){
+        logger.info("appliList---->start");
+        //返回值
+        Map<String,Object> result = new HashMap<String,Object>();
+        Users user = new Users();
+        List<Map<String,Object>> applylist = userService
+    }
+
+    /**
      * 根据用户ID查询用户信息
      */
     @RequestMapping(value="/users/{id}",method = RequestMethod.GET)
