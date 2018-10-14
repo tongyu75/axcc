@@ -299,7 +299,13 @@ public class UsersController {
         //返回值
         Map<String,Object> result = new HashMap<String,Object>();
         Users user = new Users();
-        List<Map<String,Object>> applylist = userService
+        List<Map<String,Object>> applylist = userService.findAllApply(pageNum,pageSize);
+        result.put("code",BaseResult.SUCCESS_CODE);
+        result.put("msg",BaseResult.SUCCESS_MSG);
+        result.put("total",count);
+        result.put("info",applylist);
+        logger.info("appliList---end"+result.toString());
+        return result;
     }
 
     /**
