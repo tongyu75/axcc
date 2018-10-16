@@ -1,6 +1,8 @@
 package com.axcc.controller;
 
+import com.axcc.model.Business;
 import com.axcc.model.Users;
+import com.axcc.service.BusinessService;
 import com.axcc.service.UserService;
 import com.axcc.utils.BaseResult;
 import org.slf4j.Logger;
@@ -8,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,13 +32,15 @@ public class UsersController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    BusinessService businessService;
     /**
      * 用户登录
      * @param phone 手机号
      * @param pwd 密码
      */
     @RequestMapping(value="/login/{phone}/{pwd}",method = RequestMethod.GET)
-    public Map<String,Object> login(@PathVariable String phone, @PathVariable String pwd){
+    public Map<String,Object> login(HttpServletRequest reuest, @PathVariable String phone, @PathVariable String pwd){
         logger.info("login---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
@@ -44,6 +49,8 @@ public class UsersController {
         paramUsers.setPassword(pwd);
         Users users = userService.getUserByBean(paramUsers);
         if (users != null) {
+            // 存到session中
+            reuest.getSession().setAttribute("user", users);
             result.put("code", BaseResult.SUCCESS_CODE);
             result.put("msg", BaseResult.SUCCESS_MSG);
             result.put("result", users);
@@ -302,7 +309,7 @@ public class UsersController {
         List<Map<String,Object>> applylist = userService.findAllApply(pageNum,pageSize);
         result.put("code",BaseResult.SUCCESS_CODE);
         result.put("msg",BaseResult.SUCCESS_MSG);
-        result.put("total",count);
+        result.put("total",applylist.size());
         result.put("info",applylist);
         logger.info("appliList---end"+result.toString());
         return result;
@@ -322,4 +329,24 @@ public class UsersController {
         logger.info("users---end");
         return result;
     }
+
+    /**
+     * 会员申请排队
+     */
+    @RequestMapping(value="/memberQueue",method = RequestMethod.POST)
+    public Map<String,Object> memberQueue(@RequestParam(value = "userId", required = true) Integer userId,
+                                          @RequestParam(value = "buyType", required = true) Integer buyType){
+        logger.info("memberQueue---start");
+        Business business = new Business();
+        business.setUserId(userId);
+        business.setBuyType(buyType);
+        // 管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
+        business.setCheckStatus(0);
+        Map<String,Object> result = new HashMap<String, Object>();
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        logger.info("users---end");
+        return result;
+    }
+
 }

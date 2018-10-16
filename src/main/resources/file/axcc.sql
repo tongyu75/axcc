@@ -47,7 +47,8 @@ CREATE TABLE `business` (
   `check_status` int(2) DEFAULT NULL COMMENT '管理员审核状态（0：会员已提交申请，未审核；1：审核通过，会员到代理员处缴费；2：审核未通过）',
   `check_time` datetime DEFAULT NULL COMMENT '管理员审核时间',
   `pay_status` int(2) NOT NULL COMMENT '会员缴费态（0：已申请购车，未缴费；1：缴费成功；2：缴费失败）',
-  `pay_tine` datetime DEFAULT NULL COMMENT '缴费时间',
+  `pay_time` datetime DEFAULT NULL COMMENT '缴费时间',
+  `apply_time` datetime DEFAULT NULL COMMENT '会员申请时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='代理员业务表\r\n\r\n1> 没有40万的车型\r\n2>会员申请排队购车，管理员审核通过后，会员到代理员缴纳购车所需的费用，\r\n    代理员通过会员手机号查看会员提交的购车申请是否已被管理员审核通过，\r\n    若已通过，可办理业务收取会员的购车费用，并记录到本表中，\r\n    返回“缴费成功”状态，管理员进行排号。\r\n3>由于会员可以到任意代理员处支付费用（不需要指定某个具体的代理员），\r\n    所以代理员需要通过会员手机号查询该会员是否已提交了购车申请，管理员是否已审核通过，\r\n    然后办理业务，支付完成后向管理员反馈支付成功的状态，最后由管理员进行排号';
 

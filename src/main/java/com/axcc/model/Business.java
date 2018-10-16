@@ -23,6 +23,8 @@ public class Business {
 
     private Date checkTime;
 
+    private Date applyTime;
+
     private Integer payStatus;
 
     private Date payTine;
@@ -121,5 +123,13 @@ public class Business {
 
     public void setPayTine(Date payTine) {
         this.payTine = payTine;
+    }
+
+    public Date getApplyTime() {
+        return applyTime;
+    }
+
+    public void setApplyTime(Date applyTime) {
+        this.applyTime = applyTime;
     }
 }

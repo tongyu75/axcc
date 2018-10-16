@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tongshr on 2018/10/02.
@@ -76,6 +77,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Map<String,Object>> findAllApply(int pageNum, int pageSize){
         PageHelper.startPage(pageNum,pageSize);
-        return usersDao.findtAllApply();
+        return usersDao.findAllApply();
     }
 }
