@@ -12,13 +12,12 @@
     <result column="buy_status" jdbcType="INTEGER" property="buyStatus" />
     <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
     <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
-    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
     <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
     <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status, 
-    check_time, pay_status, pay_time, apply_time
+    check_time, pay_time, apply_time
   </sql>
   <select id="getBusinessById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -29,7 +28,7 @@
   <select id="getBusinessByBean" parameterType="com.axcc.model.Business" resultMap="BaseResultMap">
     select
     id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status,
-    check_time, pay_status, pay_time, apply_time
+    check_time, pay_time, apply_time
     from bussiness
     <where>
       <if test="userId != null">
@@ -58,9 +57,6 @@
       </if>
       <if test="checkTime != null">
         and check_time = #{checkTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="payStatus != null">
-        and pay_status = #{payStatus,jdbcType=INTEGER}
       </if>
       <if test="payTime != null">
         and pay_time = #{payTime,jdbcType=TIMESTAMP}
@@ -73,7 +69,7 @@
   <select id="listBusinessByBean" parameterType="com.axcc.model.Business" resultMap="BaseResultMap">
     select
     id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status,
-    check_time, pay_status, pay_time, apply_time
+    check_time, pay_time, apply_time
     from bussiness
     <where>
       <if test="userId != null">
@@ -102,9 +98,6 @@
       </if>
       <if test="checkTime != null">
         and check_time = #{checkTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="payStatus != null">
-        and pay_status = #{payStatus,jdbcType=INTEGER}
       </if>
       <if test="payTime != null">
         and pay_time = #{payTime,jdbcType=TIMESTAMP}
@@ -144,9 +137,6 @@
       <if test="checkTime != null">
         and check_time = #{checkTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="payStatus != null">
-        and pay_status = #{payStatus,jdbcType=INTEGER}
-      </if>
       <if test="payTime != null">
         and pay_time = #{payTime,jdbcType=TIMESTAMP}
       </if>
@@ -185,9 +175,6 @@
       <if test="checkTime != null">
         check_time = #{checkTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="payStatus != null">
-        pay_status = #{payStatus,jdbcType=INTEGER},
-      </if>
       <if test="payTime != null">
         pay_time = #{payTime,jdbcType=TIMESTAMP},
       </if>
@@ -201,13 +188,12 @@
     insert into bussiness (id, user_id, agent_id,
       admin_id, wait_num, buy_money,
       buy_type, buy_status, check_status,
-      check_time, pay_status, pay_time, apply_time
+      check_time, pay_time, apply_time
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER},
       #{adminId,jdbcType=INTEGER}, #{waitNum,jdbcType=INTEGER}, #{buyMoney,jdbcType=REAL},
       #{buyType,jdbcType=INTEGER}, #{buyStatus,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER},
-      #{checkTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP}
-      , #{applyTime,jdbcType=TIMESTAMP})
+      #{checkTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{applyTime,jdbcType=TIMESTAMP})
   </insert>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -223,12 +209,12 @@
     insert into bussiness (id, user_id, agent_id, 
       admin_id, wait_num, buy_money, 
       buy_type, buy_status, check_status, 
-      check_time, pay_status, pay_time
+      check_time, pay_time, apply_time
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER}, 
       #{adminId,jdbcType=INTEGER}, #{waitNum,jdbcType=INTEGER}, #{buyMoney,jdbcType=REAL}, 
       #{buyType,jdbcType=INTEGER}, #{buyStatus,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}, 
-      #{checkTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP}
+      #{checkTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{applyTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.axcc.model.Business">
@@ -264,11 +250,11 @@
       <if test="checkTime != null">
         check_time,
       </if>
-      <if test="payStatus != null">
-        pay_status,
-      </if>
       <if test="payTime != null">
         pay_time,
+      </if>
+      <if test="applyTime != null">
+        apply_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -302,11 +288,11 @@
       <if test="checkTime != null">
         #{checkTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="payStatus != null">
-        #{payStatus,jdbcType=INTEGER},
-      </if>
       <if test="payTime != null">
         #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyTime != null">
+        #{applyTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -340,11 +326,11 @@
       <if test="checkTime != null">
         check_time = #{checkTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="payStatus != null">
-        pay_status = #{payStatus,jdbcType=INTEGER},
-      </if>
       <if test="payTime != null">
         pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyTime != null">
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -360,8 +346,8 @@
       buy_status = #{buyStatus,jdbcType=INTEGER},
       check_status = #{checkStatus,jdbcType=INTEGER},
       check_time = #{checkTime,jdbcType=TIMESTAMP},
-      pay_status = #{payStatus,jdbcType=INTEGER},
-      pay_time = #{payTime,jdbcType=TIMESTAMP}
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

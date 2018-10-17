@@ -23,11 +23,10 @@ public class Business {
 
     private Date checkTime;
 
+    private Date payTime;
+
     private Date applyTime;
 
-    private Integer payStatus;
-
-    private Date payTine;
 
     public Integer getId() {
         return id;
@@ -109,20 +108,12 @@ public class Business {
         this.checkTime = checkTime;
     }
 
-    public Integer getPayStatus() {
-        return payStatus;
+    public Date getPayTime() {
+        return payTime;
     }
 
-    public void setPayStatus(Integer payStatus) {
-        this.payStatus = payStatus;
-    }
-
-    public Date getPayTine() {
-        return payTine;
-    }
-
-    public void setPayTine(Date payTine) {
-        this.payTine = payTine;
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
     }
 
     public Date getApplyTime() {
