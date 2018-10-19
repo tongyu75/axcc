@@ -14,6 +14,131 @@
   <sql id="Base_Column_List">
     id, user_id, apply_money, apply_time, user_status, check_status, create_time, description
   </sql>
+  <select id="getMoneyApplyById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    where id = #{id, jdbcType=INTEGER}
+  </select>
+  <select id="getMoneyApplyByBean" parameterType="com.axcc.model.MoneyApply" resultMap="CaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from money_apply
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="applyMoney != null">
+        and apply_money = #{applyMoney,jdbcType=REAL}
+      </if>
+      <if test="applyTime != null">
+        and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="userStatus != null">
+        and user_status = #{userStatus,jdbcType=INTEGER}
+      </if>
+      <if test="checkStatus != null">
+        and check_status = #{checkStatus,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="listMoneyApplyByBean" parameterType="com.axcc.model.MoneyApply" resultMap="BaseResultMap">
+    select id, user_id, apply_money,
+      apply_time, user_status, check_status,
+      create_time, description
+    from money_apply
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="applyMoney != null">
+        and apply_money = #{applyMoney,jdbcType=REAL}
+      </if>
+      <if test="applyTime != null">
+        and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="userStatus != null">
+        and user_status = #{userStatus,jdbcType=INTEGER}
+      </if>
+      <if test="checkStatus != null">
+        and check_status = #{checkStatus,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="countMoneyApplyByBean" parameterType="com.axcc.model.money_apply" resultMap="java.lang.Integer">
+    select count(id) from money_apply
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="applyMoney != null">
+        and apply_money = #{applyMoney,jdbcType=REAL}
+      </if>
+      <if test="applyTime != null">
+        and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="userStatus != null">
+        and user_status = #{userStatus,jdbcType=INTEGER}
+      </if>
+      <if test="checkStatus != null">
+        and check_status = #{checkStatus,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <insert id="insertMoneyApplyForBean" parameterType="com.axcc.model.MoneyApply">
+    insert into money_apply (id, user_id, apply_money,
+      apply_time, user_status, check_status,
+      create_time, description)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{applyMoney,jdbcType=REAL},
+      #{applyTime,jdbcType=TIMESTAMP}, #{userStatus,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateMoneyApplyForBean" parameterType="com.axcc.model.MoneyApply">
+    update money_apply
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="applyMoney != null">
+        apply_money = #{applyMoney,jdbcType=REAL},
+      </if>
+      <if test="applyTime != null">
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null">
+        user_status = #{userStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!-- ======================================================================================= -->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

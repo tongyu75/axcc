@@ -14,6 +14,130 @@
   <sql id="Base_Column_List" >
     id, user_id, user_type, buy_money, buy_type, buy_status, agent_me_money, create_time
   </sql>
+  <select id="getHistoryById" parameterType="java.lang.Ingeter" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from history
+    where id=#{id,jdbcType=INTEGER}
+  </select>
+  <select id="getHistoryByBean" parameterType="com.axcc.model.History" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from history
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="userType != null">
+        and user_type = #{userType,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null" >
+        and buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="buyType != null" >
+        and buy_type = #{buyType,jdbcType=INTEGER}
+      </if>
+      <if test="buyStatus != null" >
+        and buy_status = #{buyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="agentMeMoney != null" >
+        and agent_money = #{agentMeMoney,jdbcType=REAL}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  <select id="listHistoryByBean" parameterType="com.axcc.model.History" resultMap="BaseResultMap">
+    select id, user_id, user_type, buy_money, buy_type, buy_status, agent_me_money, create_time
+    from history
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="userType != null">
+        and user_type = #{userType,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null">
+        and buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="buyType != null">
+        and buy_type = #{buyType,jdbcType=INTEGER}
+      </if>
+      <if test="buyStatus != null" >
+        and buy_status = #{buyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="agentMeMoney != null" >
+        and agent_me_money = #{agentMeMoney,jdbcType=REAL}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  <select id="countHistoryByBean" parameterType="com.axcc.model.History" resultMap="java.lang.Integer">
+    select count(id) from history
+    <where>
+      <if test="userId != null">
+          and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="userType != null">
+          and user_type = #{userType,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null">
+          and buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="buyType != null">
+          and buy_type = #{buyType,jdbcType=INTEGER}
+      </if>
+      <if test="buyStatus != null" >
+          and buy_status = #{buyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="agentMeMoney != null" >
+          and agent_me_money = #{agentMeMoney,jdbcType=REAL}
+      </if>
+      <if test="createTime != null" >
+          and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  <insert id="insertHistoryForBean" parameterType="com.axcc.model.History">
+    insert into history (id, user_id, user_type,
+      buy_money, buy_type, buy_status,
+      agent_me_money, create_time)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{userType,jdbcType=INTEGER},
+      #{buyMoney,jdbcType=REAL}, #{buyType,jdbcType=INTEGER}, #{buyStatus,jdbcType=INTEGER},
+      #{agentMeMoney,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateHistoryForBean" parameterType="com.axcc.model.History">
+    update history
+      <set >
+          <if test="userId != null" >
+              user_id = #{userId,jdbcType=INTEGER},
+          </if>
+          <if test="userType != null" >
+              user_type = #{userType,jdbcType=INTEGER},
+          </if>
+          <if test="buyMoney != null" >
+              buy_money = #{buyMoney,jdbcType=REAL},
+          </if>
+          <if test="buyType != null" >
+              buy_type = #{buyType,jdbcType=INTEGER},
+          </if>
+          <if test="buyStatus != null" >
+              buy_status = #{buyStatus,jdbcType=INTEGER},
+          </if>
+          <if test="agentMeMoney != null" >
+              agent_me_money = #{agentMeMoney,jdbcType=REAL},
+          </if>
+          <if test="createTime != null" >
+              create_time = #{createTime,jdbcType=TIMESTAMP},
+          </if>
+      </set>
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!-- ================================================================================ -->
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

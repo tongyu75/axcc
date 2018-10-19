@@ -13,6 +13,128 @@
   <sql id="Base_Column_List">
     id, user_id, voucher_money, voucher_status, voucher_time, voucher_finish, description
   </sql>
+  <select id="getVoucherById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from Voucher
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getVoucherByBean" parameterType="com.axcc.model.Voucher" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from Voucher
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="voucherMoney != null">
+        and voucher_money = #{voucherMoney,jdbcType=REAL}
+      </if>
+      <if test="voucherStatus != null">
+        and voucher_status = #{voucherStatus,jdbcType=INTEGER}
+      </if>
+      <if test="voucherTime != null">
+        and voucher_time = #{voucherTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="voucherFinish != null">
+        and voucher_finish = #{voucherFinish,jdbcType=TIMESTAMP}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="listVoucherByBean" parameterType="com.axcc.model.Voucher" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from Voucher
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="voucherMoney != null">
+        and voucher_money = #{voucherMoney,jdbcType=REAL}
+      </if>
+      <if test="voucherStatus != null">
+        and voucher_status = #{voucherStatus,jdbcType=INTEGER}
+      </if>
+      <if test="voucherTime != null">
+        and voucher_time = #{voucherTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="voucherFinish != null">
+        and voucher_finish = #{voucherFinish,jdbcType=TIMESTAMP}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="countVoucherByBean" parameterType="com.axcc.model.Voucher" resultMap="java.lang.Integer">
+    select  count(id) from voucher
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="voucherMoney != null">
+        and voucher_money = #{voucherMoney,jdbcType=REAL}
+      </if>
+      <if test="voucherStatus != null">
+        and voucher_status = #{voucherStatus,jdbcType=INTEGER}
+      </if>
+      <if test="voucherTime != null">
+        and voucher_time = #{voucherTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="voucherFinish != null">
+        and voucher_finish = #{voucherFinish,jdbcType=TIMESTAMP}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <insert id="insertVoucherForBean" parameterType="com.axcc.model.Voucher">
+    insert into voucher (id, user_id, voucher_money,
+      voucher_status, voucher_time, voucher_finish,
+      description)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{voucherMoney,jdbcType=REAL},
+      #{voucherStatus,jdbcType=INTEGER}, #{voucherTime,jdbcType=TIMESTAMP}, #{voucherFinish,jdbcType=TIMESTAMP},
+      #{description,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateVoucherForBean" parameterType="com.axcc.model.Voucher">
+    update voucher
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="voucherMoney != null">
+        voucher_money = #{voucherMoney,jdbcType=REAL},
+      </if>
+      <if test="voucherStatus != null">
+        voucher_status = #{voucherStatus,jdbcType=INTEGER},
+      </if>
+      <if test="voucherTime != null">
+        voucher_time = #{voucherTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="voucherFinish != null">
+        voucher_finish = #{voucherFinish,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!-- ==================================================================================== -->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
