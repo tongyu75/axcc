@@ -2,6 +2,7 @@ package com.axcc.service.impl;
 
 import com.axcc.dao.BusinessDao;
 import com.axcc.model.Business;
+import com.axcc.model.BusinessUser;
 import com.axcc.service.BusinessService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,27 @@ public class BusinessServiceImpl implements BusinessService {
     public List<Business> listBusinessByBean(Business bean, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return BusinessDao.listBusinessByBean(bean);
+    }
+
+    @Override
+    public BusinessUser getBusinessUserByBean(BusinessUser bean) {
+
+        return BusinessDao.getBusinessUserByBean(bean);
+    }
+
+    @Override
+    public BusinessUser getBusinessUserById(int id) {
+        return BusinessDao.getBusinessUserById(id);
+    }
+
+    @Override
+    public int countBusinessUserByBean(BusinessUser bean) {
+        return BusinessDao.countBusinessUserByBean(bean);
+    }
+
+    @Override
+    public List<BusinessUser> listBusinessUserByBean(BusinessUser bean, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return BusinessDao.listBusinessUserByBean(bean);
     }
 }

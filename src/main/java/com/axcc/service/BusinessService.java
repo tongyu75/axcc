@@ -1,6 +1,7 @@
 package com.axcc.service;
 
 import com.axcc.model.Business;
+import com.axcc.model.BusinessUser;
 
 import java.util.List;
 
@@ -19,4 +20,12 @@ public interface BusinessService {
     List<Business> listBusinessByBean(Business bean, int pageNum, int pageSize);
 
     int countBusinessByBean(Business bean);
+
+    BusinessUser getBusinessUserById(int id);
+
+    BusinessUser getBusinessUserByBean(BusinessUser bean);
+
+    List<BusinessUser> listBusinessUserByBean(BusinessUser bean, int pageNum, int pageSize);
+
+    int countBusinessUserByBean(BusinessUser bean);
 }

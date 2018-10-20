@@ -19,7 +19,7 @@
     <include refid="Base_Column_List"/>
     where id = #{id, jdbcType=INTEGER}
   </select>
-  <select id="getMoneyApplyByBean" parameterType="com.axcc.model.MoneyApply" resultMap="CaseResultMap">
+  <select id="getMoneyApplyByBean" parameterType="com.axcc.model.MoneyApply" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from money_apply
@@ -76,7 +76,7 @@
       </if>
     </where>
   </select>
-  <select id="countMoneyApplyByBean" parameterType="com.axcc.model.money_apply" resultMap="java.lang.Integer">
+  <select id="countMoneyApplyByBean" parameterType="com.axcc.model.MoneyApply" resultType="java.lang.Integer">
     select count(id) from money_apply
     <where>
       <if test="userId != null">

@@ -46,7 +46,7 @@
         </if>
     </where>
   </select>
-  <select id="countAgentShareByBean" parameterType="com.axcc.model.AgentShare" resultMap="java.lang.Integer">
+  <select id="countAgentShareByBean" parameterType="com.axcc.model.AgentShare" resultType="java.lang.Integer">
     select count(id) from agent_share
     <where>
         <if test="userId != null">

@@ -2,6 +2,8 @@ package com.axcc.dao;
 
 import com.axcc.model.History;
 
+import java.util.List;
+
 public interface HistoryDao {
 
     History getHistoryById(Integer id);

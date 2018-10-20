@@ -75,7 +75,7 @@
       </if>
     </where>
   </select>
-  <select id="countVoucherByBean" parameterType="com.axcc.model.Voucher" resultMap="java.lang.Integer">
+  <select id="countVoucherByBean" parameterType="com.axcc.model.Voucher" resultType="java.lang.Integer">
     select  count(id) from voucher
     <where>
       <if test="id != null">

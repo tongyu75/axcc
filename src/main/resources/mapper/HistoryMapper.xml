@@ -14,7 +14,7 @@
   <sql id="Base_Column_List" >
     id, user_id, user_type, buy_money, buy_type, buy_status, agent_me_money, create_time
   </sql>
-  <select id="getHistoryById" parameterType="java.lang.Ingeter" resultMap="BaseResultMap">
+  <select id="getHistoryById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List"/>
     from history
@@ -75,7 +75,7 @@
       </if>
     </where>
   </select>
-  <select id="countHistoryByBean" parameterType="com.axcc.model.History" resultMap="java.lang.Integer">
+  <select id="countHistoryByBean" parameterType="com.axcc.model.History" resultType="java.lang.Integer">
     select count(id) from history
     <where>
       <if test="userId != null">

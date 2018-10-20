@@ -1,6 +1,7 @@
 package com.axcc.dao;
 
 import com.axcc.model.Business;
+import com.axcc.model.BusinessUser;
 import com.axcc.model.Users;
 
 import java.util.List;
@@ -14,6 +15,14 @@ public interface BusinessDao {
     List<Business> listBusinessByBean(Business bean);
 
     int countBusinessByBean(Business bean);
+
+    BusinessUser getBusinessUserById(Integer id);
+
+    BusinessUser getBusinessUserByBean(BusinessUser record);
+
+    List<BusinessUser> listBusinessUserByBean(BusinessUser bean);
+
+    int countBusinessUserByBean(BusinessUser bean);
 
     int insertBusinessForBean(Business record);
 

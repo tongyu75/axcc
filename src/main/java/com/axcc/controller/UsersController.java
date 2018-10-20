@@ -1,6 +1,7 @@
 package com.axcc.controller;
 
 import com.axcc.model.Business;
+import com.axcc.model.BusinessUser;
 import com.axcc.model.Users;
 import com.axcc.service.BusinessService;
 import com.axcc.service.UserService;
@@ -337,16 +338,158 @@ public class UsersController {
     public Map<String,Object> memberQueue(@RequestParam(value = "userId", required = true) Integer userId,
                                           @RequestParam(value = "buyType", required = true) Integer buyType){
         logger.info("memberQueue---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
         Business business = new Business();
         business.setUserId(userId);
+        // 购车类型（1：10万，2:20万，3:30万，5:50万）
         business.setBuyType(buyType);
         // 管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
         business.setCheckStatus(0);
-        Map<String,Object> result = new HashMap<String, Object>();
-        result.put("code", BaseResult.SUCCESS_CODE);
-        result.put("msg", BaseResult.SUCCESS_MSG);
-        logger.info("users---end");
+        // 申请时间
+        business.setApplyTime(new Date());
+        int value = businessService.insertBusinessForBean(business);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("memberQueue---end");
         return result;
     }
 
+    /**
+     * 管理员审核状态和代理员审核状态的更新
+     */
+    @RequestMapping(value="/updateCheckStatus",method = RequestMethod.POST)
+    public Map<String,Object> updateCheckStatus(
+            @RequestParam(value = "id", required = true) Integer id,
+            @RequestParam(value = "checkStatus", required = true) Integer checkStatus){
+        logger.info("updateCheckStatus---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Business business = new Business();
+        business.setId(id);
+        // 管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
+        business.setCheckStatus(checkStatus);
+        // 审核时间
+        business.setCheckTime(new Date());
+        int value = businessService.updateBusinessForBean(business);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("updateCheckStatus---end");
+        return result;
+    }
+
+    /**
+     * 管理员登陆查看会员的缴费详情和排队详情以及代理员登陆查看详情
+     */
+    @RequestMapping(value="/businessDetail",method = RequestMethod.POST)
+    public Map<String,Object> businessDetail(
+            @RequestParam(value = "id", required = true) Integer id){
+        logger.info("business---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        BusinessUser business = businessService.getBusinessUserById(id);
+        if (business != null) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+            result.put("result", business);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("business---end");
+        return result;
+    }
+
+    /**
+     * 购车排号
+     */
+    @RequestMapping(value="/updateWaitNum",method = RequestMethod.POST)
+    public Map<String,Object> updateQueueNum(
+            @RequestParam(value = "id", required = true) Integer id,
+            @RequestParam(value = "waitNum", required = true) Integer waitNum){
+        logger.info("updateQueueNum---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Business business = new Business();
+        business.setId(id);
+        // 排位号
+        business.setWaitNum(waitNum);
+        int value = businessService.updateBusinessForBean(business);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("updateQueueNum---end");
+        return result;
+    }
+
+    /**
+     * 排队列表
+     * @param pageNum 第几页
+     * @param pageSize 每页显示的个数
+     */
+    @RequestMapping(value="/listWait",method = RequestMethod.POST)
+    public Map<String,Object> listWait(
+            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "pageNum", required = true) Integer pageNum,
+            @RequestParam(value = "pageSize", required = true) Integer pageSize){
+        logger.info("listWait---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        BusinessUser bean = new BusinessUser();
+        bean.setLoginName(phone);
+        // 查询记录总条数
+        int count = businessService.countBusinessUserByBean(bean);
+        // 查询记录
+        List<BusinessUser> lstBusinessUser = businessService.listBusinessUserByBean(bean, pageNum, pageSize);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", lstBusinessUser);
+        result.put("total", count);
+        logger.info("listWait---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 代理员输入的实缴金额
+     */
+    @RequestMapping(value="/updateBuyMoney",method = RequestMethod.POST)
+    public Map<String,Object> updateBuyMoney(
+            @RequestParam(value = "id", required = true) Integer id,
+            @RequestParam(value = "buyMoney", required = true) Float buyMoney){
+        logger.info("updateCheckStatus---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Business business = new Business();
+        business.setId(id);
+        // 实缴金额
+        business.setBuyMoney(buyMoney);
+        // 管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
+        business.setCheckStatus(2);
+        // 会员购车状态（0：未排队，1：排队中，2：已出车）
+        business.setBuyStatus(2);
+        int value = businessService.updateBusinessForBean(business);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("updateCheckStatus---end");
+        return result;
+    }
 }

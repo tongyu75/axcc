@@ -2,6 +2,8 @@ package com.axcc.dao;
 
 import com.axcc.model.MoneyApply;
 
+import java.util.List;
+
 public interface MoneyApplyDao {
 
     MoneyApply getMoneyApplyById(Integer id);

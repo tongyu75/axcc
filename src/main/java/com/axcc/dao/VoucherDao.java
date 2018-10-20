@@ -2,6 +2,8 @@ package com.axcc.dao;
 
 import com.axcc.model.Voucher;
 
+import java.util.List;
+
 public interface VoucherDao {
 
     Voucher getVoucherById(Integer id);
