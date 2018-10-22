@@ -35,5 +35,4 @@ public interface UsersDao {
 
     List<Users> selectAllUser();
 
-    List<Map<String,Object>> findAllApply();
 }
