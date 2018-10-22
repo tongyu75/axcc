@@ -488,7 +488,4 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="findAllApply" resultType="java.util.Map">
-    select
-  </select>
 </mapper>

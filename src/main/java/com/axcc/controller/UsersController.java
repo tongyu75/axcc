@@ -225,9 +225,32 @@ public class UsersController {
         logger.info("listProxy---end" + result.toString());
         return result;
     }
-
     /**
-     * 获取会员列表
+     * 按购车类型获取会员申请列表
+     */
+    @RequestMapping(value="/listBuyTypeUser",method = RequestMethod.POST)
+    public Map<String,Object> listBuyTypeUser(@RequestParam(value="pageNum",required = true) int pageNum,
+                                              @RequestParam(value="pageSize",required = true) int pageSize,
+                                              @RequestParam(value="buyType",required = true) int buyType){
+        logger.info("listBuyTypeUser---------start------");
+        //返回值
+        Map<String,Object> result = new HashMap<String,Object>();
+        //查询条件，buyType:购车类型，1:10万车型，2:20万车型；3:30万车型；5:50万车型
+        BusinessUser bean = new BusinessUser();
+        bean.setBuyType(buyType);
+        //记录查询总数
+        int count = businessService.countBusinessUserByBean(bean);
+        //查询记录
+        List<BusinessUser> lstBusinessUser = businessService.listBusinessUserByBean(bean,pageNum,pageSize);
+        result.put("code",BaseResult.SUCCESS_CODE);
+        result.put("msg",BaseResult.SUCCESS_MSG);
+        result.put("info",lstBusinessUser);
+        result.put("total",count);
+        logger.info("listBuyTypeUser--------end-------");
+        return result;
+    }
+    /**
+     * 获取会员列表，可以按登录名条件查询
      *
      */
     @RequestMapping(value="/memberList",method = RequestMethod.POST)
@@ -298,25 +321,6 @@ public class UsersController {
     }
 
     /**
-     * 获取会员申请列表
-     *
-     */
-    @RequestMapping(value="/apply/{pageNum}/{pageSize}",method=RequestMethod.GET)
-    public Map<String,Object> applyList(@PathVariable int pageNum,@PathVariable int pageSize){
-        logger.info("appliList---->start");
-        //返回值
-        Map<String,Object> result = new HashMap<String,Object>();
-        Users user = new Users();
-        List<Map<String,Object>> applylist = userService.findAllApply(pageNum,pageSize);
-        result.put("code",BaseResult.SUCCESS_CODE);
-        result.put("msg",BaseResult.SUCCESS_MSG);
-        result.put("total",applylist.size());
-        result.put("info",applylist);
-        logger.info("appliList---end"+result.toString());
-        return result;
-    }
-
-    /**
      * 根据用户ID查询用户信息
      */
     @RequestMapping(value="/users/{id}",method = RequestMethod.GET)
@@ -332,7 +336,7 @@ public class UsersController {
     }
 
     /**
-     * 会员申请排队
+     * 会员登录：申请排队
      */
     @RequestMapping(value="/memberQueue",method = RequestMethod.POST)
     public Map<String,Object> memberQueue(@RequestParam(value = "userId", required = true) Integer userId,
@@ -411,7 +415,7 @@ public class UsersController {
     }
 
     /**
-     * 购车排号
+     * 管理员登录：为会员购车排号
      */
     @RequestMapping(value="/updateWaitNum",method = RequestMethod.POST)
     public Map<String,Object> updateQueueNum(
@@ -464,7 +468,7 @@ public class UsersController {
     }
 
     /**
-     * 代理员输入的实缴金额
+     * 代理员登录：输入的实缴金额
      */
     @RequestMapping(value="/updateBuyMoney",method = RequestMethod.POST)
     public Map<String,Object> updateBuyMoney(
