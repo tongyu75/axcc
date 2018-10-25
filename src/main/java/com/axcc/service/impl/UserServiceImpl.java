@@ -70,13 +70,4 @@ public class UserServiceImpl implements UserService {
         PageHelper.startPage(pageNum, pageSize);
         return usersDao.selectAllUser();
     }
-    /**
-     * 多表查询，获取所有会员申请单列表信息
-     *
-     */
-    @Override
-    public List<Map<String,Object>> findAllApply(int pageNum, int pageSize){
-        PageHelper.startPage(pageNum,pageSize);
-        return usersDao.findAllApply();
-    }
 }
