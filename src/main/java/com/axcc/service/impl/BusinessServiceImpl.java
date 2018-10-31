@@ -53,13 +53,14 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public BusinessUser getBusinessUserById(int id) {
-        return BusinessDao.getBusinessUserById(id);
+    public BusinessUser getBusinessUserByBean(BusinessUser record){
+
+        return BusinessDao.getBusinessUserByBean(record);
     }
 
     @Override
-    public BusinessUser getBusinessUserByBean(BusinessUser record){
-        return BusinessDao.getBusinessUserByBean(record);
+    public BusinessUser getBusinessUserById(int id) {
+        return BusinessDao.getBusinessUserById(id);
     }
 
     @Override
