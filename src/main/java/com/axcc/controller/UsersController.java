@@ -187,24 +187,33 @@ public class UsersController {
         logger.info("user---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
+        int value = 0;
         Users paramUsers = new Users();
-        paramUsers.setLoginName(phone);
-        paramUsers.setUserName(userName);
-        paramUsers.setProxyArea(proxyArea);
-        paramUsers.setPassword("123456");
-        // 代理员角色
-        paramUsers.setUserRole(1);
-        Date date = new Date();
-        paramUsers.setCreateTime(date);
-        paramUsers.setUpdateTime(date);
-        int value = userService.insertUserForBean(paramUsers);
-        if (value == 1) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
-        } else {
-            result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
+        paramUsers = userService.getUserByLoginName(phone);
+        //如果该代理员已经是会员了，直接更改角色为代理员
+        if(null != paramUsers){
+            paramUsers.setUserRole(1);
+            paramUsers.setUserName(userName);
+            paramUsers.setProxyArea(proxyArea);
+            Date date = new Date();
+            paramUsers.setCreateTime(date);
+            paramUsers.setUpdateTime(date);
+            value = userService.updateUserForBean(paramUsers);
+        }else{
+            //如果该代理员还不是会员，则添加为代理员,默认密码为123456
+            Users bean1 = new Users();
+            bean1.setLoginName(phone);
+            bean1.setUserName(userName);
+            bean1.setProxyArea(proxyArea);
+            bean1.setPassword("123456");
+            // 代理员角色
+            bean1.setUserRole(1);
+            Date date = new Date();
+            bean1.setCreateTime(date);
+            bean1.setUpdateTime(date);
+            value = userService.insertUserForBean(bean1);
         }
+        result = BaseResult.checkResult(value);
         logger.info("user---end" + result.toString());
         return result;
     }
