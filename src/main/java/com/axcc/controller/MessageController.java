@@ -52,6 +52,7 @@ public class MessageController {
         //返回值
         Map<String,Object> result = new HashMap<String,Object>();
         Message bean = new Message();
+        bean.setIsDelete(0);
         //总数量
         int count = messageService.countMessageByBean(bean);
         //分页显示
