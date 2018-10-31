@@ -58,6 +58,11 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
+    public BusinessUser getBusinessUserByBean(BusinessUser record){
+        return BusinessDao.getBusinessUserByBean(record);
+    }
+
+    @Override
     public BusinessUser getBusinessUsersByUserId(Integer userId) {
         return BusinessDao.getBusinessUsersByUserId(userId);
     }
@@ -65,11 +70,6 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     public int getBuyStatusCount() {
         return BusinessDao.getBuyStatusCount();
-    }
-
-    @Override
-    public BusinessUser getBusinessUserByBean(BusinessUser record){
-        return BusinessDao.getBusinessUserByBean(record);
     }
 
     @Override

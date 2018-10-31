@@ -4,7 +4,6 @@ import com.axcc.model.Users;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface UsersDao {
@@ -20,6 +19,8 @@ public interface UsersDao {
     int insertUserForBean(Users record);
 
     int updateUserForBean(Users record);
+
+    Users getUserByLoginName(String loginName);
 
     int resetPassword(Users record);
 

@@ -119,7 +119,7 @@ public class UsersController {
      * @param phone 手机号
      * @param pwd 密码
      */
-    @RequestMapping(value="/resetPwd",method = RequestMethod.PUT)
+    @RequestMapping(value="/resetPwd",method = RequestMethod.POST)
     public Map<String,Object> resetPwd(@RequestParam(value = "phone", required = true) String phone, @RequestParam(value = "pwd", required = true) String pwd){
         logger.info("password---start");
         // 返回值
