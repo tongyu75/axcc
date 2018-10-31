@@ -6,12 +6,19 @@ import com.axcc.model.Users;
 import com.axcc.service.BusinessService;
 import com.axcc.service.UserService;
 import com.axcc.utils.BaseResult;
+import com.axcc.utils.FileResourcePathUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +36,13 @@ import java.util.Map;
 public class UsersController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final ResourceLoader resourceLoader;
+
+    @Autowired
+    public UsersController(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     @Autowired
     UserService userService;
@@ -127,6 +141,40 @@ public class UsersController {
     }
 
     /**
+     * 修改个人信息
+     */
+    @RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
+    public Map<String, Object> updateUserInfo(@RequestParam(value = "id") int id,
+                                              @RequestParam(value = "userName") String userName,
+                                              @RequestParam(value = "realName") String realName,
+                                              @RequestParam(value = "sex") int sex,
+                                              @RequestParam(value = "card") String card,
+                                              @RequestParam(value = "bankCard") String bankCard,
+                                              @RequestParam(value = "bankAddr") String bankAddr) {
+        logger.info("updateUserInfo-------start");
+        //返回值
+        Map<String, Object> result = new HashMap<String, Object>();
+        Users paramUsers = new Users();
+        paramUsers.setId(id);
+        paramUsers.setUserName(userName);
+        paramUsers.setRealName(realName);
+        paramUsers.setSex(sex);
+        paramUsers.setCard(card);
+        paramUsers.setBankCard(bankCard);
+        paramUsers.setBankAddr(bankAddr);
+        int value = userService.updateUserForBean(paramUsers);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("updateUserInfo-----" + value + "----end" + result.toString());
+        return result;
+    }
+
+    /**
      * 代理员添加
      * @param proxyArea 代理区域
      * @param userName 代理名
@@ -139,25 +187,33 @@ public class UsersController {
         logger.info("user---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
+        int value = 0;
         Users paramUsers = new Users();
-        paramUsers.setLoginName(phone);
-        paramUsers.setUserName(userName);
-        paramUsers.setProxyArea(proxyArea);
-        paramUsers.setPassword("123456");
-        // 代理员角色
-        paramUsers.setUserRole(1);
-        Date date = new Date();
-        paramUsers.setCreateTime(date);
-        paramUsers.setUpdateTime(date);
-        int value = userService.insertUserForBean(paramUsers);
-        if (value == 1) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
-        } else {
-            result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
+        paramUsers = userService.getUserByLoginName(phone);
+        //如果该代理员已经是会员了，直接更改角色为代理员
+        if(null != paramUsers){
+            paramUsers.setUserRole(1);
+            paramUsers.setUserName(userName);
+            paramUsers.setProxyArea(proxyArea);
+            Date date = new Date();
+            paramUsers.setCreateTime(date);
+            paramUsers.setUpdateTime(date);
+            value = userService.updateUserForBean(paramUsers);
+        }else{
+        //如果该代理员还不是会员，则添加为代理员,默认密码为123456
+            Users bean1 = new Users();
+            bean1.setLoginName(phone);
+            bean1.setUserName(userName);
+            bean1.setProxyArea(proxyArea);
+            bean1.setPassword("123456");
+            // 代理员角色
+            bean1.setUserRole(1);
+            Date date = new Date();
+            bean1.setCreateTime(date);
+            bean1.setUpdateTime(date);
+            value = userService.insertUserForBean(bean1);
         }
-        logger.info("user---end" + result.toString());
+        result = BaseResult.checkResult(value);
         return result;
     }
 
@@ -214,6 +270,7 @@ public class UsersController {
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         Users user = new Users();
+        user.setUserRole(1);
         // 查询记录总条数
         int count = userService.countUserByBean(user);
         // 查询记录
@@ -247,6 +304,31 @@ public class UsersController {
         result.put("info",lstBusinessUser);
         result.put("total",count);
         logger.info("listBuyTypeUser--------end-------");
+        return result;
+    }
+    /**
+     * 会员登录：返回排号信息
+     *
+     * */
+    @RequestMapping(value="/getMemberInfo",method = RequestMethod.POST)
+    public Map<String,Object> getMemberInfo(@RequestParam(value = "userId", required = true) Integer userId){
+        logger.info("getMemberInfo---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        BusinessUser bUser = businessService.getBusinessUsersByUserId(userId); //根据用户ID获取用户及排队信息
+        int total = businessService.getBuyStatusCount(); //获取已提车总量
+        result.put("waitNum",bUser.getWaitNum());
+        result.put("buyStatus",bUser.getBuyStatus());
+        result.put("checkStatus",bUser.getCheckStatus());
+        result.put("buyTotal",total);
+        if (null != result) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("getMemberInfo---end");
         return result;
     }
     /**
@@ -495,5 +577,78 @@ public class UsersController {
         }
         logger.info("updateCheckStatus---end");
         return result;
+    }
+    /**
+     * 头像上传
+     */
+    @RequestMapping(value="/uploadPhoto", method = RequestMethod.POST)
+    public Map<String, Object> uploadPhoto(@RequestParam(value = "file", required = true) MultipartFile file,
+                                           HttpServletRequest request) {
+        logger.info("uploadPhoto-----------start---------");
+        //获取用户
+        Users users = (Users)request.getSession().getAttribute("user");
+        //返回类型
+        Map<String, Object> result = new HashMap<String, Object>();
+        //定义时间格式
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        String fileTime = sdf.format(new Date());
+        //上传文件的名称
+        String fileName = file.getOriginalFilename();
+        //上传文件的后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        if (file.isEmpty()) {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+            return result;
+        }
+        //定义文件新名：以时间戳命名
+        fileName = fileTime + suffixName;
+        //定义实际保存位置
+        String path = FileResourcePathUtil.propertyValueMap.get("photoDir") + users.getLoginName();
+        File targetFile = new File(path, fileName);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
+        try {
+            //保存文件
+            file.transferTo(targetFile);
+        } catch (IOException e) {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+            return result;
+        }
+
+        //同步数据库
+        // 1>获取用户信息
+        Users bean = userService.getUserById(users.getId());
+        bean.setImage(fileName);
+        // 2>更新数据库
+        int value = userService.updateUserForBean(bean);
+        if (value != 1) {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+            return result;
+        }
+
+        //同步session
+        request.getSession().setAttribute("user", bean);
+
+        logger.info("updateUserInfo-----" + value + "----end" + result.toString());
+        result.put("code", BaseResult.FAIL_CODE);
+        result.put("msg", BaseResult.FAIL_MSG);
+        return result;
+    }
+
+    /**
+     * 显示图片
+     */
+    @RequestMapping(value = "/showPhoto",method = RequestMethod.POST)
+    public ResponseEntity showPhoto(String fileName) {
+        try {
+            // 由于是读取本机的文件，file是一定要加上的， path是在application配置文件中的路径
+            return ResponseEntity.ok(resourceLoader.getResource("file:" + FileResourcePathUtil.propertyValueMap.get("photoDir") + fileName));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

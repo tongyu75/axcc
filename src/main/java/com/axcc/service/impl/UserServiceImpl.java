@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by tongshr on 2018/10/02.
@@ -28,6 +27,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users getUserById(int id) {
         return usersDao.getUserById(id);
+    }
+
+    @Override
+    public Users getUserByLoginName(String loginName) {
+        return usersDao.getUserByLoginName(loginName);
     }
 
     @Override

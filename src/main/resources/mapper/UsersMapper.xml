@@ -31,10 +31,16 @@
     from users
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="getUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where login_name = #{loginName,jdbcType=VARCHAR}
+  </select>
   <select id="getUserByBean" parameterType="com.axcc.model.Users" resultMap="BaseResultMap">
     select
     id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr,
-    parent_id, original, user_role, create_time, update_time, is_delete, description
+    parent_id, original, user_role, create_time, update_time, is_delete, description,proxy_area
     from users
     <where>
       <if test="loginName != null">
@@ -151,7 +157,7 @@
   <select id="listUserByBean" parameterType="com.axcc.model.Users" resultMap="BaseResultMap">
     select
     id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr,
-    parent_id, original, user_role, create_time, update_time, is_delete, description
+    parent_id, original, user_role, create_time, update_time, is_delete, description,proxy_area
     from users
     <where>
       <if test="loginName != null">
@@ -271,6 +277,9 @@
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="proxyArea != null">
+          proxy_area = #{proxyArea,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -465,7 +474,10 @@
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
-    </set>
+      <if test="proxyArea != null">
+          proxy_area = #{proxyArea,jdbcType=VARCHAR},
+      </if>
+      </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.axcc.model.Users">
@@ -485,7 +497,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=INTEGER},
-      description = #{description,jdbcType=VARCHAR}
+      description = #{description,jdbcType=VARCHAR},
+      proxy_area = #{proxyArea,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

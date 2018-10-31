@@ -46,12 +46,26 @@
     from business
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!-- 根据交易的ID号查看对应的用户及交易信息 -->
   <select id="getBusinessUserById" parameterType="java.lang.Integer" resultMap="BusinessUserResultMap">
     select
     A.id, A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type, A.buy_status, A.check_status,
     A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card
     from business A inner join users B on A.user_id = B.id
     where A.id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 根据用户ID获取用户最新交易的信息 -->
+  <select id="getBusinessUsersByUserId" parameterType="java.lang.Integer" resultMap="BusinessUserResultMap">
+    SELECT
+    A.id,A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type, A.buy_status, A.check_status,
+    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card
+     from business A right join users B on A.user_id = B.id
+    where A.user_id = #{userId,jdbcType=INTEGER} ORDER BY A.apply_time DESC LIMIT 1
+  </select>
+  <!-- 统计已出车的总量 -->
+  <select id="getBuyStatusCount" resultType="java.lang.Integer">
+    SELECT SUM(CASE WHEN b.buy_status = '2' THEN 1 ELSE 0 END) total
+    from business b
   </select>
   <select id="getBusinessByBean" parameterType="com.axcc.model.Business" resultMap="BaseResultMap">
     select

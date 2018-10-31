@@ -9,9 +9,14 @@ import java.util.List;
  * Created by tongshr on 2018/10/02.
  */
 public interface BusinessService {
+
     Business getBusinessById(int id);
 
     Business getBusinessByBean(Business bean);
+
+    BusinessUser getBusinessUsersByUserId(Integer userId);
+
+    int getBuyStatusCount();
 
     int insertBusinessForBean(Business bean);
 
