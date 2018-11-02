@@ -36,6 +36,7 @@ public class MessageController {
         bean.setContents(contents);
         Date date = new Date();
         bean.setCreateTime(date);
+        bean.setIsDelete(0);
         int value = messageService.insertMessageByBean(bean);
         result = BaseResult.checkResult(value);
         logger.info("insertMessage---------end");

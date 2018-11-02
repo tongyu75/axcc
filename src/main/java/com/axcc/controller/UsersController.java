@@ -3,10 +3,13 @@ package com.axcc.controller;
 import com.axcc.model.Business;
 import com.axcc.model.BusinessUser;
 import com.axcc.model.Users;
+import com.axcc.model.Voucher;
 import com.axcc.service.BusinessService;
 import com.axcc.service.UserService;
+import com.axcc.service.VoucherService;
 import com.axcc.utils.BaseResult;
 import com.axcc.utils.FileResourcePathUtil;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +52,10 @@ public class UsersController {
 
     @Autowired
     BusinessService businessService;
+
+    @Autowired
+    VoucherService voucherService;
+
     /**
      * 用户登录
      * @param phone 手机号
@@ -111,6 +118,22 @@ public class UsersController {
             result.put("msg", BaseResult.FAIL_MSG);
         }
         logger.info("user---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 根据手机号查看用户信息
+     */
+    @RequestMapping(value = "getUserByLoginName",method = RequestMethod.POST)
+    public Map<String,Object> getUserByLoginName(@RequestParam(value = "loginName",required = true) String loginName){
+        logger.info("getUserByLoginName---------------start");
+        //返回类型
+        Map<String,Object> result = new HashMap<String,Object>();
+        Users user = userService.getUserByLoginName(loginName);
+        result.put("msg",BaseResult.SUCCESS_MSG);
+        result.put("code",BaseResult.SUCCESS_CODE);
+        result.put("info",user);
+        logger.info("getUserByLoginName---------------end");
         return result;
     }
 
@@ -284,7 +307,7 @@ public class UsersController {
         return result;
     }
     /**
-     * 按购车类型获取会员申请列表
+     * 会员登录：按购车类型获取会员申请列表
      */
     @RequestMapping(value="/listBuyTypeUser",method = RequestMethod.POST)
     public Map<String,Object> listBuyTypeUser(@RequestParam(value="pageNum",required = true) int pageNum,
@@ -419,7 +442,7 @@ public class UsersController {
     }
 
     /**
-     * 会员登录：申请排队
+     * 会员登录：申请排队购车
      */
     @RequestMapping(value="/memberQueue",method = RequestMethod.POST)
     public Map<String,Object> memberQueue(@RequestParam(value = "userId", required = true) Integer userId,
@@ -449,11 +472,15 @@ public class UsersController {
 
     /**
      * 管理员审核状态和代理员审核状态的更新
+     * 参数：id  业务对应的ID
+     *      checkStatus  审核状态
+     *      useVoucher   是否使用优惠券，只有交钱时才才传值
      */
     @RequestMapping(value="/updateCheckStatus",method = RequestMethod.POST)
     public Map<String,Object> updateCheckStatus(
             @RequestParam(value = "id", required = true) Integer id,
-            @RequestParam(value = "checkStatus", required = true) Integer checkStatus){
+            @RequestParam(value = "checkStatus", required = true) Integer checkStatus,
+            @RequestParam(value = "useVoucher", required = false) Integer useVoucher){
         logger.info("updateCheckStatus---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
@@ -509,6 +536,7 @@ public class UsersController {
         Map<String,Object> result = new HashMap<String, Object>();
         Business business = new Business();
         business.setId(id);
+        business.setBuyStatus(1);
         // 排位号
         business.setWaitNum(waitNum);
         int value = businessService.updateBusinessForBean(business);
@@ -552,26 +580,51 @@ public class UsersController {
 
     /**
      * 代理员登录：输入的实缴金额
+     * 参数：id  业务对应的ID
+     *      buyMoney   排队购车所需费用
+     *      useMoney   优惠券金额，使用时传值
      */
     @RequestMapping(value="/updateBuyMoney",method = RequestMethod.POST)
     public Map<String,Object> updateBuyMoney(
             @RequestParam(value = "id", required = true) Integer id,
-            @RequestParam(value = "buyMoney", required = true) Float buyMoney){
+            @RequestParam(value = "buyMoney", required = true) Float buyMoney,
+            @RequestParam(value = "useMoney", required = false) Float useMoney){
         logger.info("updateCheckStatus---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
+
+        //使用使用优惠券
+        if(null != useMoney && useMoney != 0){
+            //计算实际付费金额
+            buyMoney = buyMoney - useMoney;
+            //更新使用后优惠券信息
+            Voucher bean = new Voucher();
+            bean.setVoucherStatus(3);
+            bean.setIsDelete(1);
+            int value = voucherService.updateVoucherByBean(bean);
+            if(value != 1){
+                result.put("msg", BaseResult.FAIL_MSG);
+                result.put("code", BaseResult.FAIL_CODE);
+                return result;
+            }
+        }
+
+        //会员付费
         Business business = new Business();
         business.setId(id);
-        // 实缴金额
-        business.setBuyMoney(buyMoney);
-        // 管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
+        business.setBuyMoney(buyMoney);// 实缴金额
+        //管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
         business.setCheckStatus(2);
-        // 会员购车状态（0：未排队，1：排队中，2：已出车）
-        business.setBuyStatus(2);
+        business.setBuyStatus(0);// 会员购车状态（0：未排队，1：排队中，2：已出车）
+        business.setPayTime(new Date());
         int value = businessService.updateBusinessForBean(business);
         if (value == 1) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
+            if(null == useMoney){
+                result = insertVoucherInfo(id); //未使用优惠券缴费，为用户发放优惠券
+            }else{
+                result.put("code", BaseResult.SUCCESS_CODE);
+                result.put("msg", BaseResult.SUCCESS_MSG);
+            }
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
@@ -579,6 +632,70 @@ public class UsersController {
         logger.info("updateCheckStatus---end");
         return result;
     }
+
+    /**
+     * 添加优惠券
+     * 如果checkStatus=2(会员缴费成功)，
+     * 若是第一次排队购车缴费成功，则为会员发放优惠券；
+     * 若是第二次排队购车，即第一次使用优惠券，但优惠券已过期，则为会员方放优惠券；
+     * 若是第二次排队购车，即第一次使用优惠券，且未过期，可以使用；
+     * 若是第三次排队购车，即第二次使用优惠券，但优惠券已过期，则为会员方法优惠券（以后如此往复，直到优惠券被使用）；
+     * 若是第三次排队购车，即第二次使用优惠券，若已使用过优惠券，则不再发放优惠券；
+     */
+    @RequestMapping(value = "insertVoucherInfo",method = RequestMethod.POST)
+    public Map<String,Object> insertVoucherInfo(@RequestParam(value = "businessId",required = true) int businessId){
+        //返回类型
+        Map<String,Object> result = new HashMap<String,Object>();
+        //获取业务信息，用户ID
+        Business business = businessService.getBusinessById(businessId);
+        int userId= business.getUserId();
+        //获取优惠券状态，查看用户是否获取过优惠券/是否已过期/是否已使用
+        Voucher vou = new Voucher();
+        vou.setUserId(userId);
+        List<Voucher> listVou = voucherService.listVoucherByBean(vou);
+        int count = 0;
+        //用户有优惠券，且优惠券都是 “未使用且已过期” 状态，则发放优惠券
+        if( listVou.size()>0 ){
+            for(Voucher vouche : listVou){
+                if(2 == vouche.getVoucherStatus()){
+                    count++;
+                }
+            }
+            if(count > 0 && count == listVou.size()){
+                result=  addVoucher(business);
+            }
+        }else{
+            //用户从未获得过优惠券，发放优惠券
+            result = addVoucher(business);
+        }
+        return result;
+    }
+
+    /**
+     * 发放优惠券
+     */
+    @RequestMapping(value = "addVoucher",method = RequestMethod.POST)
+    public Map<String,Object> addVoucher(
+            @RequestParam(value = "business",required = true) Business business){
+        //返回类型
+        Map<String,Object> map = new HashMap<String,Object>();
+        //获取参数
+        int buyType = business.getBuyType(); //购车类型
+        int userId= business.getUserId();    //会员ID
+        Date payTime = business.getPayTime(); //缴费时间
+        //发放优惠券
+        Voucher bean = new Voucher();
+        bean.setUserId(userId);
+        bean.setVoucherMoney((2000f*buyType)); //优惠券金额
+        bean.setVoucherStatus(1);
+        bean.setVoucherTime(payTime);
+        bean.setVoucherFinish(DateUtils.addDays(payTime, 30)); //获取到期时间，有效期30天
+        bean.setIsDelete(0);
+        int value = voucherService.insertVoucherByBean(bean);
+        map = BaseResult.checkResult(value);
+        return map;
+    }
+
     /**
      * 头像上传
      */

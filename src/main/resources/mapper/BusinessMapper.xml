@@ -31,6 +31,7 @@
     <result column="login_name" jdbcType="VARCHAR" property="loginName" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="card" jdbcType="VARCHAR" property="card" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
   </resultMap>
   <sql id="Base_Column_List">
     id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status, 
@@ -50,7 +51,7 @@
   <select id="getBusinessUserById" parameterType="java.lang.Integer" resultMap="BusinessUserResultMap">
     select
     A.id, A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type, A.buy_status, A.check_status,
-    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card
+    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card, B.parent_id
     from business A inner join users B on A.user_id = B.id
     where A.id = #{id,jdbcType=INTEGER}
   </select>
@@ -58,7 +59,7 @@
   <select id="getBusinessUsersByUserId" parameterType="java.lang.Integer" resultMap="BusinessUserResultMap">
     SELECT
     A.id,A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type, A.buy_status, A.check_status,
-    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card
+    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card, B.parent_id
      from business A right join users B on A.user_id = B.id
     where A.user_id = #{userId,jdbcType=INTEGER} ORDER BY A.apply_time DESC LIMIT 1
   </select>
@@ -111,7 +112,7 @@
   <select id="getBusinessUserByBean" parameterType="com.axcc.model.BusinessUser" resultMap="BusinessUserResultMap">
     select
     A.id, A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type, A.buy_status, A.check_status,
-    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card
+    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card, B.parent_id
     from business A inner join users B on A.user_id = B.id
     <where>
       <if test="userId != null">
@@ -193,7 +194,7 @@
   <select id="listBusinessUserByBean" parameterType="com.axcc.model.BusinessUser" resultMap="BusinessUserResultMap">
     select
     A.id, A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type, A.buy_status, A.check_status,
-    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card
+    A.check_time, A.pay_time, A.apply_time, B.login_name, B.user_name, B.card, B.parent_id
     from business A inner join users B on A.user_id = B.id
     <where>
       <if test="userId != null">

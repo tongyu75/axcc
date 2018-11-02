@@ -33,6 +33,8 @@ public class BusinessUser {
 
     private String card;
 
+    private String parentId;
+
     public Integer getId() {
         return id;
     }
@@ -151,5 +153,13 @@ public class BusinessUser {
 
     public void setCard(String card) {
         this.card = card;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }
