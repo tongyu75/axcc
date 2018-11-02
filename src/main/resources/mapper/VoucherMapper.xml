@@ -9,20 +9,21 @@
     <result column="voucher_time" jdbcType="TIMESTAMP" property="voucherTime" />
     <result column="voucher_finish" jdbcType="TIMESTAMP" property="voucherFinish" />
     <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, voucher_money, voucher_status, voucher_time, voucher_finish, description
+    id, user_id, voucher_money, voucher_status, voucher_time, voucher_finish, description, is_delete
   </sql>
   <select id="getVoucherById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from Voucher
+    from voucher
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="getVoucherByBean" parameterType="com.axcc.model.Voucher" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from Voucher
+    from voucher
     <where>
       <if test="id != null">
         and id = #{id,jdbcType=INTEGER}
@@ -44,13 +45,16 @@
       </if>
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
+      </if>
+      <if test="isDelete != null">
+        and is_delete = #{isDelete,jdbcType=INTEGER}
       </if>
     </where>
   </select>
   <select id="listVoucherByBean" parameterType="com.axcc.model.Voucher" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from Voucher
+    from voucher
     <where>
       <if test="id != null">
         and id = #{id,jdbcType=INTEGER}
@@ -72,6 +76,9 @@
       </if>
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
+      </if>
+      <if test="isDelete != null">
+        and is_delete = #{isDelete,jdbcType=INTEGER}
       </if>
     </where>
   </select>
@@ -99,17 +106,20 @@
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
       </if>
+      <if test="isDelete != null">
+        and is_delete = #{isDelete,jdbcType=INTEGER}
+      </if>
     </where>
   </select>
-  <insert id="insertVoucherForBean" parameterType="com.axcc.model.Voucher">
+  <insert id="insertVoucherByBean" parameterType="com.axcc.model.Voucher">
     insert into voucher (id, user_id, voucher_money,
       voucher_status, voucher_time, voucher_finish,
-      description)
+      description,is_delete)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{voucherMoney,jdbcType=REAL},
       #{voucherStatus,jdbcType=INTEGER}, #{voucherTime,jdbcType=TIMESTAMP}, #{voucherFinish,jdbcType=TIMESTAMP},
-      #{description,jdbcType=VARCHAR})
+      #{description,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER})
   </insert>
-  <update id="updateVoucherForBean" parameterType="com.axcc.model.Voucher">
+  <update id="updateVoucherByBean" parameterType="com.axcc.model.Voucher">
     update voucher
     <set>
       <if test="userId != null">
@@ -130,6 +140,9 @@
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -148,10 +161,10 @@
   <insert id="insert" parameterType="com.axcc.model.Voucher">
     insert into voucher (id, user_id, voucher_money, 
       voucher_status, voucher_time, voucher_finish, 
-      description)
+      description, is_delete)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{voucherMoney,jdbcType=REAL}, 
       #{voucherStatus,jdbcType=INTEGER}, #{voucherTime,jdbcType=TIMESTAMP}, #{voucherFinish,jdbcType=TIMESTAMP}, 
-      #{description,jdbcType=VARCHAR})
+      #{description,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.axcc.model.Voucher">
     insert into voucher
@@ -177,6 +190,9 @@
       <if test="description != null">
         description,
       </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -199,6 +215,9 @@
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -223,6 +242,9 @@
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -233,7 +255,8 @@
       voucher_status = #{voucherStatus,jdbcType=INTEGER},
       voucher_time = #{voucherTime,jdbcType=TIMESTAMP},
       voucher_finish = #{voucherFinish,jdbcType=TIMESTAMP},
-      description = #{description,jdbcType=VARCHAR}
+      description = #{description,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -17,6 +17,8 @@ public class Voucher {
 
     private String description;
 
+    private Integer isDelete;
+
     public Integer getId() {
         return id;
     }
@@ -72,4 +74,14 @@ public class Voucher {
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
     }
+
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
 }

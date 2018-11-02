@@ -14,9 +14,9 @@ public interface VoucherDao {
 
     int countVoucherByBean(Voucher bean);
 
-    int insertVoucherForBean(Voucher bean);
+    int insertVoucherByBean(Voucher bean);
 
-    int updateVoucherForBean(Voucher bean);
+    int updateVoucherByBean(Voucher bean);
 
     //----------------------------------------------------
     
