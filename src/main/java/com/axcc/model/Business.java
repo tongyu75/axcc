@@ -27,6 +27,7 @@ public class Business {
 
     private Date applyTime;
 
+    private Integer moneyApplyStatus;
 
     public Integer getId() {
         return id;
@@ -122,5 +123,13 @@ public class Business {
 
     public void setApplyTime(Date applyTime) {
         this.applyTime = applyTime;
+    }
+
+    public Integer getMoneyApplyStatus() {
+        return moneyApplyStatus;
+    }
+
+    public void setMoneyApplyStatus(Integer moneyApplyStatus) {
+        this.moneyApplyStatus = moneyApplyStatus;
     }
 }

@@ -35,6 +35,8 @@ public class BusinessUser {
 
     private String parentId;
 
+    private Integer moneyApplyStatus;
+
     public Integer getId() {
         return id;
     }
@@ -161,5 +163,13 @@ public class BusinessUser {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public Integer getMoneyApplyStatus() {
+        return moneyApplyStatus;
+    }
+
+    public void setMoneyApplyStatus(Integer moneyApplyStatus) {
+        this.moneyApplyStatus = moneyApplyStatus;
     }
 }

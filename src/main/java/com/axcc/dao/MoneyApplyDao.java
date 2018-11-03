@@ -1,6 +1,7 @@
 package com.axcc.dao;
 
 import com.axcc.model.MoneyApply;
+import com.axcc.model.Users;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface MoneyApplyDao {
     int updateMoneyApplyForBean(MoneyApply bean);
 
     //----------------------------------------------------
-    
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(MoneyApply record);

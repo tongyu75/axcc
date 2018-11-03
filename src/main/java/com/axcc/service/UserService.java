@@ -3,6 +3,7 @@ package com.axcc.service;
 import com.axcc.model.Users;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tongshr on 2018/10/02.
@@ -26,4 +27,9 @@ public interface UserService {
 
     List<Users> findAllUser(int pageNum, int pageSize);
 
+    List<Map<String, Object>> listShareMoney(String original,  int pageNum, int pageSize);
+
+    int countShareMoney(String original);
+
+    int countLevel1(String original);
 }
