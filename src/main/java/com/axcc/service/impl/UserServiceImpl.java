@@ -7,6 +7,8 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,4 +86,74 @@ public class UserServiceImpl implements UserService {
         PageHelper.startPage(pageNum,pageSize);
         return usersDao.;
     }*/
+
+    /**
+     * 获取分享奖数量
+     * @param original 当前会员original
+     */
+    @Override
+    public int countShareMoney(String original) {
+        return usersDao.countShareMoney(String.valueOf(original));
+    }
+
+    /**
+     * 获取直推人数
+     * @param original 当前会员original
+     */
+    @Override
+    public int countLevel1(String original) {
+        return usersDao.countLeve1(String.valueOf(original));
+    }
+
+    /**
+     * 获取分享奖信息
+     * @param original 当前会员original
+     */
+    @Override
+    public List<Map<String, Object>> listShareMoney(String original, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map<String, Object>> returnDate = new ArrayList<>();
+        // 直推会员
+        List<Map<String, Object>> firstMap = new ArrayList<>();
+        // 间推会员
+        List<Map<String, Object>> secondMap = new ArrayList<>();
+        // 会员信息查询
+        List<Map<String, Object>> listMap = usersDao.listShareMoney(original);
+        // 遍历会员信息
+        for (Map<String, Object> mp : listMap) {
+            String userName = (String) mp.get("userName");
+            String originalValue = (String) mp.get("original");
+            float buyMoney = (float) mp.get("buyMoney");
+            String checkTime = (String) mp.get("checkTime");
+            // 数据例子：直推会员:32-33, 间推会员：32-33-34，其中32表示当前的会员
+            String[] data = originalValue.replace(originalValue + "-", "").split("-");
+            // data长度为1代表是值推会员
+            if (data.length == 1) {
+                Map<String, Object> mpLevel1 = new HashMap<>();
+                mpLevel1.put("level", "直推会员");
+                mpLevel1.put("userName", userName);
+                mpLevel1.put("money", buyMoney * 0.05f);
+                mpLevel1.put("time", checkTime);
+                firstMap.add(mpLevel1);
+                // 长度为2代表是间推会员
+            } else if (data.length == 2) {
+                Map<String, Object> mpLevel2 = new HashMap<>();
+                mpLevel2.put("level", "间推会员");
+                mpLevel2.put("userName", userName);
+                mpLevel2.put("money", buyMoney * 0.03f);
+                mpLevel2.put("time", checkTime);
+                secondMap.add(mpLevel2);
+            }
+        }
+
+        // 将上面获取的信息按照直推会员和间推会员进行排序，然后返回。
+        for (Map<String, Object> mp : firstMap) {
+            returnDate.add(mp);
+        }
+        for (Map<String, Object> mp : secondMap) {
+            returnDate.add(mp);
+        }
+
+        return returnDate;
+    }
 }

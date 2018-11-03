@@ -1,14 +1,15 @@
 package com.axcc.controller;
 
-import com.axcc.model.Business;
-import com.axcc.model.BusinessUser;
-import com.axcc.model.Users;
-import com.axcc.model.Voucher;
+import com.axcc.model.*;
 import com.axcc.service.BusinessService;
+import com.axcc.service.MoneyApplyService;
 import com.axcc.service.UserService;
 import com.axcc.service.VoucherService;
 import com.axcc.utils.BaseResult;
 import com.axcc.utils.FileResourcePathUtil;
+import com.axcc.utils.QRCodeConstants;
+import com.axcc.utils.QRCodeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -55,6 +59,9 @@ public class UsersController {
 
     @Autowired
     VoucherService voucherService;
+
+    @Autowired
+    MoneyApplyService moneyApplyService;
 
     /**
      * 用户登录
@@ -306,6 +313,7 @@ public class UsersController {
         logger.info("listProxy---end" + result.toString());
         return result;
     }
+
     /**
      * 会员登录：按购车类型获取会员申请列表
      */
@@ -768,5 +776,173 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    /**
+     * 会员显示的分享奖
+     */
+    @RequestMapping(value="/listShareMoney",method = RequestMethod.POST)
+    public Map<String,Object> listShareMoney(
+            @RequestParam(value = "original", required = true) String original,
+            @RequestParam(value = "pageNum", required = true) Integer pageNum,
+            @RequestParam(value = "pageSize", required = true) Integer pageSize){
+        logger.info("listShareMoney---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        int count = userService.countShareMoney(original);
+        List<Map<String, Object>> lstMap = userService.listShareMoney(original, pageNum, pageSize);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", lstMap);
+        result.put("total", count);
+        logger.info("listShareMoney---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 直推会员的个数
+     */
+    @RequestMapping(value="/countLevel1",method = RequestMethod.POST)
+    public Map<String,Object> countLevel1(
+            @RequestParam(value = "original", required = true) String original){
+        logger.info("countLevel1---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        int count = userService.countLevel1(original);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", count);
+        logger.info("countLevel1---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 推荐用户的二维码
+     */
+    @RequestMapping(value="/qrCode", method = RequestMethod.POST)
+    @ResponseBody
+    public void createQrCode(
+            @RequestParam(value = "registerUrl", required = true) String registerUrl,
+            @RequestParam(value = "userId", required = true) Integer userId,
+            @RequestParam(value = "phone", required = true) String phone,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) {
+        String url = getLogQrCodeContent(registerUrl,userId,phone);
+        BufferedImage bufferedImage = null;
+        try {
+            bufferedImage = QRCodeUtils.genBarcode(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.setContentType(QRCodeConstants.CONTENT_TYPE_PNG);
+        try {
+            if (bufferedImage != null) {
+                ImageIO.write(bufferedImage, QRCodeConstants.TYPE_PNG, httpServletResponse.getOutputStream());
+                logger.info("createQrCode success");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getLogQrCodeContent(String serverAddress, Integer userId, String phone) {
+        StringBuilder comment = new StringBuilder();
+        try {
+            comment.append(serverAddress).append("&userId=").append(userId).append("&phone=").append(phone);
+            logger.info("createQrCode qrcode " + comment.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return comment.toString();
+    }
+
+    /**
+     * 提现申请
+     * @param userId 手机号
+     * @param userStatus 会员名称
+     * @param applyMoney 推荐人手机号
+     */
+    @RequestMapping(value="/withdrawCashes",method = RequestMethod.POST)
+    public Map<String,Object> withdrawCashes(@RequestParam(value = "userId", required = true) Integer userId,
+                                       @RequestParam(value = "userStatus", required = true) Integer userStatus,
+                                       @RequestParam(value = "applyMoney", required = true) Float applyMoney){
+        logger.info("user---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+
+        // 将代理员业务表中信息的提现状态变为已提现
+        /*Business business = new Business();
+        business.
+        businessService.updateBusinessForBean()*/
+        MoneyApply moneyApply = new MoneyApply();
+        moneyApply.setUserId(userId);
+        moneyApply.setApplyMoney(applyMoney);
+        moneyApply.setApplyTime(new Date());
+        // 审核状态（0：未审核，1：审核通过，2审核未通过）
+        moneyApply.setCheckStatus(0);
+        // 申请人身份（1：代理员；2：普通会员）
+        moneyApply.setUserStatus(userStatus);
+        int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("user---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 代理员对发起的提现进行审批
+     * @param id id
+     * @param checkStatus 审核状态
+     */
+    @RequestMapping(value="/approveWithdrawCashes",method = RequestMethod.POST)
+    public Map<String,Object> approveWithdrawCashes(@RequestParam(value = "id", required = true) Integer id,
+                                                    @RequestParam(value = "checkStatus", required = true) Integer checkStatus){
+        logger.info("user---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        MoneyApply moneyApply = new MoneyApply();
+        moneyApply.setId(id);
+        moneyApply.setCreateTime(new Date());
+        // 审核状态（0：未审核，1：审核通过，2审核未通过）
+        moneyApply.setCheckStatus(0);
+        int value = moneyApplyService.updateMoneyApplyForBean(moneyApply);
+        if (value == 1) {
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("user---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 提现列表
+     */
+    @RequestMapping(value="/getWithdrawCashes",method = RequestMethod.POST)
+    public Map<String,Object> getWithdrawCashes(
+            @RequestParam(value = "userId", required = true) Integer userId,
+            @RequestParam(value = "pageNum", required = true) Integer pageNum,
+            @RequestParam(value = "pageSize", required = true) Integer pageSize){
+        logger.info("getWithdrawCashes---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        MoneyApply bean = new MoneyApply();
+        bean.setUserId(userId);
+        int count = moneyApplyService.countMoneyApplyByBean(bean);
+        List<MoneyApply> lstBean = moneyApplyService.listMoneyApplyByBean(bean, pageNum, pageSize);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", lstBean);
+        result.put("total", count);
+        logger.info("getWithdrawCashes---end" + result.toString());
+        return result;
     }
 }

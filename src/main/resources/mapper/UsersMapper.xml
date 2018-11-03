@@ -501,4 +501,45 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="listShareMoney" parameterType="java.lang.String" resultType="Map">
+    SELECT
+    U.user_name userName,
+    substring_index(U.original,CONCAT(#{original,jdbcType=VARCHAR},"-"),-1) original,
+    B.buy_money buyMoney,
+    DATE_FORMAT(B.check_time,'%Y-%m-%d %H:%i:%s') checkTime
+    FROM
+    users U
+    INNER JOIN business B ON U.id = B.user_id
+    WHERE
+    U.original LIKE CONCAT(#{original,jdbcType=VARCHAR},"-","%")
+    AND B.check_status = 2
+    AND B.buy_status = 2
+    ORDER BY B.check_time DESC
+  </select>
+  <select id="countShareMoney" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    users U
+    INNER JOIN business B ON U.id = B.user_id
+    WHERE
+    U.original LIKE CONCAT(#{original,jdbcType=VARCHAR},"-","%")
+    AND length(substring_index(U.original,#{original,jdbcType=VARCHAR},-1)) - length(REPLACE (substring_index(U.original,#{original,jdbcType=VARCHAR},-1), '-', '')) in (1,2)
+    AND B.check_status = 2
+    AND B.buy_status = 2
+    ORDER BY B.check_time DESC
+  </select>
+  <select id="countLeve1" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    users U
+    INNER JOIN business B ON U.id = B.user_id
+    WHERE
+    U.original LIKE CONCAT(#{userId,jdbcType=VARCHAR},"-","%")
+    AND length(substring_index(U.original,#{original,jdbcType=VARCHAR},-1)) - length(REPLACE (substring_index(U.original,#{original,jdbcType=VARCHAR},-1), '-', '')) in (1)
+    AND B.check_status = 2
+    AND B.buy_status = 2
+    ORDER BY B.check_time DESC
+  </select>
 </mapper>

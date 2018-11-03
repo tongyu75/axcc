@@ -14,6 +14,7 @@
     <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
     <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
     <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+    <result column="money_apply_status" jdbcType="INTEGER" property="moneyApplyStatus" />
   </resultMap>
   <resultMap id="BusinessUserResultMap" type="com.axcc.model.BusinessUser">
     <id column="id" jdbcType="INTEGER" property="id" />
@@ -32,14 +33,15 @@
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="card" jdbcType="VARCHAR" property="card" />
     <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="money_apply_status" jdbcType="INTEGER" property="moneyApplyStatus" />
   </resultMap>
   <sql id="Base_Column_List">
     id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status, 
-    check_time, pay_time, apply_time
+    check_time, pay_time, apply_time,money_apply_status
   </sql>
   <sql id="Business_User_Column_List">
     id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status,
-    check_time, pay_time, apply_time, login_name, user_name, card
+    check_time, pay_time, apply_time, login_name, user_name,card,money_apply_status
   </sql>
   <select id="getBusinessById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -71,7 +73,7 @@
   <select id="getBusinessByBean" parameterType="com.axcc.model.Business" resultMap="BaseResultMap">
     select
     id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status,
-    check_time, pay_time, apply_time
+    check_time, pay_time, apply_time, money_apply_status
     from business
     <where>
       <if test="userId != null">
@@ -106,6 +108,9 @@
       </if>
       <if test="applyTime != null">
         and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="moneyApplyStatus != null">
+        and money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
       </if>
     </where>
   </select>
@@ -148,12 +153,15 @@
       <if test="applyTime != null">
         and A.apply_time = #{applyTime,jdbcType=TIMESTAMP}
       </if>
+      <if test="moneyApplyStatus != null">
+        and money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
+      </if>
     </where>
   </select>
   <select id="listBusinessByBean" parameterType="com.axcc.model.Business" resultMap="BaseResultMap">
     select
     id, user_id, agent_id, admin_id, wait_num, buy_money, buy_type, buy_status, check_status,
-    check_time, pay_time, apply_time
+    check_time, pay_time, apply_time, money_apply_status
     from business
     <where>
       <if test="userId != null">
@@ -188,6 +196,9 @@
       </if>
       <if test="applyTime != null">
         and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="moneyApplyStatus != null">
+        and money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
       </if>
     </where>
   </select>
@@ -233,6 +244,9 @@
       <if test="loginName != null">
         and B.login_name = #{loginName,jdbcType=VARCHAR}
       </if>
+      <if test="moneyApplyStatus != null">
+        and money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
+      </if>
     </where>
   </select>
   <select id="countBusinessByBean" parameterType="com.axcc.model.Business" resultType="java.lang.Integer">
@@ -270,6 +284,9 @@
       </if>
       <if test="applyTime != null">
         and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="moneyApplyStatus != null">
+        and money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
       </if>
     </where>
   </select>
@@ -350,6 +367,9 @@
       <if test="applyTime != null">
         apply_time = #{applyTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="moneyApplyStatus != null">
+        and money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -357,12 +377,12 @@
     insert into business (id, user_id, agent_id,
       admin_id, wait_num, buy_money,
       buy_type, buy_status, check_status,
-      check_time, pay_time, apply_time
+      check_time, pay_time, apply_time,money_apply_status
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER},
       #{adminId,jdbcType=INTEGER}, #{waitNum,jdbcType=INTEGER}, #{buyMoney,jdbcType=REAL},
       #{buyType,jdbcType=INTEGER}, #{buyStatus,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER},
-      #{checkTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{applyTime,jdbcType=TIMESTAMP})
+      #{checkTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{applyTime,jdbcType=TIMESTAMP}, #{moneyApplyStatus,jdbcType=INTEGER})
   </insert>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -501,6 +521,9 @@
       <if test="applyTime != null">
         apply_time = #{applyTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="moneyApplyStatus != null">
+        money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -516,7 +539,8 @@
       check_status = #{checkStatus,jdbcType=INTEGER},
       check_time = #{checkTime,jdbcType=TIMESTAMP},
       pay_time = #{payTime,jdbcType=TIMESTAMP},
-      apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
