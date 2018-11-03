@@ -72,7 +72,7 @@ public class ToolsUtil {
            return s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24); 
        }
 
-       /**
+    /**
         * 获取开始日期和结束日期相差的天数
         * @param fromDate 开始日期
         * @param toDate 结束日期

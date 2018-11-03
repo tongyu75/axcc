@@ -81,6 +81,7 @@
         and is_delete = #{isDelete,jdbcType=INTEGER}
       </if>
     </where>
+    order by voucher_status
   </select>
   <select id="countVoucherByBean" parameterType="com.axcc.model.Voucher" resultType="java.lang.Integer">
     select  count(id) from voucher
