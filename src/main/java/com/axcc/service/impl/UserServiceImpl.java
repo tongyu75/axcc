@@ -156,4 +156,58 @@ public class UserServiceImpl implements UserService {
 
         return returnDate;
     }
+
+    /**
+     * 我的会员
+     * @param original 当前会员original
+     */
+    @Override
+    public Map<String, Object> listMyMember(String original) {
+        Map<String, Object> returnDate = new HashMap<>();
+        // 直推会员
+        List<Map<String, Object>> firstMap = new ArrayList<>();
+        // 间推会员
+        List<Map<String, Object>> secondMap = new ArrayList<>();
+        // 间推会员
+        List<Map<String, Object>> otherMap = new ArrayList<>();
+        // 会员信息查询
+        List<Map<String, Object>> listMap = usersDao.listShareMoney(original);
+        // 遍历会员信息
+        for (Map<String, Object> mp : listMap) {
+            String userName = (String) mp.get("userName");
+            String originalValue = (String) mp.get("original");
+            float buyMoney = (float) mp.get("buyMoney");
+            String checkTime = (String) mp.get("checkTime");
+            // 数据例子：直推会员:32-33, 间推会员：32-33-34，其中32表示当前的会员
+            String[] data = originalValue.replace(originalValue + "-", "").split("-");
+            // data长度为1代表是值推会员
+            if (data.length == 1) {
+                Map<String, Object> mpLevel1 = new HashMap<>();
+                mpLevel1.put("level", "直推会员");
+                mpLevel1.put("userName", userName);
+                mpLevel1.put("time", checkTime);
+                firstMap.add(mpLevel1);
+                // 长度为2代表是间推会员
+            } else if (data.length == 2) {
+                Map<String, Object> mpLevel2 = new HashMap<>();
+                mpLevel2.put("level", "间推会员");
+                mpLevel2.put("userName", userName);
+                mpLevel2.put("time", checkTime);
+                secondMap.add(mpLevel2);
+            } else {
+                Map<String, Object> mpLevel3 = new HashMap<>();
+                mpLevel3.put("level", "区间会员");
+                mpLevel3.put("userName", userName);
+                mpLevel3.put("time", checkTime);
+                otherMap.add(mpLevel3);
+            }
+        }
+        returnDate.put("level1Count", firstMap.size());
+        returnDate.put("level1Data", firstMap);
+        returnDate.put("level2Count", secondMap.size());
+        returnDate.put("level2Data", secondMap);
+        returnDate.put("level3Count", otherMap.size());
+        returnDate.put("level3Data", otherMap);
+        return returnDate;
+    }
 }

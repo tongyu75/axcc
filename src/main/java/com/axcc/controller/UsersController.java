@@ -958,4 +958,21 @@ public class UsersController {
         logger.info("getWithdrawCashes---end" + result.toString());
         return result;
     }
+
+    /**
+     * 我的会员
+     */
+    @RequestMapping(value="/myMember",method = RequestMethod.POST)
+    public Map<String,Object> myMember(
+            @RequestParam(value = "original", required = true) String original){
+        logger.info("myMember---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Map<String, Object> data = userService.listMyMember(original);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", data);
+        logger.info("myMember---end" + result.toString());
+        return result;
+    }
 }

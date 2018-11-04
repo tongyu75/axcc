@@ -32,4 +32,6 @@ public interface UserService {
     int countShareMoney(String original);
 
     int countLevel1(String original);
+
+    Map<String, Object> listMyMember(String original);
 }
