@@ -347,17 +347,10 @@ public class UsersController {
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bUser = businessService.getBusinessUsersByUserId(userId); //根据用户ID获取用户及排队信息
         int total = businessService.getBuyStatusCount(); //获取已提车总量
-        result.put("waitNum",bUser.getWaitNum());
-        result.put("buyStatus",bUser.getBuyStatus());
-        result.put("checkStatus",bUser.getCheckStatus());
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("buyTotal",total);
-        if (null != result) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
-        } else {
-            result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
-        }
+        result.put("info",bUser);
         logger.info("getMemberInfo---end");
         return result;
     }
@@ -366,9 +359,9 @@ public class UsersController {
      *
      */
     @RequestMapping(value="/memberList",method = RequestMethod.POST)
-    public Map<String,Object> memberList(@RequestParam(value="pageNum") int pageNum,
-                                         @RequestParam(value="pageSize") int pageSize,
-                                         @RequestParam(value="loginName") String loginName){
+    public Map<String,Object> memberList(@RequestParam(value="pageNum",required = true) int pageNum,
+                                         @RequestParam(value="pageSize",required = true) int pageSize,
+                                         @RequestParam(value="loginName",required = false) String loginName){
         logger.info("listmember");
         //返回值
         Map<String,Object> result = new HashMap<String,Object>();
@@ -488,7 +481,10 @@ public class UsersController {
             // 返回值
             Map<String,Object> result = new HashMap<String, Object>();
             BusinessUser bean = new BusinessUser();
-            bean.setLoginName(phone);
+            if(!"".equals(phone)){
+                bean.setLoginName(phone);
+            }
+
             // 查询记录总条数
             int count = businessService.countAllUserList(bean);
             // 查询记录
@@ -510,8 +506,7 @@ public class UsersController {
     @RequestMapping(value="/updateCheckStatus",method = RequestMethod.POST)
     public Map<String,Object> updateCheckStatus(
             @RequestParam(value = "id", required = true) Integer id,
-            @RequestParam(value = "checkStatus", required = true) Integer checkStatus,
-            @RequestParam(value = "useVoucher", required = false) Integer useVoucher){
+            @RequestParam(value = "checkStatus", required = true) Integer checkStatus){
         logger.info("updateCheckStatus---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
@@ -596,7 +591,9 @@ public class UsersController {
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bean = new BusinessUser();
-        bean.setLoginName(phone);
+        if(!"".equals(phone)){
+            bean.setLoginName(phone);
+        }
         // 查询记录总条数
         int count = businessService.countBusinessUserByBean(bean);
         // 查询记录
@@ -621,7 +618,9 @@ public class UsersController {
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bean = new BusinessUser();
-        bean.setLoginName(phone);
+        if(!"".equals(phone)) {
+            bean.setLoginName(phone);
+        }
         bean.setCheckStatus(1);
         // 查询记录总条数
         int count = businessService.countBusinessUserByBean(bean);
@@ -636,7 +635,7 @@ public class UsersController {
     }
 
     /**
-     * 代理员：由登录的代理员班里的业务列表
+     * 代理员：由登录的代理员办理的业务列表
      */
     @RequestMapping(value = "listBusinessByAgent",method = RequestMethod.POST)
     public Map<String,Object> listBusinessByAgent(HttpServletRequest request,
@@ -647,10 +646,12 @@ public class UsersController {
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         //从session中获取当前登录的用户信息
-     //   Users user = (Users)request.getSession().getAttribute("user");
+        Users user = (Users)request.getSession().getAttribute("user");
         BusinessUser bean = new BusinessUser();
-        bean.setLoginName(phone);
-        bean.setAgentId(1);
+        if(!"".equals(phone)) {
+            bean.setLoginName(phone);
+        }
+        bean.setAgentId(user.getId());
         // 查询记录总条数
         int count = businessService.countBusinessByAgent(bean);
         // 查询记录
@@ -675,7 +676,7 @@ public class UsersController {
     public Map<String,Object> updateBuyMoney(HttpServletRequest request,
             @RequestParam(value = "id", required = true) Integer id,
             @RequestParam(value = "buyMoney", required = true) Float buyMoney,
-            @RequestParam(value = "voucherId", required = true) Integer voucherId,
+            @RequestParam(value = "voucherId", required = false) Integer voucherId,
             @RequestParam(value = "voucherUsed", required = false) Integer voucherUsed){
         logger.info("updateCheckStatus---start");
         // 返回值
