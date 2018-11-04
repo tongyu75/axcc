@@ -1,10 +1,7 @@
 package com.axcc.controller;
 
 import com.axcc.model.*;
-import com.axcc.service.BusinessService;
-import com.axcc.service.MoneyApplyService;
-import com.axcc.service.UserService;
-import com.axcc.service.VoucherService;
+import com.axcc.service.*;
 import com.axcc.utils.BaseResult;
 import com.axcc.utils.FileResourcePathUtil;
 import com.axcc.utils.QRCodeConstants;
@@ -63,6 +60,8 @@ public class UsersController {
     @Autowired
     MoneyApplyService moneyApplyService;
 
+    @Autowired
+    MoneyApplyDetailService moneyApplyDetailService;
     /**
      * 用户登录
      * @param phone 手机号
@@ -819,7 +818,7 @@ public class UsersController {
     /**
      * 推荐用户的二维码
      */
-    @RequestMapping(value="/qrCode", method = RequestMethod.POST)
+    @RequestMapping(value="/qrCode", method = RequestMethod.GET)
     @ResponseBody
     public void createQrCode(
             @RequestParam(value = "registerUrl", required = true) String registerUrl,
@@ -872,9 +871,6 @@ public class UsersController {
         Map<String,Object> result = new HashMap<String, Object>();
 
         // 将代理员业务表中信息的提现状态变为已提现
-        /*Business business = new Business();
-        business.
-        businessService.updateBusinessForBean()*/
         MoneyApply moneyApply = new MoneyApply();
         moneyApply.setUserId(userId);
         moneyApply.setApplyMoney(applyMoney);
@@ -887,6 +883,23 @@ public class UsersController {
         if (value == 1) {
             result.put("code", BaseResult.SUCCESS_CODE);
             result.put("msg", BaseResult.SUCCESS_MSG);
+            /* TODO 目前不需要
+            // 提现申请完成后，要插入提现明细表
+            MoneyApplyDetail detail = new MoneyApplyDetail();
+            // 提现金额
+            detail.setApplyMoney(applyMoney);
+            // 提现状态（0：未提现，1：提现中, 2:已提现）
+            detail.setApplyStatus(0);
+            // 提现时间
+            detail.setApplyTime(new Date());
+            int detailValue = moneyApplyDetailService.insertMoneyApplyDetailForBean(detail);
+            if (detailValue == 1) {
+                result.put("code", BaseResult.SUCCESS_CODE);
+                result.put("msg", BaseResult.SUCCESS_MSG);
+            } else  {
+                result.put("code", BaseResult.FAIL_CODE);
+                result.put("msg", BaseResult.FAIL_MSG);
+            }*/
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
