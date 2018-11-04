@@ -33,4 +33,12 @@ public interface BusinessService {
     List<BusinessUser> listBusinessUserByBean(BusinessUser bean, int pageNum, int pageSize);
 
     int countBusinessUserByBean(BusinessUser bean);
+
+    List<BusinessUser> listAllUserByBean(BusinessUser bean, int pageNum, int pageSize);
+
+    int countAllUserList(BusinessUser bean);
+
+    List<BusinessUser> listBusinessByAgent(BusinessUser bean, int pageNum, int pageSize);
+
+    int countBusinessByAgent(BusinessUser bean);
 }

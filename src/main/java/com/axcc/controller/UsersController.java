@@ -6,7 +6,6 @@ import com.axcc.utils.BaseResult;
 import com.axcc.utils.FileResourcePathUtil;
 import com.axcc.utils.QRCodeConstants;
 import com.axcc.utils.QRCodeUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -478,6 +477,31 @@ public class UsersController {
     }
 
     /**
+     * 管理员登录：查看所有用户信息
+     */
+    @RequestMapping(value = "getAllUserList",method = RequestMethod.POST)
+    public Map<String,Object> getAllUserList(
+        @RequestParam(value = "phone", required = false) String phone,
+        @RequestParam(value = "pageNum", required = true) Integer pageNum,
+        @RequestParam(value = "pageSize", required = true) Integer pageSize){
+            logger.info("getAllUserList---start");
+            // 返回值
+            Map<String,Object> result = new HashMap<String, Object>();
+            BusinessUser bean = new BusinessUser();
+            bean.setLoginName(phone);
+            // 查询记录总条数
+            int count = businessService.countAllUserList(bean);
+            // 查询记录
+            List<BusinessUser> lstBusinessUser = businessService.listAllUserByBean(bean, pageNum, pageSize);
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
+            result.put("info", lstBusinessUser);
+            result.put("total", count);
+            logger.info("getAllUserList---end" + result.toString());
+            return result;
+    }
+
+    /**
      * 管理员审核状态和代理员审核状态的更新
      * 参数：id  业务对应的ID
      *      checkStatus  审核状态
@@ -586,26 +610,83 @@ public class UsersController {
     }
 
     /**
+     * 代理员：代办业务列表,即没付费的用户信息
+     */
+    @RequestMapping(value = "listBusinessNoMoney",method = RequestMethod.POST)
+    public Map<String,Object> listBusinessNoMoney(
+            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "pageNum", required = true) Integer pageNum,
+            @RequestParam(value = "pageSize", required = true) Integer pageSize){
+        logger.info("listWait---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        BusinessUser bean = new BusinessUser();
+        bean.setLoginName(phone);
+        bean.setCheckStatus(1);
+        // 查询记录总条数
+        int count = businessService.countBusinessUserByBean(bean);
+        // 查询记录
+        List<BusinessUser> lstBusinessUser = businessService.listBusinessUserByBean(bean, pageNum, pageSize);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", lstBusinessUser);
+        result.put("total", count);
+        logger.info("listWait---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 代理员：由登录的代理员班里的业务列表
+     */
+    @RequestMapping(value = "listBusinessByAgent",method = RequestMethod.POST)
+    public Map<String,Object> listBusinessByAgent(HttpServletRequest request,
+            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "pageNum", required = true) Integer pageNum,
+            @RequestParam(value = "pageSize", required = true) Integer pageSize){
+        logger.info("listWait---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        //从session中获取当前登录的用户信息
+     //   Users user = (Users)request.getSession().getAttribute("user");
+        BusinessUser bean = new BusinessUser();
+        bean.setLoginName(phone);
+        bean.setAgentId(1);
+        // 查询记录总条数
+        int count = businessService.countBusinessByAgent(bean);
+        // 查询记录
+        List<BusinessUser> lstBusinessUser = businessService.listBusinessByAgent(bean, pageNum, pageSize);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", lstBusinessUser);
+        result.put("total", count);
+        logger.info("listWait---end" + result.toString());
+        return result;
+    }
+
+    /**
      * 代理员登录：输入的实缴金额
      * 参数：id  业务对应的ID
      *      buyMoney   排队购车所需费用
      *      useMoney   优惠券金额，使用时传值
+     *      voucherId   优惠券ID
+     *      voucherUsed  是否使用优惠券 0：未使用，1 使用
      */
     @RequestMapping(value="/updateBuyMoney",method = RequestMethod.POST)
-    public Map<String,Object> updateBuyMoney(
+    public Map<String,Object> updateBuyMoney(HttpServletRequest request,
             @RequestParam(value = "id", required = true) Integer id,
             @RequestParam(value = "buyMoney", required = true) Float buyMoney,
-            @RequestParam(value = "useMoney", required = false) Float useMoney){
+            @RequestParam(value = "voucherId", required = true) Integer voucherId,
+            @RequestParam(value = "voucherUsed", required = false) Integer voucherUsed){
         logger.info("updateCheckStatus---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
-
+        //从session中获取当前登录的用户信息
+        Users user = (Users)request.getSession().getAttribute("user");
         //使用使用优惠券
-        if(null != useMoney && useMoney != 0){
-            //计算实际付费金额
-            buyMoney = buyMoney - useMoney;
+        if(1 == voucherUsed){
             //更新使用后优惠券信息
             Voucher bean = new Voucher();
+            bean.setId(voucherId);
             bean.setVoucherStatus(3);
             bean.setIsDelete(1);
             int value = voucherService.updateVoucherByBean(bean);
@@ -619,6 +700,7 @@ public class UsersController {
         //会员付费
         Business business = new Business();
         business.setId(id);
+        business.setAgentId(user.getId());
         business.setBuyMoney(buyMoney);// 实缴金额
         //管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
         business.setCheckStatus(2);
@@ -626,7 +708,7 @@ public class UsersController {
         business.setPayTime(new Date());
         int value = businessService.updateBusinessForBean(business);
         if (value == 1) {
-            if(null == useMoney){
+            if(0 == voucherUsed){
                 result = insertVoucherInfo(id); //未使用优惠券缴费，为用户发放优惠券
             }else{
                 result.put("code", BaseResult.SUCCESS_CODE);
@@ -670,6 +752,9 @@ public class UsersController {
             }
             if(count > 0 && count == listVou.size()){
                 result=  addVoucher(business);
+            }else{
+                result.put("code", BaseResult.SUCCESS_CODE);
+                result.put("msg", BaseResult.SUCCESS_MSG);
             }
         }else{
             //用户从未获得过优惠券，发放优惠券

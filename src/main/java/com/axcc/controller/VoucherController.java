@@ -72,12 +72,6 @@ public class VoucherController {
         Voucher voucher = new Voucher();
         voucher.setUserId(userId);
         List<Voucher> vou = voucherService.listVoucherByBean(voucher);
-        if(0 == vou.size()){
-            result.put("msg", BaseResult.SUCCESS_MSG);
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("info",null);
-            return result;
-        }
         result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("info",vou);

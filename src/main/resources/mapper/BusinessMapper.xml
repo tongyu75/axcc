@@ -249,6 +249,67 @@
       </if>
     </where>
   </select>
+  <select id="listAllUserByBean" parameterType="com.axcc.model.BusinessUser" resultMap="BusinessUserResultMap">
+    select B.login_name, B.user_name, B.card, B.parent_id,
+    A.id, A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type,
+    A.buy_status, A.check_status, A.check_time, A.pay_time, A.apply_time
+    from users B left join business A on B.id = A.user_id
+    <where>
+      <if test="userId != null">
+        and A.user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="agentId != null">
+        and A.agent_id = #{agentId,jdbcType=INTEGER}
+      </if>
+      <if test="adminId != null">
+        and A.admin_id = #{adminId,jdbcType=INTEGER}
+      </if>
+      <if test="waitNum != null">
+        and A.wait_num = #{waitNum,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null">
+        and A.buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="buyType != null">
+        and A.buy_type = #{buyType,jdbcType=INTEGER}
+      </if>
+      <if test="buyStatus != null">
+        and A.buy_status = #{buyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="checkStatus != null">
+        and A.check_status = #{checkStatus,jdbcType=INTEGER}
+      </if>
+      <if test="checkTime != null">
+        and A.check_time = #{checkTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="payTime != null">
+        and A.pay_time = #{payTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyTime != null">
+        and A.apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="loginName != null">
+        and B.login_name = #{loginName,jdbcType=VARCHAR}
+      </if>
+      <if test="moneyApplyStatus != null">
+        and money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="listBusinessByAgent" parameterType="com.axcc.model.BusinessUser" resultMap="BusinessUserResultMap">
+    select B.login_name, B.user_name, B.card, B.parent_id,
+    A.id, A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type,
+    A.buy_status, A.check_status, A.check_time, A.pay_time, A.apply_time
+    from users B inner join business A on B.id = A.user_id
+    <where>
+      <if test="agentId != null">
+        and A.agent_id = #{agentId,jdbcType=INTEGER}
+      </if>
+      <if test="loginName != null">
+        and B.login_name = #{loginName,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
   <select id="countBusinessByBean" parameterType="com.axcc.model.Business" resultType="java.lang.Integer">
     select count(id) from business
     <where>
@@ -325,6 +386,58 @@
       </if>
       <if test="applyTime != null">
         and A.apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="loginName != null">
+        and B.login_name = #{loginName,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="countAllUserList" parameterType="com.axcc.model.BusinessUser" resultType="java.lang.Integer">
+    select count(B.id) from business A right join users B on A.user_id = B.id
+    <where>
+      <if test="userId != null">
+        and A.user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="agentId != null">
+        and A.agent_id = #{agentId,jdbcType=INTEGER}
+      </if>
+      <if test="adminId != null">
+        and A.admin_id = #{adminId,jdbcType=INTEGER}
+      </if>
+      <if test="waitNum != null">
+        and A.wait_num = #{waitNum,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null">
+        and A.buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="buyType != null">
+        and A.buy_type = #{buyType,jdbcType=INTEGER}
+      </if>
+      <if test="buyStatus != null">
+        and A.buy_status = #{buyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="checkStatus != null">
+        and A.check_status = #{checkStatus,jdbcType=INTEGER}
+      </if>
+      <if test="checkTime != null">
+        and A.check_time = #{checkTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="payTime != null">
+        and A.pay_time = #{payTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyTime != null">
+        and A.apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="loginName != null">
+        and B.login_name = #{loginName,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="countBusinessByAgent" parameterType="com.axcc.model.BusinessUser" resultType="java.lang.Integer">
+    select count(A.id) from business A inner join users B on A.user_id = B.id
+    <where>
+      <if test="agentId != null">
+        and A.agent_id = #{agentId,jdbcType=INTEGER}
       </if>
       <if test="loginName != null">
         and B.login_name = #{loginName,jdbcType=VARCHAR}

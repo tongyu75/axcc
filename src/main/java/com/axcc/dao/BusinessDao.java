@@ -27,6 +27,14 @@ public interface BusinessDao {
 
     int countBusinessUserByBean(BusinessUser bean);
 
+    List<BusinessUser> listAllUserByBean(BusinessUser bean);
+
+    int countAllUserList(BusinessUser bean);
+
+    List<BusinessUser> listBusinessByAgent(BusinessUser bean);
+
+    int countBusinessByAgent(BusinessUser bean);
+
     int insertBusinessForBean(Business record);
 
     int updateBusinessForBean(Business record);
@@ -38,8 +46,4 @@ public interface BusinessDao {
     int insertSelective(Business record);
 
     Business selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(Business record);
-
-    int updateByPrimaryKey(Business record);
 }
