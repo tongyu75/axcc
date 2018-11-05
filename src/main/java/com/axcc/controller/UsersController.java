@@ -950,7 +950,7 @@ public class UsersController {
     public String getLogQrCodeContent(String serverAddress, Integer userId, String phone) {
         StringBuilder comment = new StringBuilder();
         try {
-            comment.append(serverAddress).append("&userId=").append(userId).append("&phone=").append(phone);
+            comment.append(serverAddress).append("?userId=").append(userId).append("&phone=").append(phone);
             logger.info("createQrCode qrcode " + comment.toString());
         } catch (Exception e) {
             e.printStackTrace();
