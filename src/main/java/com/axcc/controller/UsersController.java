@@ -384,11 +384,11 @@ public class UsersController {
     }
 
     /**
-     * 会员详情
+     * 根据ID获取会员详情
      * @param id 会员ID
      */
     @RequestMapping(value="/member/{id}",method = RequestMethod.GET)
-    public Map<String,Object> memberDetail(@PathVariable int id){
+    public Map<String,Object> memberDetail(@RequestParam(value = "id",required = true ) int id){
         logger.info("member---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
@@ -397,6 +397,22 @@ public class UsersController {
         result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("info", user);
         logger.info("member---end" + result.toString());
+        return result;
+    }
+    /**
+     * 根据手机号获取会员详情
+     * @param loginName 会员手机号
+     */
+    @RequestMapping(value="/memberByLoginName",method = RequestMethod.POST)
+    public Map<String,Object> memberByLoginName(@RequestParam(value = "loginName",required = true) String loginName){
+        logger.info("memberByLoginName---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Users user = userService.getUserByLoginName(loginName);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", user);
+        logger.info("memberByLoginName---end" + result.toString());
         return result;
     }
 
