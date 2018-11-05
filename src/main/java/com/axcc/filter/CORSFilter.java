@@ -27,6 +27,8 @@ public class CORSFilter implements Filter
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age", "3600");
 		response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Pragma, Cache-Control, Expires");
+		// SessionFilter时返回header值，如果不加这个，前端页面无法获取header值
+		response.setHeader("Access-Control-Expose-Headers", "sessionstatus");
 
 		chain.doFilter(req, res);
 	}
