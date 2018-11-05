@@ -388,7 +388,7 @@ public class UsersController {
      * @param id 会员ID
      */
     @RequestMapping(value="/member/{id}",method = RequestMethod.GET)
-    public Map<String,Object> memberDetail(@RequestParam(value = "id",required = true ) int id){
+    public Map<String,Object> memberDetail(@PathVariable(value = "id",required  = true ) int id){
         logger.info("member---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
