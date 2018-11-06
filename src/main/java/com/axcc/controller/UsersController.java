@@ -469,6 +469,8 @@ public class UsersController {
         business.setUserId(userId);
         // 购车类型（1：10万，2:20万，3:30万，5:50万）
         business.setBuyType(buyType);
+        //购车状态，0 未排队，1 排队中，2 已出车
+        business.setBuyStatus(0);
         // 管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
         business.setCheckStatus(0);
         // 申请时间
