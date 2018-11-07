@@ -506,7 +506,7 @@ public class UsersController {
             // 查询记录总条数
             int count = businessService.countAllUserList(bean);
             // 查询记录
-            List<BusinessUser> lstBusinessUser = businessService.listAllUserByBean(bean, pageNum, pageSize);
+            List<Map<String,Object>> lstBusinessUser = businessService.listAllUserByBean(bean, pageNum, pageSize);
             result.put("code", BaseResult.SUCCESS_CODE);
             result.put("msg", BaseResult.SUCCESS_MSG);
             result.put("info", lstBusinessUser);
@@ -550,8 +550,7 @@ public class UsersController {
      * 管理员登陆查看会员的缴费详情和排队详情以及代理员登陆查看详情
      */
     @RequestMapping(value="/businessDetail",method = RequestMethod.POST)
-    public Map<String,Object> businessDetail(
-            @RequestParam(value = "id", required = true) Integer id){
+    public Map<String,Object> businessDetail(@RequestParam(value = "id") Integer id){
         logger.info("business---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
@@ -815,7 +814,8 @@ public class UsersController {
                                            HttpServletRequest request) {
         logger.info("uploadPhoto-----------start---------");
         //获取用户
-        Users users = (Users)request.getSession().getAttribute("user");
+//        Users users = (Users)request.getSession().getAttribute("user");
+        Users users = userService.getUserById(2);
         //返回类型
         Map<String, Object> result = new HashMap<String, Object>();
         //定义时间格式
@@ -833,7 +833,7 @@ public class UsersController {
         //定义文件新名：以时间戳命名
         fileName = fileTime + suffixName;
         //定义实际保存位置
-        String path = FileResourcePathUtil.propertyValueMap.get("photoDir") + users.getLoginName();
+        String path = FileResourcePathUtil.propertyValueMap.get("photoDir") + users.getLoginName()+"/";
         File targetFile = new File(path, fileName);
         if (!targetFile.exists()) {
             targetFile.mkdirs();
@@ -843,7 +843,7 @@ public class UsersController {
             file.transferTo(targetFile);
         } catch (IOException e) {
             result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
+            result.put("msg", "上传失败");
             return result;
         }
 
@@ -855,7 +855,7 @@ public class UsersController {
         int value = userService.updateUserForBean(bean);
         if (value != 1) {
             result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
+            result.put("msg", "保存失败");
             return result;
         }
 
@@ -863,8 +863,8 @@ public class UsersController {
         request.getSession().setAttribute("user", bean);
 
         logger.info("updateUserInfo-----" + value + "----end" + result.toString());
-        result.put("code", BaseResult.FAIL_CODE);
-        result.put("msg", BaseResult.FAIL_MSG);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
         return result;
     }
 

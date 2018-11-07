@@ -4,6 +4,7 @@ import com.axcc.model.Business;
 import com.axcc.model.BusinessUser;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tongshr on 2018/10/02.
@@ -34,7 +35,7 @@ public interface BusinessService {
 
     int countBusinessUserByBean(BusinessUser bean);
 
-    List<BusinessUser> listAllUserByBean(BusinessUser bean, int pageNum, int pageSize);
+    List<Map<String,Object>> listAllUserByBean(BusinessUser bean, int pageNum, int pageSize);
 
     int countAllUserList(BusinessUser bean);
 

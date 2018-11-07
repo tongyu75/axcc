@@ -4,6 +4,7 @@ import com.axcc.model.Business;
 import com.axcc.model.BusinessUser;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BusinessDao {
 
@@ -27,7 +28,7 @@ public interface BusinessDao {
 
     int countBusinessUserByBean(BusinessUser bean);
 
-    List<BusinessUser> listAllUserByBean(BusinessUser bean);
+    List<Map<String,Object>> listAllUserByBean(BusinessUser bean);
 
     int countAllUserList(BusinessUser bean);
 

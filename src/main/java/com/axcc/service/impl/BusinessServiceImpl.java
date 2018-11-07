@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tongshr on 2018/10/02.
@@ -89,9 +90,28 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public List<BusinessUser> listAllUserByBean(BusinessUser bean, int pageNum, int pageSize) {
+    public List<Map<String,Object>> listAllUserByBean(BusinessUser bean, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        return BusinessDao.listAllUserByBean(bean);
+        List<Map<String,Object>> listMap = BusinessDao.listAllUserByBean(bean);
+        for(Map<String,Object> map : listMap){
+            System.out.println(map);
+            if(null == map.get("buyType")){
+                map.put("buyType","未申请购车");
+            }
+            if(null == map.get("buyMoney")){
+                map.put("buyMoney","无");
+            }
+            if(null == map.get("buyStatus")){
+                map.put("buyStatus","未申请购车");
+            }
+            if(null == map.get("checkStatus")){
+                map.put("checkStatus","无");
+            }
+            if(null == map.get("waitNum")){
+                map.put("waitNum","无");
+            }
+        }
+        return listMap;
     }
 
     @Override
