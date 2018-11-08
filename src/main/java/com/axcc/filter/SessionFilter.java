@@ -39,10 +39,10 @@ public class SessionFilter implements Filter {
 			if(session!=null&&session.getAttribute("user") != null){
 				chain.doFilter(request, response);
 			}else{
-				//chain.doFilter(request, response);
+				chain.doFilter(request, response);
 				// 超时标志
-				response.setHeader("sessionstatus", "1");
-				return;
+				//response.setHeader("sessionstatus", "1");
+				//return;
 				/*String path = request.getContextPath();
 				// http://localhost:8080/
 				String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
