@@ -18,6 +18,8 @@ public interface VoucherDao {
 
     int updateVoucherByBean(Voucher bean);
 
+    int deleteVoucherByUserId(Integer userId);
+
     //----------------------------------------------------
     
     int deleteByPrimaryKey(Integer id);

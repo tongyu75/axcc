@@ -27,6 +27,8 @@ public class Business {
 
     private Date applyTime;
 
+    private Integer isDelete;
+
     private Integer moneyApplyStatus;
 
     public Integer getId() {
@@ -131,5 +133,13 @@ public class Business {
 
     public void setMoneyApplyStatus(Integer moneyApplyStatus) {
         this.moneyApplyStatus = moneyApplyStatus;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
     }
 }

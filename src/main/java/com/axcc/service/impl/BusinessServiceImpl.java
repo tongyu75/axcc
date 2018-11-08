@@ -4,6 +4,7 @@ import com.axcc.dao.BusinessDao;
 import com.axcc.model.Business;
 import com.axcc.model.BusinessUser;
 import com.axcc.service.BusinessService;
+import com.axcc.utils.BaseResult;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,11 @@ public class BusinessServiceImpl implements BusinessService {
     public int insertBusinessForBean(Business bean) {
 
         return BusinessDao.insertBusinessForBean(bean);
+    }
+
+    @Override
+    public int deleteByUserId(Integer userId){
+        return BusinessDao.deleteByUserId(userId);
     }
 
     @Override
@@ -95,18 +101,60 @@ public class BusinessServiceImpl implements BusinessService {
         List<Map<String,Object>> listMap = BusinessDao.listAllUserByBean(bean);
         for(Map<String,Object> map : listMap){
             System.out.println(map);
+            //------------------购车类型-----------------------
             if(null == map.get("buyType")){
                 map.put("buyType","未申请购车");
+            }else{
+                int bType = (int)map.get("buyType");
+                if(1 == bType){
+                    map.put("buyType", BaseResult.BUYTYPE_1);
+                }else if(2 == bType){
+                    map.put("buyType", BaseResult.BUYTYPE_2);
+                }else if(3 == bType){
+                    map.put("buyType", BaseResult.BUYTYPE_3);
+                }else if(5 == bType){
+                    map.put("buyType", BaseResult.BUYTYPE_5);
+                }
             }
+            //------------------购车金额------------------------
             if(null == map.get("buyMoney")){
                 map.put("buyMoney","无");
             }
+            //------------------购车状态------------------------
             if(null == map.get("buyStatus")){
                 map.put("buyStatus","未申请购车");
+            }else{
+                int bStatus = (int)map.get("buyStatus");
+                if(0 == bStatus){
+                    map.put("buyStatus",BaseResult.BUYSTATUS_0);
+                }else if(1 == bStatus){
+                    map.put("buyStatus",BaseResult.BUYSTATUS_1);
+                }else if(2 == bStatus){
+                    map.put("buyStatus",BaseResult.BUYSTATUS_2);
+                }
             }
+            //------------------审核状态------------------------
             if(null == map.get("checkStatus")){
                 map.put("checkStatus","无");
+            }else{
+                int chStatus = (int)map.get("checkStatus");
+                if (0 == chStatus){
+                    map.put("checkStatus",BaseResult.CHECKSTATUS_0);
+                }
+                else if (1 == chStatus){
+                    map.put("checkStatus",BaseResult.CHECKSTATUS_1);
+                }
+                else if (2 == chStatus){
+                    map.put("checkStatus",BaseResult.CHECKSTATUS_2);
+                }
+                else if (3 == chStatus){
+                    map.put("checkStatus",BaseResult.CHECKSTATUS_3);
+                }
+                else if (4 == chStatus){
+                    map.put("checkStatus",BaseResult.CHECKSTATUS_4);
+                }
             }
+            //-------------------排队号码------------------------
             if(null == map.get("waitNum")){
                 map.put("waitNum","无");
             }

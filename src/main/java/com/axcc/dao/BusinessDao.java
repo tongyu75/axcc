@@ -40,6 +40,8 @@ public interface BusinessDao {
 
     int updateBusinessForBean(Business record);
 
+    int deleteByUserId(Integer userId);
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(Business record);

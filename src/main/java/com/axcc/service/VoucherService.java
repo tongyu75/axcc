@@ -13,4 +13,6 @@ public interface VoucherService {
     List<Voucher> listVoucherByBean(Voucher bean);
 
     int updateVoucherByBean(Voucher bean);
+
+    int deleteVoucherByUserId(Integer userId);
 }

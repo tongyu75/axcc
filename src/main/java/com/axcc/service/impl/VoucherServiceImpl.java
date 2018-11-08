@@ -29,4 +29,8 @@ public class VoucherServiceImpl implements VoucherService {
     public int updateVoucherByBean(Voucher bean){
         return voucherDao.updateVoucherByBean(bean);
     }
+
+    public int deleteVoucherByUserId(Integer userId){
+        return voucherDao.deleteVoucherByUserId(userId);
+    }
 }

@@ -32,4 +32,22 @@ public class BaseResult {
         }
         return map;
     }
+
+    /* 购车类型 buyType */
+    public static final String BUYTYPE_1 = "五进一十万车型";
+    public static final String BUYTYPE_2 = "五进二十万车型";
+    public static final String BUYTYPE_3 = "五进三十万车型";
+    public static final String BUYTYPE_5 = "五进五十万车型";
+
+    /* 购车状态 buyStatus*/
+    public static final String BUYSTATUS_0 = "未排队";
+    public static final String BUYSTATUS_1 = "排队中";
+    public static final String BUYSTATUS_2 = "已出车";
+
+    /* 管理员审核状态 check_status*/
+    public static final String CHECKSTATUS_0 = "已提交申请，未审核";
+    public static final String CHECKSTATUS_1 = "审核通过，未缴费";
+    public static final String CHECKSTATUS_2 = "审核通过，已缴费";
+    public static final String CHECKSTATUS_3 = "审核通过，缴费失败";
+    public static final String CHECKSTATUS_4 = "审核未通过";
 }

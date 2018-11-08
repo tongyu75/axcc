@@ -417,7 +417,25 @@ public class UsersController {
     }
 
     /**
-     * 会员删除
+     * 根据用户手机号删除
+     */
+    @RequestMapping(value = "delUserByLoginName",method = RequestMethod.DELETE)
+    public Map<String,Object> delUserByLoginName(
+            @RequestParam(value = "loginName", required = true) String loginName){
+        //返回类型
+        Map<String,Object> map = new HashMap<String,Object>();
+        Users user = userService.getUserByLoginName(loginName);
+        if(null != user){
+            map = memberDelete(user.getId());
+        }else{
+            map.put("code", BaseResult.FAIL_CODE);
+            map.put("msg", BaseResult.FAIL_MSG);
+        }
+        return map;
+    }
+
+    /**
+     * 根据ID删除会员
      * @param id 会员ID
      */
     @RequestMapping(value="/member/{id}",method = RequestMethod.DELETE)
@@ -425,6 +443,31 @@ public class UsersController {
         logger.info("member---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
+        //删除优惠券信息(逻辑删除)
+        Voucher voucher = new Voucher();
+        voucher.setUserId(id);
+        List<Voucher> listVou = voucherService.listVoucherByBean(voucher);
+        if(listVou.size() > 0){
+            int delVou = voucherService.deleteVoucherByUserId(id);
+            if (delVou != 1) {
+                result.put("code", BaseResult.FAIL_CODE);
+                result.put("msg", BaseResult.FAIL_MSG);
+                return result;
+            }
+        }
+        //删除业务信息(逻辑删除)
+        Business business = new Business();
+        business.setUserId(id);
+        int count = businessService.countBusinessByBean(business);
+        if(count > 0){
+            int delBusi = businessService.deleteByUserId(id);
+            if (delBusi != 1) {
+                result.put("code", BaseResult.FAIL_CODE);
+                result.put("msg", BaseResult.FAIL_MSG);
+                return result;
+            }
+        }
+        //删除用户信息
         Users user = new Users();
         user.setId(id);
         // 逻辑删除
@@ -473,6 +516,8 @@ public class UsersController {
         business.setBuyStatus(0);
         // 管理员审核状态（0：会员已提交申请，未审核；1：审核通过，未缴费；2：审核通过，已缴费；3：审核通过，缴费失败；4：审核未通过）
         business.setCheckStatus(0);
+        //业务状态：0 未删除，1 已删除
+        business.setIsDelete(0);
         // 申请时间
         business.setApplyTime(new Date());
         int value = businessService.insertBusinessForBean(business);
@@ -519,7 +564,7 @@ public class UsersController {
      * 管理员审核状态和代理员审核状态的更新
      * 参数：id  业务对应的ID
      *      checkStatus  审核状态
-     *      useVoucher   是否使用优惠券，只有交钱时才才传值
+     *      checkStatus   是否使用优惠券，只有交钱时才才传值
      */
     @RequestMapping(value="/updateCheckStatus",method = RequestMethod.POST)
     public Map<String,Object> updateCheckStatus(
@@ -685,7 +730,7 @@ public class UsersController {
      * 代理员登录：输入的实缴金额
      * 参数：id  业务对应的ID
      *      buyMoney   排队购车所需费用
-     *      useMoney   优惠券金额，使用时传值
+     *      agentId    登录的代理员ID
      *      voucherId   优惠券ID
      *      voucherUsed  是否使用优惠券 0：未使用，1 使用
      */
@@ -693,13 +738,15 @@ public class UsersController {
     public Map<String,Object> updateBuyMoney(HttpServletRequest request,
             @RequestParam(value = "id", required = true) Integer id,
             @RequestParam(value = "buyMoney", required = true) Float buyMoney,
+            @RequestParam(value = "agentId", required = true) Integer agentId,
             @RequestParam(value = "voucherId", required = false) Integer voucherId,
-            @RequestParam(value = "voucherUsed", required = false) Integer voucherUsed){
+            @RequestParam(value = "voucherUsed", required = true) Integer voucherUsed){
         logger.info("updateCheckStatus---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         //从session中获取当前登录的用户信息
-        Users user = (Users)request.getSession().getAttribute("user");
+    //    Users user = (Users)request.getSession().getAttribute("user");
+        Users user = userService.getUserById(agentId);
         //使用使用优惠券
         if(1 == voucherUsed){
             //更新使用后优惠券信息

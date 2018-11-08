@@ -27,6 +27,8 @@ public class BusinessUser {
 
     private Date applyTime;
 
+    private Integer isDelete;
+
     private String loginName;
 
     private String userName;
@@ -131,6 +133,14 @@ public class BusinessUser {
 
     public void setApplyTime(Date applyTime) {
         this.applyTime = applyTime;
+    }
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
     }
 
     public String getLoginName() {

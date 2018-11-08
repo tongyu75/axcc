@@ -23,6 +23,8 @@ public interface BusinessService {
 
     int updateBusinessForBean(Business bean);
 
+    int deleteByUserId(Integer userId);
+
     List<Business> listBusinessByBean(Business bean, int pageNum, int pageSize);
 
     int countBusinessByBean(Business bean);
