@@ -104,6 +104,15 @@ public class UsersController {
         logger.info("user---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
+
+        // 根据parentId获取推荐人的original，用来生成注册人的original字段
+        Users paramRef = new Users();
+        paramRef.setLoginName(parentId);
+        Users refUses = userService.getUserByBean(paramRef);
+        // refOriginal的值如:32-31
+        String refOriginal = refUses.getOriginal();
+
+        // 插入注册会员
         Users paramUsers = new Users();
         paramUsers.setLoginName(phone);
         paramUsers.setUserName(userName);
@@ -116,8 +125,21 @@ public class UsersController {
         paramUsers.setUpdateTime(date);
         int value = userService.insertUserForBean(paramUsers);
         if (value == 1) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
+            // 更新注册会员的original
+            int addId = paramUsers.getId();
+            // original的值如：32-32-30
+            String original = refOriginal + "-" + addId;
+            Users updateBean = new Users();
+            updateBean.setId(addId);
+            updateBean.setOriginal(original);
+            int updateValue = userService.updateUserForBean(updateBean);
+            if (updateValue == 1) {
+                result.put("code", BaseResult.SUCCESS_CODE);
+                result.put("msg", BaseResult.SUCCESS_MSG);
+            } else {
+                result.put("code", BaseResult.FAIL_CODE);
+                result.put("msg", BaseResult.FAIL_MSG);
+            }
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
@@ -1088,7 +1110,7 @@ public class UsersController {
     }
 
     /**
-     * 提现列表
+     * 提现明细列表
      */
     @RequestMapping(value="/getWithdrawCashes",method = RequestMethod.POST)
     public Map<String,Object> getWithdrawCashes(

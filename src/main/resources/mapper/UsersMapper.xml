@@ -308,7 +308,7 @@
       #{userRole,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
       #{isDelete,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{proxyArea,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertUserForBean" parameterType="com.axcc.model.Users">
+  <insert id="insertUserForBean" parameterType="com.axcc.model.Users" keyProperty="id" useGeneratedKeys="true">
     insert into users
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -504,6 +504,7 @@
   <select id="listShareMoney" parameterType="java.lang.String" resultType="Map">
     SELECT
     U.user_name userName,
+    U.login_name loginName,
     substring_index(U.original,CONCAT(#{original,jdbcType=VARCHAR},"-"),-1) original,
     B.buy_money buyMoney,
     DATE_FORMAT(B.check_time,'%Y-%m-%d %H:%i:%s') checkTime

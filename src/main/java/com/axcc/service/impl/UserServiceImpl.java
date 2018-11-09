@@ -175,6 +175,7 @@ public class UserServiceImpl implements UserService {
         // 遍历会员信息
         for (Map<String, Object> mp : listMap) {
             String userName = (String) mp.get("userName");
+            String loginName = (String) mp.get("loginName");
             String originalValue = (String) mp.get("original");
             float buyMoney = (float) mp.get("buyMoney");
             String checkTime = (String) mp.get("checkTime");
@@ -185,6 +186,7 @@ public class UserServiceImpl implements UserService {
                 Map<String, Object> mpLevel1 = new HashMap<>();
                 mpLevel1.put("level", "直推会员");
                 mpLevel1.put("userName", userName);
+                mpLevel1.put("loginName", loginName);
                 mpLevel1.put("time", checkTime);
                 firstMap.add(mpLevel1);
                 // 长度为2代表是间推会员
@@ -192,12 +194,14 @@ public class UserServiceImpl implements UserService {
                 Map<String, Object> mpLevel2 = new HashMap<>();
                 mpLevel2.put("level", "间推会员");
                 mpLevel2.put("userName", userName);
+                mpLevel2.put("loginName", loginName);
                 mpLevel2.put("time", checkTime);
                 secondMap.add(mpLevel2);
             } else {
                 Map<String, Object> mpLevel3 = new HashMap<>();
                 mpLevel3.put("level", "区间会员");
                 mpLevel3.put("userName", userName);
+                mpLevel3.put("loginName", loginName);
                 mpLevel3.put("time", checkTime);
                 otherMap.add(mpLevel3);
             }
