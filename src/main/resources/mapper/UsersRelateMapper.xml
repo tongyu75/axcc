@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.axcc.dao.UsersRelateDao">
+  <resultMap id="BaseResultMap" type="com.axcc.model.UsersRelate">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="buy_money" jdbcType="REAL" property="buyMoney" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="apply_status" jdbcType="INTEGER" property="applyStatus" />
+    <result column="original" jdbcType="VARCHAR" property="original" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, buy_money, check_time, apply_time, pay_time, apply_status, original, description
+  </sql>
+  <select id="getUserRelateById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from users_relate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getUserRelateByBean" parameterType="com.axcc.model.UsersRelate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from users_relate
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null">
+        and buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="checkTime != null">
+        and apply_time = #{checkTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyTime != null">
+        and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="payTime != null">
+        and pay_time = #{payTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyStatus != null">
+        and apply_status = #{applyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="original != null">
+        and original = #{original,jdbcType=VARCHAR}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="countUserRelateByBean" parameterType="com.axcc.model.UsersRelate" resultType="java.lang.Integer">
+    select count(id) from users
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null">
+        and buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="checkTime != null">
+        and apply_time = #{checkTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyTime != null">
+        and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="payTime != null">
+        and pay_time = #{payTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyStatus != null">
+        and apply_status = #{applyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="original != null">
+        and original = #{original,jdbcType=VARCHAR}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="listUserRelateByBean" parameterType="com.axcc.model.UsersRelate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from users_relate
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null">
+        and buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="checkTime != null">
+        and apply_time = #{checkTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyTime != null">
+        and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="payTime != null">
+        and pay_time = #{payTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyStatus != null">
+        and apply_status = #{applyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="original != null">
+        and original = #{original,jdbcType=VARCHAR}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <update id="updateUserRelateForBean" parameterType="com.axcc.model.UsersRelate">
+    update users_relate
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="buyMoney != null">
+        buy_money = #{buyMoney,jdbcType=REAL}
+      </if>
+      <if test="checkTime != null">
+        apply_time = #{checkTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyTime != null">
+        apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=INTEGER}
+      </if>
+      <if test="original != null">
+        original = #{original,jdbcType=VARCHAR}
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.axcc.model.UsersRelate">
+    insert into users_relate (id, user_id, buy_money, check_time, apply_time, pay_time, apply_status, original, description)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{buyMoney,jdbcType=REAL},
+      #{checkTime,jdbcType=TIMESTAMP}, #{applyTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP},
+      #{apply_status,jdbcType=INTEGER}, #{original,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertUserRelateForBean" parameterType="com.axcc.model.UsersRelate" keyProperty="id" useGeneratedKeys="true">
+    insert into users_relate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="buyMoney != null">
+        buy_money,
+      </if>
+      <if test="checkTime != null">
+        apply_time,
+      </if>
+      <if test="applyTime != null">
+        apply_time,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="applyStatus != null">
+        apply_status,
+      </if>
+      <if test="original != null">
+        original,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="buyMoney != null">
+        #{buyMoney,jdbcType=REAL},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyTime != null">
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyStatus != null">
+        #{applyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="original != null">
+        #{original,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <!--<select id="listShareMoney" parameterType="java.lang.String" resultType="Map">
+    SELECT
+    U.user_name userName,
+    U.login_name loginName,
+    substring_index(U.original,CONCAT(#{original,jdbcType=VARCHAR},"-"),-1) original,
+    B.buy_money buyMoney,
+    DATE_FORMAT(B.check_time,'%Y-%m-%d %H:%i:%s') checkTime
+    FROM
+    users U
+    INNER JOIN business B ON U.id = B.user_id
+    WHERE
+    U.original LIKE CONCAT(#{original,jdbcType=VARCHAR},"-","%")
+    AND B.check_status = 2
+    AND B.buy_status = 2
+    ORDER BY B.check_time DESC
+  </select>
+  <select id="countShareMoney" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    users U
+    INNER JOIN business B ON U.id = B.user_id
+    WHERE
+    U.original LIKE CONCAT(#{original,jdbcType=VARCHAR},"-","%")
+    AND length(substring_index(U.original,#{original,jdbcType=VARCHAR},-1)) - length(REPLACE (substring_index(U.original,#{original,jdbcType=VARCHAR},-1), '-', '')) in (1,2)
+    AND B.check_status = 2
+    AND B.buy_status = 2
+    ORDER BY B.check_time DESC
+  </select>
+  <select id="countLeve1" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    users U
+    INNER JOIN business B ON U.id = B.user_id
+    WHERE
+    U.original LIKE CONCAT(#{userId,jdbcType=VARCHAR},"-","%")
+    AND length(substring_index(U.original,#{original,jdbcType=VARCHAR},-1)) - length(REPLACE (substring_index(U.original,#{original,jdbcType=VARCHAR},-1), '-', '')) in (1)
+    AND B.check_status = 2
+    AND B.buy_status = 2
+    ORDER BY B.check_time DESC
+  </select>-->
+</mapper>
