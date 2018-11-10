@@ -22,9 +22,14 @@ public interface UsersRelateDao {
 
     int updateUserRelateForBean(UsersRelate record);
 
-    List<Map<String, Object>> listShareMoney(String original);
+    List<Map<String, Object>> listShareMoney(Integer id);
 
-    int countShareMoney(String original);
+    int countShareMoney(Integer id);
 
-    int countLeve1(String original);
+    int countLeve1(Integer id);
+
+    Map<String, Object> sumShareMoney(Integer id);
+
+    List<Map<String, Object>> listMyMember(Integer id);
+
 }

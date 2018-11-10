@@ -17,6 +17,7 @@
   <select id="getMoneyApplyById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
+    from money_apply
     where id = #{id, jdbcType=INTEGER}
   </select>
   <select id="getMoneyApplyByBean" parameterType="com.axcc.model.MoneyApply" resultMap="BaseResultMap">

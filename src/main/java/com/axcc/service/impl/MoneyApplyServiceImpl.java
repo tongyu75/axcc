@@ -25,6 +25,11 @@ public class MoneyApplyServiceImpl implements MoneyApplyService {
     private MoneyApplyDao moneyApplyDao;
 
     @Override
+    public MoneyApply getMoneyApplyById(int id) {
+        return moneyApplyDao.getMoneyApplyById(id);
+    }
+
+    @Override
     public int insertMoneyApplyForBean(MoneyApply bean) {
         return moneyApplyDao.insertMoneyApplyForBean(bean);
     }

@@ -27,11 +27,4 @@ public interface UserService {
 
     List<Users> findAllUser(int pageNum, int pageSize);
 
-    List<Map<String, Object>> listShareMoney(String original,  int pageNum, int pageSize);
-
-    int countShareMoney(String original);
-
-    int countLevel1(String original);
-
-    Map<String, Object> listMyMember(String original);
 }

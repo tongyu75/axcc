@@ -21,6 +21,10 @@ public class UsersRelate {
 
     private String description;
 
+    private Integer level;
+
+    private Integer childId;
+
     public Integer getId() {
         return id;
     }
@@ -91,5 +95,21 @@ public class UsersRelate {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getChildId() {
+        return childId;
+    }
+
+    public void setChildId(Integer childId) {
+        this.childId = childId;
     }
 }

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -61,6 +62,9 @@ public class UsersController {
 
     @Autowired
     MoneyApplyDetailService moneyApplyDetailService;
+
+    @Autowired
+    UserRelateService userRelateService;
     /**
      * 用户登录
      * @param phone 手机号
@@ -603,8 +607,40 @@ public class UsersController {
         business.setCheckTime(new Date());
         int value = businessService.updateBusinessForBean(business);
         if (value == 1) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
+            // 如果是状态2，则还需要插入新的数据到会员所属关系表(users_relate)，用于分享奖的操作
+            if (checkStatus == 2) {
+                Business bean = businessService.getBusinessById(id);
+                // 获取用户信息
+                Users users = userService.getUserById(bean.getUserId());
+                String[] ori = users.getOriginal().split("-");
+                // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
+                for(int i = 0; i < ori.length - 1; i++) {
+                    String parentId = ori[i];
+                    UsersRelate usersRelate = new UsersRelate();
+                    usersRelate.setUserId(Integer.valueOf(parentId));
+                    usersRelate.setOriginal(parentId);
+                    // 提现状态(0:未提现 1:已提现)
+                    usersRelate.setApplyStatus(0);
+                    // 购车费用
+                    usersRelate.setBuyMoney(bean.getBuyMoney());
+                    // 管理员审核时间
+                    usersRelate.setApplyTime(bean.getApplyTime());
+                    // 会员申请时间
+                    usersRelate.setCheckTime(bean.getCheckTime());
+                    // 会员级别
+                    usersRelate.setLevel(ori.length - 1 - i);
+                    // 当前会员对应的子会员的用户ID
+                    usersRelate.setChildId(bean.getUserId());
+                    int val = userRelateService.insertUserRelateForBean(usersRelate);
+                    if (val == 1) {
+                        result.put("code", BaseResult.SUCCESS_CODE);
+                        result.put("msg", BaseResult.SUCCESS_MSG);
+                    } else {
+                        result.put("code", BaseResult.FAIL_CODE);
+                        result.put("msg", BaseResult.FAIL_MSG);
+                    }
+                }
+            }
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
@@ -951,18 +987,18 @@ public class UsersController {
     }
 
     /**
-     * 会员显示的分享奖
+     * 会员显示的分享奖列表以及分享奖总额
      */
     @RequestMapping(value="/listShareMoney",method = RequestMethod.POST)
     public Map<String,Object> listShareMoney(
-            @RequestParam(value = "original", required = true) String original,
+            @RequestParam(value = "userId", required = true) Integer userId,
             @RequestParam(value = "pageNum", required = true) Integer pageNum,
             @RequestParam(value = "pageSize", required = true) Integer pageSize){
         logger.info("listShareMoney---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
-        int count = userService.countShareMoney(original);
-        List<Map<String, Object>> lstMap = userService.listShareMoney(original, pageNum, pageSize);
+        int count = userRelateService.countShareMoney(userId);
+        Map<String, Object> lstMap = userRelateService.listShareMoney(userId, pageNum, pageSize);
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("info", lstMap);
@@ -976,11 +1012,11 @@ public class UsersController {
      */
     @RequestMapping(value="/countLevel1",method = RequestMethod.POST)
     public Map<String,Object> countLevel1(
-            @RequestParam(value = "original", required = true) String original){
+            @RequestParam(value = "userId", required = true) Integer userId){
         logger.info("countLevel1---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
-        int count = userService.countLevel1(original);
+        int count = userRelateService.countLevel1(userId);
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("info", count);
@@ -1033,20 +1069,26 @@ public class UsersController {
      * 提现申请
      * @param userId 手机号
      * @param userStatus 会员名称
-     * @param applyMoney 推荐人手机号
      */
     @RequestMapping(value="/withdrawCashes",method = RequestMethod.POST)
     public Map<String,Object> withdrawCashes(@RequestParam(value = "userId", required = true) Integer userId,
-                                       @RequestParam(value = "userStatus", required = true) Integer userStatus,
-                                       @RequestParam(value = "applyMoney", required = true) Float applyMoney){
+                                       @RequestParam(value = "userStatus", required = true) Integer userStatus){
         logger.info("user---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
-
+        // 直推会员人数
+        int countLevel1 = userRelateService.countLevel1(userId);
+        // 分享奖
+        Map<String,Object> mp = userRelateService.sumShareMoney(userId);
+        Double sumMoney = (Double)mp.get("sumMoney");
+        // 进行提现申请时，如果直推会员达到20人就奖励5000
+        if (countLevel1 >= 20) {
+            sumMoney = sumMoney + 5000f;
+        }
         // 将代理员业务表中信息的提现状态变为已提现
         MoneyApply moneyApply = new MoneyApply();
         moneyApply.setUserId(userId);
-        moneyApply.setApplyMoney(applyMoney);
+        moneyApply.setApplyMoney(sumMoney.floatValue());
         moneyApply.setApplyTime(new Date());
         // 审核状态（0：未审核，1：审核通过，2审核未通过）
         moneyApply.setCheckStatus(0);
@@ -1056,23 +1098,7 @@ public class UsersController {
         if (value == 1) {
             result.put("code", BaseResult.SUCCESS_CODE);
             result.put("msg", BaseResult.SUCCESS_MSG);
-            /* TODO 目前不需要
-            // 提现申请完成后，要插入提现明细表
-            MoneyApplyDetail detail = new MoneyApplyDetail();
-            // 提现金额
-            detail.setApplyMoney(applyMoney);
-            // 提现状态（0：未提现，1：提现中, 2:已提现）
-            detail.setApplyStatus(0);
-            // 提现时间
-            detail.setApplyTime(new Date());
-            int detailValue = moneyApplyDetailService.insertMoneyApplyDetailForBean(detail);
-            if (detailValue == 1) {
-                result.put("code", BaseResult.SUCCESS_CODE);
-                result.put("msg", BaseResult.SUCCESS_MSG);
-            } else  {
-                result.put("code", BaseResult.FAIL_CODE);
-                result.put("msg", BaseResult.FAIL_MSG);
-            }*/
+
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
@@ -1096,11 +1122,29 @@ public class UsersController {
         moneyApply.setId(id);
         moneyApply.setCreateTime(new Date());
         // 审核状态（0：未审核，1：审核通过，2审核未通过）
-        moneyApply.setCheckStatus(0);
+        moneyApply.setCheckStatus(checkStatus);
         int value = moneyApplyService.updateMoneyApplyForBean(moneyApply);
         if (value == 1) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
+            // 提现审批通过之后，将users_relate表的对应记录标注已提现完成状态
+            if (checkStatus == 1) {
+                UsersRelate bean = new UsersRelate();
+                bean.setUserId(moneyApplyService.getMoneyApplyById(id).getUserId());
+                List<UsersRelate> lstUser = userRelateService.listUserRelateByBean(bean);
+                for (UsersRelate relate : lstUser) {
+                    UsersRelate param = new UsersRelate();
+                    param.setId(relate.getId());
+                    // 提现状态(0:未提现 1:已提现)
+                    param.setApplyStatus(1);
+                    int val = userRelateService.updateUserRelateForBean(param);
+                    if (val == 1) {
+                        result.put("code", BaseResult.SUCCESS_CODE);
+                        result.put("msg", BaseResult.SUCCESS_MSG);
+                    } else {
+                        result.put("code", BaseResult.FAIL_CODE);
+                        result.put("msg", BaseResult.FAIL_MSG);
+                    }
+                }
+            }
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
@@ -1137,11 +1181,11 @@ public class UsersController {
      */
     @RequestMapping(value="/myMember",method = RequestMethod.POST)
     public Map<String,Object> myMember(
-            @RequestParam(value = "original", required = true) String original){
+            @RequestParam(value = "userId", required = true) Integer userId){
         logger.info("myMember---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
-        Map<String, Object> data = userService.listMyMember(original);
+        Map<String, Object> data = userRelateService.listMyMember(userId);
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("info", data);

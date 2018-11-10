@@ -11,9 +11,11 @@
     <result column="apply_status" jdbcType="INTEGER" property="applyStatus" />
     <result column="original" jdbcType="VARCHAR" property="original" />
     <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="child_id" jdbcType="INTEGER" property="childId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, buy_money, check_time, apply_time, pay_time, apply_status, original, description
+    id, user_id, buy_money, check_time, apply_time, pay_time, apply_status, original, level, description, child_id
   </sql>
   <select id="getUserRelateById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -44,11 +46,17 @@
       <if test="applyStatus != null">
         and apply_status = #{applyStatus,jdbcType=INTEGER}
       </if>
+      <if test="level != null">
+        and level = #{level,jdbcType=INTEGER}
+      </if>
       <if test="original != null">
         and original = #{original,jdbcType=VARCHAR}
       </if>
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
+      </if>
+      <if test="childId != null">
+        and child_id = #{childId,jdbcType=INTEGER}
       </if>
     </where>
   </select>
@@ -73,11 +81,17 @@
       <if test="applyStatus != null">
         and apply_status = #{applyStatus,jdbcType=INTEGER}
       </if>
+      <if test="level != null">
+        and level = #{level,jdbcType=INTEGER}
+      </if>
       <if test="original != null">
         and original = #{original,jdbcType=VARCHAR}
       </if>
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
+      </if>
+      <if test="childId != null">
+        and child_id = #{childId,jdbcType=INTEGER}
       </if>
     </where>
   </select>
@@ -104,11 +118,17 @@
       <if test="applyStatus != null">
         and apply_status = #{applyStatus,jdbcType=INTEGER}
       </if>
+      <if test="level != null">
+        and level = #{level,jdbcType=INTEGER}
+      </if>
       <if test="original != null">
         and original = #{original,jdbcType=VARCHAR}
       </if>
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
+      </if>
+      <if test="childId != null">
+        and child_id = #{childId,jdbcType=INTEGER}
       </if>
     </where>
   </select>
@@ -133,20 +153,26 @@
       <if test="applyStatus != null">
         apply_status = #{applyStatus,jdbcType=INTEGER}
       </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER}
+      </if>
       <if test="original != null">
         original = #{original,jdbcType=VARCHAR}
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR}
       </if>
+      <if test="childId != null">
+        child_id = #{childId,jdbcType=INTEGER}
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <insert id="insert" parameterType="com.axcc.model.UsersRelate">
-    insert into users_relate (id, user_id, buy_money, check_time, apply_time, pay_time, apply_status, original, description)
+    insert into users_relate (id, user_id, buy_money, check_time, apply_time, pay_time, apply_status, level, child_id, original, description)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{buyMoney,jdbcType=REAL},
       #{checkTime,jdbcType=TIMESTAMP}, #{applyTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP},
-      #{apply_status,jdbcType=INTEGER}, #{original,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
+      #{apply_status,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, #{childId,jdbcType=INTEGER}, #{original,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
   </insert>
   <insert id="insertUserRelateForBean" parameterType="com.axcc.model.UsersRelate" keyProperty="id" useGeneratedKeys="true">
     insert into users_relate
@@ -161,7 +187,7 @@
         buy_money,
       </if>
       <if test="checkTime != null">
-        apply_time,
+        check_time,
       </if>
       <if test="applyTime != null">
         apply_time,
@@ -171,6 +197,12 @@
       </if>
       <if test="applyStatus != null">
         apply_status,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="childId != null">
+        child_id,
       </if>
       <if test="original != null">
         original,
@@ -201,6 +233,12 @@
       <if test="applyStatus != null">
         #{applyStatus,jdbcType=INTEGER},
       </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="childId != null">
+        #{childId,jdbcType=INTEGER},
+      </if>
       <if test="original != null">
         #{original,jdbcType=VARCHAR},
       </if>
@@ -209,46 +247,61 @@
       </if>
     </trim>
   </insert>
-  <!--<select id="listShareMoney" parameterType="java.lang.String" resultType="Map">
+  <select id="listShareMoney" parameterType="java.lang.Integer" resultType="Map">
     SELECT
-    U.user_name userName,
-    U.login_name loginName,
-    substring_index(U.original,CONCAT(#{original,jdbcType=VARCHAR},"-"),-1) original,
-    B.buy_money buyMoney,
-    DATE_FORMAT(B.check_time,'%Y-%m-%d %H:%i:%s') checkTime
+      B.user_name userName,
+      B.login_name loginName,
+      CASE A.`level` WHEN 1 THEN A.buy_money*0.05 ELSE A.buy_money*0.03 END buyMoney,
+      DATE_FORMAT(
+          A.check_time,
+          '%Y-%m-%d %H:%i:%s'
+      ) checkTime,
+      A.`level` level,
+      A.apply_status applyStatus
     FROM
-    users U
-    INNER JOIN business B ON U.id = B.user_id
-    WHERE
-    U.original LIKE CONCAT(#{original,jdbcType=VARCHAR},"-","%")
-    AND B.check_status = 2
-    AND B.buy_status = 2
-    ORDER BY B.check_time DESC
+	  users_relate A
+    INNER JOIN users B ON A.user_id = B.id
+    WHERE A.`level` in (1,2) AND A.user_id = #{userId,jdbcType=INTEGER}
+    ORDER BY
+      A.apply_status ASC,
+      A.check_time DESC
   </select>
-  <select id="countShareMoney" parameterType="java.lang.String" resultType="java.lang.Integer">
+  <select id="countShareMoney" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT
     count(1)
     FROM
-    users U
-    INNER JOIN business B ON U.id = B.user_id
-    WHERE
-    U.original LIKE CONCAT(#{original,jdbcType=VARCHAR},"-","%")
-    AND length(substring_index(U.original,#{original,jdbcType=VARCHAR},-1)) - length(REPLACE (substring_index(U.original,#{original,jdbcType=VARCHAR},-1), '-', '')) in (1,2)
-    AND B.check_status = 2
-    AND B.buy_status = 2
-    ORDER BY B.check_time DESC
+	  users_relate A
+    INNER JOIN users B ON A.user_id = B.id
+    WHERE A.`level` in (1,2) AND A.user_id = #{userId,jdbcType=INTEGER}
   </select>
-  <select id="countLeve1" parameterType="java.lang.String" resultType="java.lang.Integer">
+  <select id="countLeve1" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT
     count(1)
     FROM
-    users U
-    INNER JOIN business B ON U.id = B.user_id
-    WHERE
-    U.original LIKE CONCAT(#{userId,jdbcType=VARCHAR},"-","%")
-    AND length(substring_index(U.original,#{original,jdbcType=VARCHAR},-1)) - length(REPLACE (substring_index(U.original,#{original,jdbcType=VARCHAR},-1), '-', '')) in (1)
-    AND B.check_status = 2
-    AND B.buy_status = 2
-    ORDER BY B.check_time DESC
-  </select>-->
+	  users_relate A
+    INNER JOIN users B ON A.user_id = B.id
+    WHERE A.`level` = 1 AND A.apply_status = 0 AND A.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="sumShareMoney" parameterType="java.lang.Integer" resultType="Map">
+    SELECT SUM(CASE A.`level` WHEN 1 THEN A.buy_money*0.05 ELSE A.buy_money*0.03 END) sumMoney
+    FROM users_relate A
+    WHERE A.`level` in (1,2) AND A.apply_status = 0 AND A.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="listMyMember" parameterType="java.lang.Integer" resultType="Map">
+    SELECT
+      B.user_name userName,
+      B.login_name loginName,
+      DATE_FORMAT(
+          A.check_time,
+          '%Y-%m-%d %H:%i:%s'
+      ) checkTime,
+      A.`level` level
+    FROM
+	  users_relate A
+    INNER JOIN users B ON A.child_id = B.id
+    WHERE A.user_id = #{userId,jdbcType=INTEGER}
+    ORDER BY
+      A.apply_status ASC,
+      A.check_time DESC
+  </select>
 </mapper>

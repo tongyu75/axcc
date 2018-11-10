@@ -37,9 +37,4 @@ public interface UsersDao {
 
     List<Users> selectAllUser();
 
-    List<Map<String, Object>> listShareMoney(String original);
-
-    int countShareMoney(String original);
-
-    int countLeve1(String original);
 }
