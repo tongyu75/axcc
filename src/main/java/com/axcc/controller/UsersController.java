@@ -7,11 +7,11 @@ import com.axcc.utils.FileResourcePathUtil;
 import com.axcc.utils.QRCodeConstants;
 import com.axcc.utils.QRCodeUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -958,8 +958,8 @@ public class UsersController {
                                            HttpServletRequest request) {
         logger.info("uploadPhoto-----------start---------");
         //获取用户
-//        Users users = (Users)request.getSession().getAttribute("user");
-        Users users = userService.getUserById(2);
+        Users session = (Users)request.getSession().getAttribute("user");
+        Users users = userService.getUserById(session.getId());
         //返回类型
         Map<String, Object> result = new HashMap<String, Object>();
         //定义时间格式
@@ -977,52 +977,41 @@ public class UsersController {
         //定义文件新名：以时间戳命名
         fileName = fileTime + suffixName;
         //定义实际保存位置
-        String path = FileResourcePathUtil.propertyValueMap.get("photoDir") + users.getLoginName()+"/";
-        File targetFile = new File(path, fileName);
-        if (!targetFile.exists()) {
-            targetFile.mkdirs();
-        }
+        String path = FileResourcePathUtil.propertyValueMap.get("photoDir") + users.getLoginName();
+        File targetFile = new File(path);
+        targetFile.mkdirs();
+        File realFile = new File(path, fileName);
         try {
             //保存文件
-            file.transferTo(targetFile);
+            IOUtils.copy(file.getInputStream(),new FileOutputStream(realFile));
+            result.put("path",path+fileName);
         } catch (IOException e) {
             result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", "上传失败");
+            result.put("msg", BaseResult.FAIL_MSG);
             return result;
         }
 
         //同步数据库
         // 1>获取用户信息
         Users bean = userService.getUserById(users.getId());
-        bean.setImage(fileName);
+        bean.setImage(path+fileName);
         // 2>更新数据库
         int value = userService.updateUserForBean(bean);
         if (value != 1) {
             result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", "保存失败");
+            result.put("msg", BaseResult.FAIL_MSG);
             return result;
         }
 
         //同步session
-        request.getSession().setAttribute("user", bean);
+     //   Users user = (Users)request.getSession().getAttribute("user");
+        session.setImage(path+fileName);
+        request.getSession().setAttribute("user", session);
 
         logger.info("updateUserInfo-----" + value + "----end" + result.toString());
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("msg", BaseResult.SUCCESS_MSG);
         return result;
-    }
-
-    /**
-     * 显示图片
-     */
-    @RequestMapping(value = "/showPhoto",method = RequestMethod.POST)
-    public ResponseEntity showPhoto(String fileName) {
-        try {
-            // 由于是读取本机的文件，file是一定要加上的， path是在application配置文件中的路径
-            return ResponseEntity.ok(resourceLoader.getResource("file:" + FileResourcePathUtil.propertyValueMap.get("photoDir") + fileName));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     /**
