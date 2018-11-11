@@ -65,6 +65,10 @@ public class UsersController {
 
     @Autowired
     UserRelateService userRelateService;
+
+    @Autowired
+    AgentShareService agentShareService;
+
     /**
      * 用户登录
      * @param phone 手机号
@@ -609,6 +613,7 @@ public class UsersController {
         if (value == 1) {
             // 如果是状态2，则还需要插入新的数据到会员所属关系表(users_relate)，用于分享奖的操作
             if (checkStatus == 2) {
+                // 插入新的数据到会员所属关系表(users_relate)
                 Business bean = businessService.getBusinessById(id);
                 // 获取用户信息
                 Users users = userService.getUserById(bean.getUserId());
@@ -837,11 +842,48 @@ public class UsersController {
                 result.put("code", BaseResult.SUCCESS_CODE);
                 result.put("msg", BaseResult.SUCCESS_MSG);
             }
+
+            // 插入代理员业绩表
+            AgentShare agentShare = new AgentShare();
+            agentShare.setAgentId(agentId);
+            agentShare.setUserId(businessService.getBusinessById(id).getUserId());
+            agentShare.setBusinessId(id);
+            agentShare.setAgentMoney(buyMoney);
+            agentShare.setCreateDate(new Date());
+            int val = agentShareService.insertAgentShareForBean(agentShare);
+            if (val == 1) {
+                result.put("code", BaseResult.SUCCESS_CODE);
+                result.put("msg", BaseResult.SUCCESS_MSG);
+            } else {
+                result.put("code", BaseResult.FAIL_CODE);
+                result.put("msg", BaseResult.FAIL_MSG);
+            }
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
         }
         logger.info("updateCheckStatus---end");
+        return result;
+    }
+
+    /**
+     * 代理员业绩表
+     */
+    @RequestMapping(value="/listAgentShare",method = RequestMethod.POST)
+    public Map<String,Object> listAgentShare(
+            @RequestParam(value = "agentId", required = true) Integer agentId,
+            @RequestParam(value = "pageNum", required = true) Integer pageNum,
+            @RequestParam(value = "pageSize", required = true) Integer pageSize){
+        logger.info("listShareMoney---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        int count = agentShareService.countAgentShareById(agentId);
+        Map<String,Object> lstMap = agentShareService.listAgentShareById(agentId, pageNum, pageSize);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", lstMap);
+        result.put("total", count);
+        logger.info("listShareMoney---end" + result.toString());
         return result;
     }
 

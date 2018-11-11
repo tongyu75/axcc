@@ -195,4 +195,38 @@
       create_date = #{createDate,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="sumAgentShareMoney" parameterType="java.lang.Integer" resultType="Map">
+    SELECT IF(SUM(agent_money) IS NULL, 0, SUM(agent_money)) sumMoney
+    FROM agent_share
+    WHERE agent_id = #{agentId,jdbcType=INTEGER}
+  </select>
+  <select id="listAgentShareByAgentId" parameterType="java.lang.Integer" resultType="Map">
+    SELECT
+	  A.id id,
+      A.agent_id agentId,
+      A.agent_money agentMoney,
+      B.login_name agentName,
+      A.user_id userId,
+      C.login_name userName,
+      DATE_FORMAT(
+          A.create_date,
+          '%Y-%m-%d %H:%i:%s'
+      ) createTime
+    FROM
+	  agent_share A
+    INNER JOIN users B ON A.agent_id = B.id
+    INNER JOIN users C ON A.user_id = C.id
+    WHERE A.agent_id = #{agentId,jdbcType=INTEGER}
+    ORDER BY
+      A.create_date DESC
+  </select>
+  <select id="countAgentShareByAgentId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+	  agent_share A
+    INNER JOIN users B ON A.agent_id = B.id
+    INNER JOIN users C ON A.user_id = C.id
+    WHERE A.agent_id = #{agentId,jdbcType=INTEGER}
+  </select>
 </mapper>

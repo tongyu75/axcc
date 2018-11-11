@@ -1,11 +1,15 @@
-package com.axcc.dao;
+package com.axcc.service;
 
 import com.axcc.model.AgentShare;
+import com.axcc.model.Users;
 
 import java.util.List;
 import java.util.Map;
 
-public interface AgentShareDao {
+/**
+ * Created by tongshr on 2018/10/02.
+ */
+public interface AgentShareService {
 
     AgentShare getAgentShareById(Integer id);
 
@@ -13,15 +17,12 @@ public interface AgentShareDao {
 
     List<AgentShare> listAgentShareByBean(AgentShare bean);
 
-    List<Map<String, Object>> listAgentShareByAgentId(Integer agentId);
+    Map<String,Object> listAgentShareById(Integer agentId, int pageNum, int pageSize);
 
-    int countAgentShareByAgentId(Integer agentId);
-
-    int countAgentShareByBean(AgentShare bean);
+    int countAgentShareById(Integer agentId);
 
     int insertAgentShareForBean(AgentShare bean);
 
     int updateAgentShareForBean(AgentShare bean);
 
-    Map<String, Object> sumAgentShareMoney(Integer id);
 }
