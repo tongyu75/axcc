@@ -3,12 +3,14 @@
 <mapper namespace="com.axcc.dao.AgentShareDao">
   <resultMap id="BaseResultMap" type="com.axcc.model.AgentShare">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="agent_id" jdbcType="INTEGER" property="agentId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="business_id" jdbcType="INTEGER" property="businessId" />
     <result column="agent_money" jdbcType="REAL" property="agentMoney" />
     <result column="create_date" jdbcType="DATE" property="createDate" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, agent_money, create_date
+    id, agent_id, user_id, business_id, agent_money, create_date
   </sql>
   <select id="getAgentShareById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -17,11 +19,17 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="getAgentShareByBean" parameterType="com.axcc.model.AgentShare" resultMap="BaseResultMap">
-    select id,user_id,agent_money,create_date
+    select id, agent_id, user_id, business_id, agent_money, create_date
     from agent_share
     <where>
+      <if test="agentId != null">
+        and agent_id = #{agentId,jdbcType=INTEGER}
+      </if>
       <if test="userId != null">
         and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
       </if>
       <if test="agentMoney != null">
         and agent_money = #{agentMoney,jdbcType=REAL}
@@ -32,11 +40,17 @@
     </where>
   </select>
   <select id="listAgentShareByBean" parameterType="com.axcc.model.AgentShare" resultMap="BaseResultMap">
-    select id,user_id,agent_money,create_date
+    select id,agent_id,user_id,business_id,agent_money,create_date
     from agent_share
     <where>
+        <if test="agentId != null">
+          and agent_id = #{agentId,jdbcType=INTEGER}
+        </if>
         <if test="userId != null">
           and user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="businessId != null">
+          and business_id = #{businessId,jdbcType=INTEGER}
         </if>
         <if test="agentMoney != null">
           and agent_money = #{agentMoney,jdbcType=REAL}
@@ -49,8 +63,14 @@
   <select id="countAgentShareByBean" parameterType="com.axcc.model.AgentShare" resultType="java.lang.Integer">
     select count(id) from agent_share
     <where>
+        <if test="agentId != null">
+          and agent_id = #{agentId,jdbcType=INTEGER}
+        </if>
         <if test="userId != null">
-            and user_id = #{userId,jdbcType=INTEGER}
+          and user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="businessId != null">
+          and business_id = #{businessId,jdbcType=INTEGER}
         </if>
         <if test="agentMoney != null">
             and agent_money = #{agentMoney,jdbcType=REAL}
@@ -62,14 +82,20 @@
   </select>
   <insert id="insertAgentShareByBean" parameterType="com.axcc.model.AgentShare">
     insert into agent_share (id, user_id, agent_money, create_date)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
-      #{agentMoney,jdbcType=REAL}, #{createDate,jdbcType=DATE})
+    values (#{id,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+      #{businessId,jdbcType=INTEGER}, #{agentMoney,jdbcType=REAL}, #{createDate,jdbcType=DATE})
   </insert>
   <update id="updateAgentShareForBean" parameterType="com.axcc.model.AgentShare">
     update agent_share
     <set>
+      <if test="agentId != null">
+        and agent_id = #{agentId,jdbcType=INTEGER}
+      </if>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
       </if>
       <if test="agentMoney != null">
         agent_money = #{agentMoney,jdbcType=REAL},
@@ -92,9 +118,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.axcc.model.AgentShare">
-    insert into agent_share (id, user_id, agent_money, create_date)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
-      #{agentMoney,jdbcType=REAL}, #{createDate,jdbcType=DATE})
+    insert into agent_share (id, agent_id, user_id, business_id, agent_money, create_date)
+    values (#{id,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+      #{businessId,jdbcType=INTEGER},  #{agentMoney,jdbcType=REAL}, #{createDate,jdbcType=DATE})
   </insert>
   <insert id="insertSelective" parameterType="com.axcc.model.AgentShare">
     insert into agent_share
@@ -102,8 +128,14 @@
       <if test="id != null">
         id,
       </if>
+      <if test="agentId != null">
+        agent_id,
+      </if>
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="businessId != null">
+        business_id,
       </if>
       <if test="agentMoney != null">
         agent_money,
@@ -116,8 +148,14 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=INTEGER},
+      </if>
       <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=INTEGER},
       </if>
       <if test="agentMoney != null">
         #{agentMoney,jdbcType=REAL},
@@ -130,8 +168,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.axcc.model.AgentShare">
     update agent_share
     <set>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=INTEGER},
+      </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=INTEGER},
       </if>
       <if test="agentMoney != null">
         agent_money = #{agentMoney,jdbcType=REAL},
@@ -144,7 +188,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.axcc.model.AgentShare">
     update agent_share
-    set user_id = #{userId,jdbcType=INTEGER},
+    set agent_id = #{agentId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      business_id = #{businessId,jdbcType=INTEGER},
       agent_money = #{agentMoney,jdbcType=REAL},
       create_date = #{createDate,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}

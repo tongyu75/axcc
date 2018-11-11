@@ -5,9 +5,11 @@ import java.util.Date;
 public class AgentShare {
     private Integer id;
 
+    private Integer agentId;
+
     private Integer userId;
 
-    private Integer parentId;
+    private Integer businessId;
 
     private Float agentMoney;
 
@@ -21,6 +23,14 @@ public class AgentShare {
         this.id = id;
     }
 
+    public Integer getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(Integer agentId) {
+        this.agentId = agentId;
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -29,12 +39,10 @@ public class AgentShare {
         this.userId = userId;
     }
 
-    public Integer getParentId() {
-        return parentId;
-    }
+    public Integer getBusinesstId() { return businessId; }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setBusinessId(Integer businessId) {
+        this.businessId = businessId;
     }
 
     public Float getAgentMoney() {
