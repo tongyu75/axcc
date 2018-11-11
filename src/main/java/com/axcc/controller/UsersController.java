@@ -23,10 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  GET：一般用于查询数据，不办函数据的更新以及插入操作。由于明文传输的关系，我们一般用来获取一些无关用户的信息。
@@ -1107,6 +1104,7 @@ public class UsersController {
         return comment.toString();
     }
 
+
     /**
      * 提现申请
      * @param userId 手机号
@@ -1118,33 +1116,43 @@ public class UsersController {
         logger.info("user---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
-        // 直推会员人数
-        int countLevel1 = userRelateService.countLevel1(userId);
-        // 分享奖
-        Map<String,Object> mp = userRelateService.sumShareMoney(userId);
-        Double sumMoney = (Double)mp.get("sumMoney");
-        // 进行提现申请时，如果直推会员达到20人就奖励5000
-        if (countLevel1 >= 20) {
-            sumMoney = sumMoney + 5000f;
-        }
-        // 将代理员业务表中信息的提现状态变为已提现
-        MoneyApply moneyApply = new MoneyApply();
-        moneyApply.setUserId(userId);
-        moneyApply.setApplyMoney(sumMoney.floatValue());
-        moneyApply.setApplyTime(new Date());
-        // 审核状态（0：未审核，1：审核通过，2审核未通过）
-        moneyApply.setCheckStatus(0);
-        // 申请人身份（1：代理员；2：普通会员）
-        moneyApply.setUserStatus(userStatus);
-        int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
-        if (value == 1) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
+        // 首先判断提现的时间是否是星期一，如果不是星期一就不能继续提现操作
+        Calendar cal= Calendar.getInstance();
+        cal.setTime(new Date());
+        int week = cal.get(Calendar.DAY_OF_WEEK)-1;
+        if (week == 1) {
+            // 直推会员人数
+            int countLevel1 = userRelateService.countLevel1(userId);
+            // 分享奖
+            Map<String,Object> mp = userRelateService.sumShareMoney(userId);
+            Double sumMoney = (Double)mp.get("sumMoney");
+            // 进行提现申请时，如果直推会员达到20人就奖励5000
+            if (countLevel1 >= 20) {
+                sumMoney = sumMoney + 5000f;
+            }
+            // 将代理员业务表中信息的提现状态变为已提现
+            MoneyApply moneyApply = new MoneyApply();
+            moneyApply.setUserId(userId);
+            moneyApply.setApplyMoney(sumMoney.floatValue());
+            moneyApply.setApplyTime(new Date());
+            // 审核状态（0：未审核，1：审核通过，2审核未通过）
+            moneyApply.setCheckStatus(0);
+            // 申请人身份（1：代理员；2：普通会员）
+            moneyApply.setUserStatus(userStatus);
+            int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
+            if (value == 1) {
+                result.put("code", BaseResult.SUCCESS_CODE);
+                result.put("msg", BaseResult.SUCCESS_MSG);
 
+            } else {
+                result.put("code", BaseResult.FAIL_CODE);
+                result.put("msg", BaseResult.FAIL_MSG);
+            }
         } else {
-            result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
+            result.put("code", "2");
+            result.put("msg", "申请提现时间不是星期一，不允许提现");
         }
+
         logger.info("user---end" + result.toString());
         return result;
     }
