@@ -885,6 +885,57 @@ public class UsersController {
     }
 
     /**
+     * 代理员提现申请
+     * @param agentId 代理员ID
+     * @param userStatus 用户类型
+     */
+    @RequestMapping(value="/agentWithdrawCashes",method = RequestMethod.POST)
+    public Map<String,Object> agentWithdrawCashes(@RequestParam(value = "agentId", required = true) Integer agentId,
+                                                  @RequestParam(value = "userStatus", required = true) Integer userStatus){
+        logger.info("agentWithdrawCashes---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        // 首先判断提现的时间是否是每月的5号，如果不是就不能继续提现操作
+        Calendar cal= Calendar.getInstance();
+        cal.setTime(new Date());
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        if (day == 5) {
+            // 判断是否重复提交
+            MoneyApply bean = new MoneyApply();
+            bean.setUserId(agentId);
+            bean.setUserStatus(userStatus);
+            bean.setApplyTime(new Date());
+            int num = moneyApplyService.countOnlyOneMoneyApply(bean);
+            if(0 == num){
+                // 将代理员业务表中信息的提现状态变为已提现
+                MoneyApply moneyApply = new MoneyApply();
+                // 业绩奖
+                Map<String,Object> mp = agentShareService.sumAgentMoney(agentId);
+                Double sumMoney = (Double)mp.get("sumMoney");
+                moneyApply.setLevel1Count(0); //代理员为了计算方便，设置为0，可以直接累加结果
+                moneyApply.setUserId(agentId);
+                moneyApply.setApplyMoney(sumMoney.floatValue());
+                moneyApply.setApplyTime(new Date());
+                // 审核状态（0：未审核，1：审核通过，2审核未通过）
+                moneyApply.setCheckStatus(0);
+                // 申请人身份（1：代理员；2：普通会员）
+                moneyApply.setUserStatus(userStatus);
+                int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
+                result = BaseResult.checkResult(value);
+            }else{
+                result.put("code", "3");
+                result.put("msg", "请不要重复提交申请");
+            }
+        } else {
+            result.put("code", "2");
+            result.put("msg", "代理员每月5号才能申请提现");
+        }
+
+        logger.info("agentWithdrawCashes---start" + result.toString());
+        return result;
+    }
+
+    /**
      * 添加优惠券
      * 如果checkStatus=2(会员缴费成功)，
      * 若是第一次排队购车缴费成功，则为会员发放优惠券；
@@ -977,7 +1028,7 @@ public class UsersController {
         //定义文件新名：以时间戳命名
         fileName = fileTime + suffixName;
         //定义实际保存位置
-        String path = FileResourcePathUtil.propertyValueMap.get("photoDir") + users.getLoginName();
+        String path = FileResourcePathUtil.propertyValueMap.get("photoDir") + users.getLoginName()+"/";
         File targetFile = new File(path);
         targetFile.mkdirs();
         File realFile = new File(path, fileName);
@@ -1095,7 +1146,7 @@ public class UsersController {
 
 
     /**
-     * 提现申请
+     * 会员提现申请
      * @param userId 手机号
      * @param userStatus 会员名称
      */
@@ -1110,35 +1161,45 @@ public class UsersController {
         cal.setTime(new Date());
         int week = cal.get(Calendar.DAY_OF_WEEK)-1;
         if (week == 1) {
+            // 判断是否重复提交
+            MoneyApply bean = new MoneyApply();
+            bean.setUserId(userId);
+            bean.setUserStatus(userStatus);
+            bean.setApplyTime(new Date());
+            int num = moneyApplyService.countOnlyOneMoneyApply(bean);
+            if(0 == num){
+                // 将代理员业务表中信息的提现状态变为已提现
+                MoneyApply moneyApply = new MoneyApply();
+                // 直推会员人数
+                int countLevel1 = userRelateService.countLevel1(userId);
+                // 分享奖
+                Map<String,Object> mp = userRelateService.sumShareMoney(userId);
+                Double sumMoney = (Double)mp.get("sumMoney");
+                // 进行提现申请时，如果直推会员达到20人就奖励5000
+                if (countLevel1 >= 20) {
+                    sumMoney = sumMoney + 5000f;
+                    // 1代表直推人数超过20人状态标志
+                    moneyApply.setLevel1Count(1);
+                }
+                moneyApply.setUserId(userId);
+                moneyApply.setApplyMoney(sumMoney.floatValue());
+                moneyApply.setApplyTime(new Date());
+                // 审核状态（0：未审核，1：审核通过，2审核未通过）
+                moneyApply.setCheckStatus(0);
+                // 申请人身份（1：代理员；2：普通会员）
+                moneyApply.setUserStatus(userStatus);
+                int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
+                if (value == 1) {
+                    result.put("code", BaseResult.SUCCESS_CODE);
+                    result.put("msg", BaseResult.SUCCESS_MSG);
 
-            // 将代理员业务表中信息的提现状态变为已提现
-            MoneyApply moneyApply = new MoneyApply();
-            // 直推会员人数
-            int countLevel1 = userRelateService.countLevel1(userId);
-            // 分享奖
-            Map<String,Object> mp = userRelateService.sumShareMoney(userId);
-            Double sumMoney = (Double)mp.get("sumMoney");
-            // 进行提现申请时，如果直推会员达到20人就奖励5000
-            if (countLevel1 >= 20) {
-                sumMoney = sumMoney + 5000f;
-                // 1代表直推人数超过20人状态标志
-                moneyApply.setLevel1Count(1);
-            }
-            moneyApply.setUserId(userId);
-            moneyApply.setApplyMoney(sumMoney.floatValue());
-            moneyApply.setApplyTime(new Date());
-            // 审核状态（0：未审核，1：审核通过，2审核未通过）
-            moneyApply.setCheckStatus(0);
-            // 申请人身份（1：代理员；2：普通会员）
-            moneyApply.setUserStatus(userStatus);
-            int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
-            if (value == 1) {
-                result.put("code", BaseResult.SUCCESS_CODE);
-                result.put("msg", BaseResult.SUCCESS_MSG);
-
-            } else {
-                result.put("code", BaseResult.FAIL_CODE);
-                result.put("msg", BaseResult.FAIL_MSG);
+                } else {
+                    result.put("code", BaseResult.FAIL_CODE);
+                    result.put("msg", BaseResult.FAIL_MSG);
+                }
+            }else{
+                result.put("code", "3");
+                result.put("msg", "请不要重复提交申请");
             }
         } else {
             result.put("code", "2");

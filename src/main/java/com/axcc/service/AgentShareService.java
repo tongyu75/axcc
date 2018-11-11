@@ -1,7 +1,6 @@
 package com.axcc.service;
 
 import com.axcc.model.AgentShare;
-import com.axcc.model.Users;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,8 @@ public interface AgentShareService {
     List<AgentShare> listAgentShareByBean(AgentShare bean);
 
     Map<String,Object> listAgentShareById(Integer agentId, int pageNum, int pageSize);
+
+    Map<String,Object> sumAgentMoney(Integer agentId);
 
     int countAgentShareById(Integer agentId);
 

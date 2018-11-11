@@ -1,7 +1,6 @@
 package com.axcc.dao;
 
 import com.axcc.model.MoneyApply;
-import com.axcc.model.Users;
 
 import java.util.List;
 
@@ -14,6 +13,8 @@ public interface MoneyApplyDao {
     List<MoneyApply> listMoneyApplyByBean(MoneyApply bean);
 
     int countMoneyApplyByBean(MoneyApply bean);
+
+    int countOnlyOneMoneyApply(MoneyApply bean);
 
     int insertMoneyApplyForBean(MoneyApply bean);
 

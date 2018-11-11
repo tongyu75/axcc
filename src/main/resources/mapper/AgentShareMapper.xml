@@ -200,6 +200,11 @@
     FROM agent_share
     WHERE agent_id = #{agentId,jdbcType=INTEGER}
   </select>
+  <select id="sumAgentMoney" parameterType="java.lang.Integer" resultType="Map">
+    SELECT IF(SUM(agent_money) IS NULL, 0, SUM(agent_money * 0.05)) sumMoney
+    FROM agent_share
+    WHERE agent_id = #{agentId,jdbcType=INTEGER} AND period_diff(date_format(now(),'%Y%m'), date_format(create_date,'%Y%m')) = 1
+  </select>
   <select id="listAgentShareByAgentId" parameterType="java.lang.Integer" resultType="Map">
     SELECT
 	  A.id id,

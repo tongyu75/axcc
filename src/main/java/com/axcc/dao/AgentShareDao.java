@@ -24,4 +24,6 @@ public interface AgentShareDao {
     int updateAgentShareForBean(AgentShare bean);
 
     Map<String, Object> sumAgentShareMoney(Integer id);
+
+    Map<String, Object> sumAgentMoney(Integer agentId);
 }

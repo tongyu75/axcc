@@ -1,6 +1,5 @@
 package com.axcc.service;
 
-import com.axcc.model.Users;
 import com.axcc.model.UsersRelate;
 
 import java.util.List;

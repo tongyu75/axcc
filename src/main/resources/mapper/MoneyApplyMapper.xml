@@ -113,6 +113,20 @@
       </if>
     </where>
   </select>
+  <select id="countOnlyOneMoneyApply" parameterType="com.axcc.model.MoneyApply" resultType="java.lang.Integer">
+    select count(id)
+    from money_apply
+    <where>
+      user_id = #{userId,jdbcType=INTEGER} AND check_status = 0
+      <if test="userStatus != null and userStatus == 1">
+        AND date_format(now(),'%Y%m')=date_format(apply_time,'%Y%m')
+      </if>
+      <if test="userStatus != null and userStatus == 2">
+        AND date_format(now(),'%Y%m%d')=date_format(apply_time,'%Y%m%d')
+      </if>
+    </where>
+  </select>
+
   <insert id="insertMoneyApplyForBean" parameterType="com.axcc.model.MoneyApply">
     insert into money_apply (id, user_id, apply_money,
       apply_time, user_status, check_status,

@@ -1,11 +1,8 @@
 package com.axcc.service.impl;
 
 import com.axcc.dao.AgentShareDao;
-import com.axcc.dao.UsersDao;
 import com.axcc.model.AgentShare;
-import com.axcc.model.Users;
 import com.axcc.service.AgentShareService;
-import com.axcc.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +44,15 @@ public class AgentShareServiceImpl implements AgentShareService {
         Map<String, Object> sumShareMoney = agentShareDao.sumAgentShareMoney(agentId);
         mp.put("sumShareMoney", sumShareMoney.get("sumMoney"));
         return mp;
+    }
+
+    /**
+     * 代理员业绩奖
+     * @param agentId 当前代理员ID
+     */
+    @Override
+    public Map<String,Object> sumAgentMoney(Integer agentId) {
+        return agentShareDao.sumAgentMoney(agentId);
     }
 
     @Override

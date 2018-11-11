@@ -1,6 +1,5 @@
 package com.axcc.dao;
 
-import com.axcc.model.Users;
 import com.axcc.model.UsersRelate;
 import org.apache.ibatis.annotations.Mapper;
 
