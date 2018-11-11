@@ -1121,6 +1121,9 @@ public class UsersController {
         cal.setTime(new Date());
         int week = cal.get(Calendar.DAY_OF_WEEK)-1;
         if (week == 1) {
+
+            // 将代理员业务表中信息的提现状态变为已提现
+            MoneyApply moneyApply = new MoneyApply();
             // 直推会员人数
             int countLevel1 = userRelateService.countLevel1(userId);
             // 分享奖
@@ -1129,9 +1132,9 @@ public class UsersController {
             // 进行提现申请时，如果直推会员达到20人就奖励5000
             if (countLevel1 >= 20) {
                 sumMoney = sumMoney + 5000f;
+                // 1代表直推人数超过20人状态标志
+                moneyApply.setLevel1Count(1);
             }
-            // 将代理员业务表中信息的提现状态变为已提现
-            MoneyApply moneyApply = new MoneyApply();
             moneyApply.setUserId(userId);
             moneyApply.setApplyMoney(sumMoney.floatValue());
             moneyApply.setApplyTime(new Date());
@@ -1158,7 +1161,27 @@ public class UsersController {
     }
 
     /**
-     * 代理员对发起的提现进行审批
+     * 管理员查看申请提现的列表
+     */
+    @RequestMapping(value="/listMoneyApply",method = RequestMethod.POST)
+    public Map<String,Object> listMoneyApply(
+            @RequestParam(value = "pageNum", required = true) Integer pageNum,
+            @RequestParam(value = "pageSize", required = true) Integer pageSize){
+        logger.info("getWithdrawCashes---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        int count = moneyApplyService.countMoneyApplyForManager();
+        List<MoneyApply> lstBean = moneyApplyService.listMoneyApplyForManager(pageNum, pageSize);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", lstBean);
+        result.put("total", count);
+        logger.info("getWithdrawCashes---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 管理员对发起的提现进行审批
      * @param id id
      * @param checkStatus 审核状态
      */
@@ -1204,7 +1227,7 @@ public class UsersController {
     }
 
     /**
-     * 提现明细列表
+     * 用户查看自己的提现明细列表
      */
     @RequestMapping(value="/getWithdrawCashes",method = RequestMethod.POST)
     public Map<String,Object> getWithdrawCashes(

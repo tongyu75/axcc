@@ -19,6 +19,10 @@ public interface MoneyApplyDao {
 
     int updateMoneyApplyForBean(MoneyApply bean);
 
+    List<MoneyApply> listMoneyApplyForManager();
+
+    int countMoneyApplyForManager();
+
     //----------------------------------------------------
 
     int deleteByPrimaryKey(Integer id);

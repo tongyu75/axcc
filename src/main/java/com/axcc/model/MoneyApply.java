@@ -19,6 +19,8 @@ public class MoneyApply {
 
     private String description;
 
+    private Integer level1Count;
+
     public Integer getId() {
         return id;
     }
@@ -81,5 +83,13 @@ public class MoneyApply {
 
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
+    }
+
+    public Integer getLevel1Count() {
+        return level1Count;
+    }
+
+    public void setLevel1Count(Integer level1Count) {
+        this.level1Count = level1Count;
     }
 }
