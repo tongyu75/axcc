@@ -21,4 +21,8 @@ public interface MoneyApplyService {
     List<MoneyApply> listMoneyApplyByBean(MoneyApply bean, int pageNum, int pageSize);
 
     int countMoneyApplyByBean(MoneyApply bean);
+
+    List<MoneyApply> listMoneyApplyForManager(int pageNum, int pageSize);
+
+    int countMoneyApplyForManager();
 }

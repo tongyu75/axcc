@@ -50,4 +50,15 @@ public class MoneyApplyServiceImpl implements MoneyApplyService {
         return moneyApplyDao.countMoneyApplyByBean(bean);
     }
 
+    @Override
+    public List<MoneyApply> listMoneyApplyForManager(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return moneyApplyDao.listMoneyApplyForManager();
+    }
+
+    @Override
+    public int countMoneyApplyForManager() {
+        return moneyApplyDao.countMoneyApplyForManager();
+    }
+
 }

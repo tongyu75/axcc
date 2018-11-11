@@ -9,10 +9,11 @@
     <result column="user_status" jdbcType="INTEGER" property="userStatus" />
     <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="level1_count" jdbcType="INTEGER" property="level1Count" />
     <result column="description" jdbcType="VARCHAR" property="description" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, apply_money, apply_time, user_status, check_status, create_time, description
+    id, user_id, apply_money, apply_time, user_status, check_status, create_time, level1_count, description
   </sql>
   <select id="getMoneyApplyById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -43,6 +44,9 @@
       <if test="createTime != null">
         and create_time = #{createTime,jdbcType=TIMESTAMP}
       </if>
+      <if test="level1Count != null">
+        and level1_count = #{level1Count,jdbcType=INTEGER}
+      </if>
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
       </if>
@@ -51,7 +55,7 @@
   <select id="listMoneyApplyByBean" parameterType="com.axcc.model.MoneyApply" resultMap="BaseResultMap">
     select id, user_id, apply_money,
       apply_time, user_status, check_status,
-      create_time, description
+      create_time, level1_count, description
     from money_apply
     <where>
       <if test="userId != null">
@@ -71,6 +75,9 @@
       </if>
       <if test="createTime != null">
         and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="level1Count != null">
+        and level1_count = #{level1Count,jdbcType=INTEGER}
       </if>
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
@@ -98,6 +105,9 @@
       <if test="createTime != null">
         and create_time = #{createTime,jdbcType=TIMESTAMP}
       </if>
+      <if test="level1Count != null">
+        and level1_count = #{level1Count,jdbcType=INTEGER}
+      </if>
       <if test="description != null">
         and description = #{description,jdbcType=VARCHAR}
       </if>
@@ -106,10 +116,10 @@
   <insert id="insertMoneyApplyForBean" parameterType="com.axcc.model.MoneyApply">
     insert into money_apply (id, user_id, apply_money,
       apply_time, user_status, check_status,
-      create_time, description)
+      create_time, level1_count, description)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{applyMoney,jdbcType=REAL},
       #{applyTime,jdbcType=TIMESTAMP}, #{userStatus,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER},
-      #{createTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR})
+      #{createTime,jdbcType=TIMESTAMP}, #{level1Count,jdbcType=INTEGER},#{description,jdbcType=VARCHAR})
   </insert>
   <update id="updateMoneyApplyForBean" parameterType="com.axcc.model.MoneyApply">
     update money_apply
@@ -131,6 +141,9 @@
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="level1Count != null">
+        level1_count = #{level1Count,jdbcType=INTEGER},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
@@ -251,4 +264,14 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="listMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultMap="BaseResultMap">
+    select id, user_id, apply_money,
+    apply_time, user_status, check_status,
+    create_time, level1_count, description
+    from money_apply order by check_status ASC, apply_time DESC
+  </select>
+  <select id="countMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultType="java.lang.Integer">
+    select count(1)
+    from money_apply
+  </select>
 </mapper>
