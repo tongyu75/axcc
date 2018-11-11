@@ -283,7 +283,21 @@
     WHERE A.`level` = 1 AND A.apply_status = 0 AND A.user_id = #{userId,jdbcType=INTEGER}
   </select>
   <select id="sumShareMoney" parameterType="java.lang.Integer" resultType="Map">
-    SELECT SUM(CASE A.`level` WHEN 1 THEN A.buy_money*0.05 ELSE A.buy_money*0.03 END) sumMoney
+    SELECT IF (SUM(
+		CASE A.`level`
+		WHEN 1 THEN
+			A.buy_money * 0.05
+		ELSE
+			A.buy_money * 0.03
+		END
+	) IS NULL, 0, SUM(
+		CASE A.`level`
+		WHEN 1 THEN
+			A.buy_money * 0.05
+		ELSE
+			A.buy_money * 0.03
+		END
+	)) sumMoney
     FROM users_relate A
     WHERE A.`level` in (1,2) AND A.apply_status = 0 AND A.user_id = #{userId,jdbcType=INTEGER}
   </select>
