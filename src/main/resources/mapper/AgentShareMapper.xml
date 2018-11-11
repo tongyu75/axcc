@@ -89,13 +89,13 @@
     update agent_share
     <set>
       <if test="agentId != null">
-        and agent_id = #{agentId,jdbcType=INTEGER}
+        and agent_id = #{agentId,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
-        and user_id = #{userId,jdbcType=INTEGER}
+        and user_id = #{userId,jdbcType=INTEGER},
       </if>
       <if test="businessId != null">
-        and business_id = #{businessId,jdbcType=INTEGER}
+        and business_id = #{businessId,jdbcType=INTEGER},
       </if>
       <if test="agentMoney != null">
         agent_money = #{agentMoney,jdbcType=REAL},
