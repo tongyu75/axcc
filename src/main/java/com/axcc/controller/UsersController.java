@@ -608,41 +608,8 @@ public class UsersController {
         business.setCheckTime(new Date());
         int value = businessService.updateBusinessForBean(business);
         if (value == 1) {
-            // 如果是状态2，则还需要插入新的数据到会员所属关系表(users_relate)，用于分享奖的操作
-            if (checkStatus == 2) {
-                // 插入新的数据到会员所属关系表(users_relate)
-                Business bean = businessService.getBusinessById(id);
-                // 获取用户信息
-                Users users = userService.getUserById(bean.getUserId());
-                String[] ori = users.getOriginal().split("-");
-                // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
-                for(int i = 0; i < ori.length - 1; i++) {
-                    String parentId = ori[i];
-                    UsersRelate usersRelate = new UsersRelate();
-                    usersRelate.setUserId(Integer.valueOf(parentId));
-                    usersRelate.setOriginal(parentId);
-                    // 提现状态(0:未提现 1:已提现)
-                    usersRelate.setApplyStatus(0);
-                    // 购车费用
-                    usersRelate.setBuyMoney(bean.getBuyMoney());
-                    // 管理员审核时间
-                    usersRelate.setApplyTime(bean.getApplyTime());
-                    // 会员申请时间
-                    usersRelate.setCheckTime(bean.getCheckTime());
-                    // 会员级别
-                    usersRelate.setLevel(ori.length - 1 - i);
-                    // 当前会员对应的子会员的用户ID
-                    usersRelate.setChildId(bean.getUserId());
-                    int val = userRelateService.insertUserRelateForBean(usersRelate);
-                    if (val == 1) {
-                        result.put("code", BaseResult.SUCCESS_CODE);
-                        result.put("msg", BaseResult.SUCCESS_MSG);
-                    } else {
-                        result.put("code", BaseResult.FAIL_CODE);
-                        result.put("msg", BaseResult.FAIL_MSG);
-                    }
-                }
-            }
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
@@ -841,9 +808,11 @@ public class UsersController {
             }
 
             // 插入代理员业绩表
+            Business bean = businessService.getBusinessById(id);
+            int userId = bean.getUserId();
             AgentShare agentShare = new AgentShare();
             agentShare.setAgentId(agentId);
-            agentShare.setUserId(businessService.getBusinessById(id).getUserId());
+            agentShare.setUserId(userId);
             agentShare.setBusinessId(id);
             agentShare.setAgentMoney(buyMoney);
             agentShare.setCreateDate(new Date());
@@ -854,6 +823,38 @@ public class UsersController {
             } else {
                 result.put("code", BaseResult.FAIL_CODE);
                 result.put("msg", BaseResult.FAIL_MSG);
+            }
+
+            // 插入新的数据到会员所属关系表(users_relate)
+            // 获取用户信息
+            Users users = userService.getUserById(userId);
+            String[] ori = users.getOriginal().split("-");
+            // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
+            for(int i = 0; i < ori.length - 1; i++) {
+                String parentId = ori[i];
+                UsersRelate usersRelate = new UsersRelate();
+                usersRelate.setUserId(Integer.valueOf(parentId));
+                usersRelate.setOriginal(parentId);
+                // 提现状态(0:未提现 1:已提现)
+                usersRelate.setApplyStatus(0);
+                // 购车费用
+                usersRelate.setBuyMoney(bean.getBuyMoney());
+                // 管理员审核时间
+                usersRelate.setApplyTime(bean.getApplyTime());
+                // 会员申请时间
+                usersRelate.setCheckTime(bean.getCheckTime());
+                // 会员级别
+                usersRelate.setLevel(ori.length - 1 - i);
+                // 当前会员对应的子会员的用户ID
+                usersRelate.setChildId(bean.getUserId());
+                int val1 = userRelateService.insertUserRelateForBean(usersRelate);
+                if (val1 == 1) {
+                    result.put("code", BaseResult.SUCCESS_CODE);
+                    result.put("msg", BaseResult.SUCCESS_MSG);
+                } else {
+                    result.put("code", BaseResult.FAIL_CODE);
+                    result.put("msg", BaseResult.FAIL_MSG);
+                }
             }
         } else {
             result.put("code", BaseResult.FAIL_CODE);
