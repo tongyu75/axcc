@@ -284,6 +284,10 @@
     create_time, level1_count, description
     from money_apply order by check_status ASC, apply_time DESC
   </select>
+  <select id="countMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultType="java.lang.Integer">
+    select count(1)
+    from money_apply
+  </select>
   <select id="getMoneyApplyByDetail" parameterType="java.lang.Integer" resultType="Map">
     SELECT
     u.user_name userName,
