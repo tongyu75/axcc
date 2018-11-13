@@ -1232,6 +1232,24 @@ public class UsersController {
     }
 
     /**
+     * 管理员查看申请提现详情
+     * @param id MoneyApply表id
+     */
+    @RequestMapping(value="/getMoneyApplyDetail",method = RequestMethod.POST)
+    public Map<String,Object> getMoneyApplyDetail(
+            @RequestParam(value = "id", required = true) Integer id){
+        logger.info("getMoneyApplyDetail---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        Map<String, Object> moneyApply = moneyApplyService.getMoneyApplyByDetail(id);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", moneyApply);
+        logger.info("getMoneyApplyDetail---end" + result.toString());
+        return result;
+    }
+
+    /**
      * 管理员对发起的提现进行审批
      * @param id id
      * @param checkStatus 审核状态
