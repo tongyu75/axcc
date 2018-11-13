@@ -81,7 +81,7 @@
     </where>
   </select>
   <insert id="insertAgentShareByBean" parameterType="com.axcc.model.AgentShare">
-    insert into agent_share (id, user_id, agent_money, create_date)
+    insert into agent_share (id, user_id, agent_id, business_id, agent_money, create_date)
     values (#{id,jdbcType=INTEGER}, #{agentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
       #{businessId,jdbcType=INTEGER}, #{agentMoney,jdbcType=REAL}, #{createDate,jdbcType=DATE})
   </insert>

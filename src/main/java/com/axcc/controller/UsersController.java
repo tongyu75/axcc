@@ -768,13 +768,16 @@ public class UsersController {
             @RequestParam(value = "agentId", required = true) Integer agentId,
             @RequestParam(value = "voucherId", required = false) Integer voucherId,
             @RequestParam(value = "voucherUsed", required = true) Integer voucherUsed){
-        logger.info("updateCheckStatus---start");
+        logger.info("updateBuyMoney---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
+        Map<String,Object> resultVou = new HashMap<String, Object>();
+        Map<String,Object> resultAgent = new HashMap<String, Object>();
+        Map<String,Object> resultRelate = new HashMap<String, Object>();
         //从session中获取当前登录的用户信息
     //    Users user = (Users)request.getSession().getAttribute("user");
         Users user = userService.getUserById(agentId);
-        //使用使用优惠券
+        //使用使用优惠券,更新优惠券信息
         if(1 == voucherUsed){
             //更新使用后优惠券信息
             Voucher bean = new Voucher();
@@ -800,23 +803,71 @@ public class UsersController {
         business.setPayTime(new Date());
         int value = businessService.updateBusinessForBean(business);
         if (value == 1) {
+            /**插入优惠券表，未使用优惠券缴费，为用户发放优惠券*/
             if(0 == voucherUsed){
-                result = insertVoucherInfo(id); //未使用优惠券缴费，为用户发放优惠券
+                resultVou = insertVoucherInfo(id);
             }else{
+                resultVou.put("code", BaseResult.SUCCESS_CODE);
+                resultVou.put("msg", BaseResult.SUCCESS_MSG);
+            }
+            int valueVou = (int)resultVou.get("code");
+            /**插入代理员业绩表*/
+            resultAgent = insertAgentShare(id,buyMoney,agentId);
+            int valueAgent = (int)resultAgent.get("code");
+            /**checkStatus=2，则还需要插入新的数据到会员所属关系表(users_relate)，用于分享奖的操作*/
+            resultRelate = insertUsersRelate(id);
+            int valueRelate = (int)resultRelate.get("code");
+            /**判断操作结果*/
+            if(0==valueVou && 0==valueAgent && 0==valueRelate){
                 result.put("code", BaseResult.SUCCESS_CODE);
                 result.put("msg", BaseResult.SUCCESS_MSG);
+            }else{
+                result.put("code", BaseResult.FAIL_CODE);
+                result.put("msg", BaseResult.FAIL_MSG);
             }
+        } else {
+            result.put("code", BaseResult.FAIL_CODE);
+            result.put("msg", BaseResult.FAIL_MSG);
+        }
+        logger.info("updateBuyMoney---end");
+        return result;
+    }
 
-            // 插入代理员业绩表
-            Business bean = businessService.getBusinessById(id);
-            int userId = bean.getUserId();
-            AgentShare agentShare = new AgentShare();
-            agentShare.setAgentId(agentId);
-            agentShare.setUserId(userId);
-            agentShare.setBusinessId(id);
-            agentShare.setAgentMoney(buyMoney);
-            agentShare.setCreateDate(new Date());
-            int val = agentShareService.insertAgentShareForBean(agentShare);
+    /**
+     *  checkStatus=2，则还需要插入新的数据到会员所属关系表(users_relate)，用于分享奖的操作
+     *
+     */
+    public Map<String,Object> insertUsersRelate(Integer id){
+        //返回类型
+        Map<String,Object> result = new HashMap<String,Object>();
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        // 插入新的数据到会员所属关系表(users_relate)
+        Business bean = businessService.getBusinessById(id);
+        // 获取用户信息
+        Users users = userService.getUserById(bean.getUserId());
+        String[] ori = users.getOriginal().split("-");
+        // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
+        for(int i = 0; i < ori.length - 1; i++) {
+            String parentId = ori[i];
+            UsersRelate usersRelate = new UsersRelate();
+            usersRelate.setUserId(Integer.valueOf(parentId));
+            usersRelate.setOriginal(parentId);
+            // 提现状态(0:未提现 1:已提现)
+            usersRelate.setApplyStatus(0);
+            // 购车费用
+            usersRelate.setBuyMoney(bean.getBuyMoney());
+            // 会员申请时间
+            usersRelate.setApplyTime(bean.getApplyTime());
+            // 管理员审核时间
+            usersRelate.setCheckTime(bean.getCheckTime());
+            // 会员付款时间
+            usersRelate.setPayTime(bean.getPayTime());
+            // 会员级别
+            usersRelate.setLevel(ori.length - 1 - i);
+            // 当前会员对应的子会员的用户ID
+            usersRelate.setChildId(bean.getUserId());
+            int val = userRelateService.insertUserRelateForBean(usersRelate);
             if (val == 1) {
                 result.put("code", BaseResult.SUCCESS_CODE);
                 result.put("msg", BaseResult.SUCCESS_MSG);
@@ -824,44 +875,29 @@ public class UsersController {
                 result.put("code", BaseResult.FAIL_CODE);
                 result.put("msg", BaseResult.FAIL_MSG);
             }
-
-            // 插入新的数据到会员所属关系表(users_relate)
-            // 获取用户信息
-            Users users = userService.getUserById(userId);
-            String[] ori = users.getOriginal().split("-");
-            // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
-            for(int i = 0; i < ori.length - 1; i++) {
-                String parentId = ori[i];
-                UsersRelate usersRelate = new UsersRelate();
-                usersRelate.setUserId(Integer.valueOf(parentId));
-                usersRelate.setOriginal(parentId);
-                // 提现状态(0:未提现 1:已提现)
-                usersRelate.setApplyStatus(0);
-                // 购车费用
-                usersRelate.setBuyMoney(bean.getBuyMoney());
-                // 管理员审核时间
-                usersRelate.setApplyTime(bean.getApplyTime());
-                // 会员申请时间
-                usersRelate.setCheckTime(bean.getCheckTime());
-                // 会员级别
-                usersRelate.setLevel(ori.length - 1 - i);
-                // 当前会员对应的子会员的用户ID
-                usersRelate.setChildId(bean.getUserId());
-                int val1 = userRelateService.insertUserRelateForBean(usersRelate);
-                if (val1 == 1) {
-                    result.put("code", BaseResult.SUCCESS_CODE);
-                    result.put("msg", BaseResult.SUCCESS_MSG);
-                } else {
-                    result.put("code", BaseResult.FAIL_CODE);
-                    result.put("msg", BaseResult.FAIL_MSG);
-                }
-            }
-        } else {
-            result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
         }
-        logger.info("updateCheckStatus---end");
         return result;
+    }
+
+    /**
+     * 添加业绩表
+     */
+    @RequestMapping(value = "insertAgentShare",method = RequestMethod.POST)
+    public Map<String,Object> insertAgentShare(
+            @RequestParam(value = "id", required = true) Integer id,
+            @RequestParam(value = "buyMoney", required = true) Float buyMoney,
+            @RequestParam(value = "agentId", required = true) Integer agentId){
+        //返回类型
+        Map<String,Object> result = new HashMap<String,Object>();
+        //插入数据
+        AgentShare agentShare = new AgentShare();
+        agentShare.setAgentId(agentId);
+        agentShare.setUserId(businessService.getBusinessById(id).getUserId());
+        agentShare.setBusinessId(id);
+        agentShare.setAgentMoney(buyMoney);
+        agentShare.setCreateDate(new Date());
+        int val = agentShareService.insertAgentShareByBean(agentShare);
+        return BaseResult.checkResult(val);
     }
 
     /**
@@ -1228,24 +1264,6 @@ public class UsersController {
         result.put("info", lstBean);
         result.put("total", count);
         logger.info("getWithdrawCashes---end" + result.toString());
-        return result;
-    }
-
-    /**
-     * 管理员查看申请提现详情
-     * @param id MoneyApply表id
-     */
-    @RequestMapping(value="/getMoneyApplyDetail",method = RequestMethod.POST)
-    public Map<String,Object> getMoneyApplyDetail(
-            @RequestParam(value = "id", required = true) Integer id){
-        logger.info("getMoneyApplyDetail---start");
-        // 返回值
-        Map<String,Object> result = new HashMap<String, Object>();
-        Map<String, Object> moneyApply = moneyApplyService.getMoneyApplyByDetail(id);
-        result.put("code", BaseResult.SUCCESS_CODE);
-        result.put("msg", BaseResult.SUCCESS_MSG);
-        result.put("info", moneyApply);
-        logger.info("getMoneyApplyDetail---end" + result.toString());
         return result;
     }
 

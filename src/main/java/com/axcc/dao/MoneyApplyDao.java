@@ -3,10 +3,13 @@ package com.axcc.dao;
 import com.axcc.model.MoneyApply;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MoneyApplyDao {
 
     MoneyApply getMoneyApplyById(Integer id);
+
+    Map<String, Object> getMoneyApplyByDetail(Integer id);
 
     MoneyApply getMoneyApplyByBean(MoneyApply bean);
 

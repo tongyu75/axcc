@@ -66,4 +66,9 @@ public class MoneyApplyServiceImpl implements MoneyApplyService {
         return moneyApplyDao.countMoneyApplyForManager();
     }
 
+    @Override
+    public Map<String, Object> getMoneyApplyByDetail(int id) {
+        return moneyApplyDao.getMoneyApplyByDetail(id);
+    }
+
 }

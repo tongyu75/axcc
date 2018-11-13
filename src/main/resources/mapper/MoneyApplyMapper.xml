@@ -284,8 +284,21 @@
     create_time, level1_count, description
     from money_apply order by check_status ASC, apply_time DESC
   </select>
-  <select id="countMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultType="java.lang.Integer">
-    select count(1)
-    from money_apply
+  <select id="getMoneyApplyByDetail" parameterType="java.lang.Integer" resultType="Map">
+    SELECT
+    u.user_name userName,
+    ma.user_status userStatus,
+    u.login_name loginName,
+    u.bank_card bandCard,
+    ma.apply_money applyMoney,
+    ma.check_status checkStatus,
+    DATE_FORMAT(
+    ma.apply_time,
+    '%Y-%m-%d %H:%i:%s'
+    ) applyTime
+    FROM
+    money_apply ma
+    INNER JOIN users u ON ma.user_id = u.id
+    WHERE ma.id = #{id,jdbcType=INTEGER}
   </select>
 </mapper>

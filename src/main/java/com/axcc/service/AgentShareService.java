@@ -22,7 +22,7 @@ public interface AgentShareService {
 
     int countAgentShareById(Integer agentId);
 
-    int insertAgentShareForBean(AgentShare bean);
+    int insertAgentShareByBean(AgentShare bean);
 
     int updateAgentShareForBean(AgentShare bean);
 

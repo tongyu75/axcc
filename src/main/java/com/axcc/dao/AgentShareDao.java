@@ -19,7 +19,7 @@ public interface AgentShareDao {
 
     int countAgentShareByBean(AgentShare bean);
 
-    int insertAgentShareForBean(AgentShare bean);
+    int insertAgentShareByBean(AgentShare bean);
 
     int updateAgentShareForBean(AgentShare bean);
 

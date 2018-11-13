@@ -61,8 +61,8 @@ public class AgentShareServiceImpl implements AgentShareService {
     }
 
     @Override
-    public int insertAgentShareForBean(AgentShare bean) {
-        return agentShareDao.insertAgentShareForBean(bean);
+    public int insertAgentShareByBean(AgentShare bean) {
+        return agentShareDao.insertAgentShareByBean(bean);
     }
 
     @Override

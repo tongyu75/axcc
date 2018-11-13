@@ -3,6 +3,7 @@ package com.axcc.service;
 import com.axcc.model.MoneyApply;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tongshr on 2018/10/02.
@@ -10,6 +11,8 @@ import java.util.List;
 public interface MoneyApplyService {
 
     MoneyApply getMoneyApplyById(int id);
+
+    Map<String, Object> getMoneyApplyByDetail(int id);
 
     int insertMoneyApplyForBean(MoneyApply bean);
 
