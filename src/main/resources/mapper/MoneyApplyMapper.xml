@@ -11,6 +11,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="level1_count" jdbcType="INTEGER" property="level1Count" />
     <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
   </resultMap>
   <sql id="Base_Column_List">
     id, user_id, apply_money, apply_time, user_status, check_status, create_time, level1_count, description
@@ -279,10 +280,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="listMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultMap="BaseResultMap">
-    select id, user_id, apply_money,
-    apply_time, user_status, check_status,
-    create_time, level1_count, description
-    from money_apply order by check_status ASC, apply_time DESC
+    select ma.id, ma.user_id, ma.apply_money,
+    ma.apply_time, ma.user_status, ma.check_status,
+    ma.create_time, ma.level1_count, ma.description, u.user_name
+    from money_apply ma
+    INNER JOIN users u ON ma.user_id = u.id
+    order by check_status ASC, apply_time DESC
   </select>
   <select id="countMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultType="java.lang.Integer">
     select count(1)

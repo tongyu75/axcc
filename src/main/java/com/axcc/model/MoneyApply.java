@@ -21,6 +21,8 @@ public class MoneyApply {
 
     private Integer level1Count;
 
+    private String userName;
+
     public Integer getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class MoneyApply {
 
     public void setLevel1Count(Integer level1Count) {
         this.level1Count = level1Count;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
