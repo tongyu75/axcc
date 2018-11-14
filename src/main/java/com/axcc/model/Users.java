@@ -1,8 +1,12 @@
 package com.axcc.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Users {
+public class Users implements Serializable{
+
+    private static final long serialVersionUID = 3358857332697931928L;
+
     private Integer id;
 
     private String loginName;

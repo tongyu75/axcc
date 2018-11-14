@@ -69,7 +69,8 @@
   </select>
   <!-- 统计已出车的总量 -->
   <select id="getBuyStatusCount" resultType="java.lang.Integer">
-    SELECT SUM(CASE WHEN b.buy_status = '2' THEN 1 ELSE 0 END) total
+    SELECT
+    IF (SUM(CASE WHEN b.buy_status = '2' THEN 1 ELSE 0 END) IS NULL, 0, SUM(CASE WHEN b.buy_status = '2' THEN 1 ELSE 0 END)) total
     from business b
   </select>
   <select id="getBusinessByBean" parameterType="com.axcc.model.Business" resultMap="BaseResultMap">

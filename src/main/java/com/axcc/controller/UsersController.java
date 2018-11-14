@@ -368,7 +368,7 @@ public class UsersController {
      *
      * */
     @RequestMapping(value="/getMemberInfo",method = RequestMethod.POST)
-    public Map<String,Object> getMemberInfo(@RequestParam(value = "userId", required = true) Integer userId){
+    public Map<String,Object> getMemberInfo(HttpServletRequest request, @RequestParam(value = "userId", required = true) Integer userId){
         logger.info("getMemberInfo---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
