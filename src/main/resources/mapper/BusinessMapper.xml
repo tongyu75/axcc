@@ -49,7 +49,7 @@
     select
     <include refid="Base_Column_List" />
     from business
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} and is_delete = 0
   </select>
   <!-- 根据交易的ID号查看对应的用户及交易信息 -->
   <select id="getBusinessUserById" parameterType="java.lang.Integer" resultMap="BusinessUserResultMap">

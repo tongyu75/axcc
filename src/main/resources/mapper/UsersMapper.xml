@@ -29,13 +29,13 @@
     select
     <include refid="Base_Column_List" />
     from users
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} and is_delete = 0
   </select>
   <select id="getUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from users
-    where login_name = #{loginName,jdbcType=VARCHAR}
+    where login_name = #{loginName,jdbcType=VARCHAR} and is_delete = 0
   </select>
   <select id="getUserByBean" parameterType="com.axcc.model.Users" resultMap="BaseResultMap">
     select
@@ -43,6 +43,7 @@
     parent_id, original, user_role, create_time, update_time, is_delete, description, proxy_area
     from users
     <where>
+      is_delete = 0
       <if test="loginName != null">
         and login_name = #{loginName,jdbcType=VARCHAR}
       </if>
@@ -94,12 +95,12 @@
       <if test="proxyArea != null">
         and proxy_area = #{proxyArea,jdbcType=VARCHAR}
       </if>
-      and is_delete = 0
     </where>
   </select>
   <select id="countUserByBean" parameterType="com.axcc.model.Users" resultType="java.lang.Integer">
     select count(id) from users
     <where>
+      is_delete = 0
       <if test="loginName != null">
         and login_name = #{loginName,jdbcType=VARCHAR}
       </if>
@@ -151,7 +152,6 @@
       <if test="proxyArea != null">
         and proxy_area = #{proxyArea,jdbcType=VARCHAR}
       </if>
-      and is_delete = 0
     </where>
   </select>
   <select id="listUserByBean" parameterType="com.axcc.model.Users" resultMap="BaseResultMap">
@@ -160,6 +160,7 @@
     parent_id, original, user_role, create_time, update_time, is_delete, description, proxy_area
     from users
     <where>
+      is_delete = 0
       <if test="loginName != null">
         and login_name = #{loginName,jdbcType=VARCHAR}
       </if>
@@ -211,7 +212,6 @@
       <if test="proxyArea != null">
         and proxy_area = #{proxyArea,jdbcType=VARCHAR}
       </if>
-      and is_delete = 0
     </where>
   </select>
   <update id="resetPassword" parameterType="com.axcc.model.Users">

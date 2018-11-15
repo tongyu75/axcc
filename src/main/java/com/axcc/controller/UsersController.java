@@ -123,6 +123,7 @@ public class UsersController {
         paramUsers.setUserName(userName);
         paramUsers.setPassword(pwd);
         paramUsers.setParentId(parentId);
+        paramUsers.setIsDelete(0);
         // 会员角色
         paramUsers.setUserRole(2);
         Date date = new Date();
@@ -245,16 +246,7 @@ public class UsersController {
         int value = 0;
         Users paramUsers = new Users();
         paramUsers = userService.getUserByLoginName(phone);
-        //如果该代理员已经是会员了，直接更改角色为代理员
-        if(null != paramUsers){
-            paramUsers.setUserRole(1);
-            paramUsers.setUserName(userName);
-            paramUsers.setProxyArea(proxyArea);
-            Date date = new Date();
-            paramUsers.setCreateTime(date);
-            paramUsers.setUpdateTime(date);
-            value = userService.updateUserForBean(paramUsers);
-        }else{
+        if(null == paramUsers){
             //如果该代理员还不是会员，则添加为代理员,默认密码为123456
             Users bean1 = new Users();
             bean1.setLoginName(phone);
@@ -267,8 +259,12 @@ public class UsersController {
             bean1.setCreateTime(date);
             bean1.setUpdateTime(date);
             value = userService.insertUserForBean(bean1);
+            result = BaseResult.checkResult(value);
+        }else{
+            result.put("code",BaseResult.FAIL_CODE);
+            result.put("msg",BaseResult.FAIL_MSG);
         }
-        result = BaseResult.checkResult(value);
+
         logger.info("user---end" + result.toString());
         return result;
     }
@@ -1009,6 +1005,7 @@ public class UsersController {
         //获取优惠券状态，查看用户是否获取过优惠券/是否已过期/是否已使用
         Voucher vou = new Voucher();
         vou.setUserId(userId);
+        vou.setIsDelete(0);
         List<Voucher> listVou = voucherService.listVoucherByBean(vou);
         int count = 0;
         //用户有优惠券，且优惠券都是 “未使用且已过期” 状态，则发放优惠券
