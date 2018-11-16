@@ -669,7 +669,7 @@ public class UsersController {
      */
     @RequestMapping(value="/listWait",method = RequestMethod.POST)
     public Map<String,Object> listWait(
-            @RequestParam(value = "loginName", required = false) String loginName,
+            @RequestParam(value = "phone", required = false) String phone,
             @RequestParam(value = "buyStatus", required = false) Integer buyStatus,
             @RequestParam(value = "pageNum", required = true) Integer pageNum,
             @RequestParam(value = "pageSize", required = true) Integer pageSize){
@@ -678,8 +678,8 @@ public class UsersController {
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bean = new BusinessUser();
         bean.setBuyStatus(buyStatus);
-        if(!"".equals(loginName)){
-            bean.setLoginName(loginName);
+        if(!"".equals(phone)){
+            bean.setLoginName(phone);
         }
         // 查询记录总条数
         int count = businessService.countBusinessUserByBean(bean);
