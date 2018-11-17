@@ -95,6 +95,20 @@ public class UsersController {
     }
 
     /**
+     * 用户退出
+     */
+    @RequestMapping(value="/logout",method = RequestMethod.POST)
+    public Map<String,Object> logout(HttpServletRequest reuest){
+        logger.info("login---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        reuest.getSession().removeAttribute("user");
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        return result;
+    }
+
+    /**
      * 会员注册
      * @param phone 手机号
      * @param userName 会员名称
@@ -140,8 +154,29 @@ public class UsersController {
             updateBean.setOriginal(original);
             int updateValue = userService.updateUserForBean(updateBean);
             if (updateValue == 1) {
-                result.put("code", BaseResult.SUCCESS_CODE);
-                result.put("msg", BaseResult.SUCCESS_MSG);
+                // 获取用户信息
+                //Users users = userService.getUserById(bean.getUserId());
+                String[] ori = original.split("-");
+                // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
+                for(int i = 0; i < ori.length - 1; i++) {
+                    // 注册会员的上级ID
+                    String parId = ori[i];
+                    UsersRelate usersRelate = new UsersRelate();
+                    usersRelate.setUserId(Integer.valueOf(parId));
+                    usersRelate.setOriginal(parId);
+                    // 会员级别
+                    usersRelate.setLevel(ori.length - 1 - i);
+                    // 注册会员的用户ID作为插入数据的子ID
+                    usersRelate.setChildId(addId);
+                    int val = userRelateService.insertUserRelateForBean(usersRelate);
+                    if (val == 1) {
+                        result.put("code", BaseResult.SUCCESS_CODE);
+                        result.put("msg", BaseResult.SUCCESS_MSG);
+                    } else {
+                        result.put("code", BaseResult.FAIL_CODE);
+                        result.put("msg", BaseResult.FAIL_MSG);
+                    }
+                }
             } else {
                 result.put("code", BaseResult.FAIL_CODE);
                 result.put("msg", BaseResult.FAIL_MSG);
@@ -165,12 +200,28 @@ public class UsersController {
         Users user = userService.getUserByLoginName(loginName);
         result.put("msg",BaseResult.SUCCESS_MSG);
         result.put("code",BaseResult.SUCCESS_CODE);
+        result.put("info",user);
+        logger.info("getUserByLoginName---------------end");
+        return result;
+    }
+
+    /**
+     * 会员:会员注册是判断推荐人手机号存不存在并且推荐人只能是会员
+     */
+    @RequestMapping(value = "exsistsRefrenceUser",method = RequestMethod.POST)
+    public Map<String,Object> exsistsUser(@RequestParam(value = "loginName",required = true) String loginName){
+        logger.info("getUserByLoginName---------------start");
+        //返回类型
+        Map<String,Object> result = new HashMap<String,Object>();
+        Users user = userService.getUserByLoginName(loginName);
         // 会员注册时的推荐人只能是会员，所以加上角色判断
         if (user != null) {
             if (user.getUserRole() != 2) {
                 user = null;
             }
         }
+        result.put("msg",BaseResult.SUCCESS_MSG);
+        result.put("code",BaseResult.SUCCESS_CODE);
         result.put("info",user);
         logger.info("getUserByLoginName---------------end");
         return result;
@@ -818,8 +869,8 @@ public class UsersController {
             /**插入代理员业绩表*/
             resultAgent = insertAgentShare(id,buyMoney,agentId);
             int valueAgent = (int)resultAgent.get("code");
-            /**checkStatus=2，则还需要插入新的数据到会员所属关系表(users_relate)，用于分享奖的操作*/
-            resultRelate = insertUsersRelate(id);
+            /**checkStatus=2，则还需要更新数据到会员所属关系表(users_relate)，用于分享奖的操作*/
+            resultRelate = updateUsersRelate(id);
             int valueRelate = (int)resultRelate.get("code");
             /**判断操作结果*/
             if(0==valueVou && 0==valueAgent && 0==valueRelate){
@@ -838,10 +889,11 @@ public class UsersController {
     }
 
     /**
-     *  checkStatus=2，则还需要插入新的数据到会员所属关系表(users_relate)，用于分享奖的操作
+     *  checkStatus=2，则还需要更新数据到会员所属关系表(users_relate)，用于分享奖的操作
      *
+     * @param id business主键ID
      */
-    public Map<String,Object> insertUsersRelate(Integer id){
+    public Map<String,Object> updateUsersRelate(Integer id){
         //返回类型
         Map<String,Object> result = new HashMap<String,Object>();
         result.put("code", BaseResult.SUCCESS_CODE);
@@ -854,30 +906,32 @@ public class UsersController {
         // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
         for(int i = 0; i < ori.length - 1; i++) {
             String parentId = ori[i];
-            UsersRelate usersRelate = new UsersRelate();
-            usersRelate.setUserId(Integer.valueOf(parentId));
-            usersRelate.setOriginal(parentId);
-            // 提现状态(0:未提现 1:已提现)
-            usersRelate.setApplyStatus(0);
-            // 购车费用
-            usersRelate.setBuyMoney(bean.getBuyMoney());
-            // 会员申请时间
-            usersRelate.setApplyTime(bean.getApplyTime());
-            // 管理员审核时间
-            usersRelate.setCheckTime(bean.getCheckTime());
-            // 会员付款时间
-            usersRelate.setPayTime(bean.getPayTime());
-            // 会员级别
-            usersRelate.setLevel(ori.length - 1 - i);
-            // 当前会员对应的子会员的用户ID
-            usersRelate.setChildId(bean.getUserId());
-            int val = userRelateService.insertUserRelateForBean(usersRelate);
-            if (val == 1) {
-                result.put("code", BaseResult.SUCCESS_CODE);
-                result.put("msg", BaseResult.SUCCESS_MSG);
-            } else {
-                result.put("code", BaseResult.FAIL_CODE);
-                result.put("msg", BaseResult.FAIL_MSG);
+            UsersRelate selBean = new UsersRelate();
+            selBean.setUserId(Integer.valueOf(parentId));
+            selBean.setChildId(bean.getUserId());
+            // 查询更新的ID
+            UsersRelate updBean = userRelateService.getUserRelateByBean(selBean);
+            if (updBean != null) {
+                UsersRelate usersRelate = new UsersRelate();
+                usersRelate.setId(updBean.getId());
+                // 提现状态(0:未提现 1:已提现)
+                usersRelate.setApplyStatus(0);
+                // 购车费用
+                usersRelate.setBuyMoney(bean.getBuyMoney());
+                // 会员申请时间
+                usersRelate.setApplyTime(bean.getApplyTime());
+                // 管理员审核时间
+                usersRelate.setCheckTime(bean.getCheckTime());
+                // 会员付款时间
+                usersRelate.setPayTime(bean.getPayTime());
+                int val = userRelateService.updateUserRelateForBean(usersRelate);
+                if (val == 1) {
+                    result.put("code", BaseResult.SUCCESS_CODE);
+                    result.put("msg", BaseResult.SUCCESS_MSG);
+                } else {
+                    result.put("code", BaseResult.FAIL_CODE);
+                    result.put("msg", BaseResult.FAIL_MSG);
+                }
             }
         }
         return result;

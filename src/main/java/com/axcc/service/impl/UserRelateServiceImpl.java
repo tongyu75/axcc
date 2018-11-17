@@ -125,14 +125,15 @@ public class UserRelateServiceImpl implements UserRelateService {
             String userName = (String) mp.get("userName");
             String loginName = (String) mp.get("loginName");
             int level = (Integer) mp.get("level");
-            String checkTime = (String) mp.get("checkTime");
+            // 会员注册时间
+            String createTime = (String) mp.get("createTime");
             // level为1代表是值推会员
             if (level == 1) {
                 Map<String, Object> mpLevel1 = new HashMap<>();
                 mpLevel1.put("level", "直推会员");
                 mpLevel1.put("userName", userName);
                 mpLevel1.put("loginName", loginName);
-                mpLevel1.put("time", checkTime);
+                mpLevel1.put("time", createTime);
                 firstMap.add(mpLevel1);
                 // 长度为2代表是间推会员
             } else if (level == 2) {
@@ -140,14 +141,14 @@ public class UserRelateServiceImpl implements UserRelateService {
                 mpLevel2.put("level", "间推会员");
                 mpLevel2.put("userName", userName);
                 mpLevel2.put("loginName", loginName);
-                mpLevel2.put("time", checkTime);
+                mpLevel2.put("time", createTime);
                 secondMap.add(mpLevel2);
             } else {
                 Map<String, Object> mpLevel3 = new HashMap<>();
                 mpLevel3.put("level", "区间会员");
                 mpLevel3.put("userName", userName);
                 mpLevel3.put("loginName", loginName);
-                mpLevel3.put("time", checkTime);
+                mpLevel3.put("time", createTime);
                 otherMap.add(mpLevel3);
             }
         }

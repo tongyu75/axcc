@@ -25,6 +25,8 @@ public class UsersRelate {
 
     private Integer childId;
 
+    private Integer searchType;
+
     public Integer getId() {
         return id;
     }
@@ -111,5 +113,13 @@ public class UsersRelate {
 
     public void setChildId(Integer childId) {
         this.childId = childId;
+    }
+
+    public Integer getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(Integer searchType) {
+        this.searchType = searchType;
     }
 }
