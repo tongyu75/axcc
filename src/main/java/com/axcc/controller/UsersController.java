@@ -1280,8 +1280,9 @@ public class UsersController {
         // 首先判断提现的时间是否是星期一，如果不是星期一就不能继续提现操作
         Calendar cal= Calendar.getInstance();
         cal.setTime(new Date());
+        /* TODO 临时注释方便测试
         int week = cal.get(Calendar.DAY_OF_WEEK)-1;
-        if (week == 1) {
+        if (week == 1) {*/
             // 判断是否重复提交
             MoneyApply bean = new MoneyApply();
             bean.setUserId(userId);
@@ -1322,10 +1323,10 @@ public class UsersController {
                 result.put("code", "3");
                 result.put("msg", "请不要重复提交申请");
             }
-        } else {
+        /*} else {
             result.put("code", "2");
             result.put("msg", "申请提现时间不是星期一，不允许提现");
-        }
+        }*/
 
         logger.info("user---end" + result.toString());
         return result;
