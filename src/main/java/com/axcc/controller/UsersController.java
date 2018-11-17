@@ -165,6 +165,12 @@ public class UsersController {
         Users user = userService.getUserByLoginName(loginName);
         result.put("msg",BaseResult.SUCCESS_MSG);
         result.put("code",BaseResult.SUCCESS_CODE);
+        // 会员注册时的推荐人只能是会员，所以加上角色判断
+        if (user != null) {
+            if (user.getUserRole() != 2) {
+                user = null;
+            }
+        }
         result.put("info",user);
         logger.info("getUserByLoginName---------------end");
         return result;
