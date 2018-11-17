@@ -952,7 +952,8 @@ public class UsersController {
         Calendar cal= Calendar.getInstance();
         cal.setTime(new Date());
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        if (day == 5) {
+        // TODO 为了测试 先注释掉
+        /*if (day == 5) {*/
             // 判断是否重复提交
             MoneyApply bean = new MoneyApply();
             bean.setUserId(agentId);
@@ -979,10 +980,10 @@ public class UsersController {
                 result.put("code", "3");
                 result.put("msg", "请不要重复提交申请");
             }
-        } else {
+        /*} else {
             result.put("code", "2");
             result.put("msg", "代理员每月5号才能申请提现");
-        }
+        }*/
 
         logger.info("agentWithdrawCashes---start" + result.toString());
         return result;
