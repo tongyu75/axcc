@@ -50,4 +50,12 @@ public class BaseResult {
     public static final String CHECKSTATUS_2 = "审核通过，已缴费";
     public static final String CHECKSTATUS_3 = "审核通过，缴费失败";
     public static final String CHECKSTATUS_4 = "审核未通过";
+
+    /* 用户登录CODE "用户不存在" */
+    public static final int LOGIN_NO_USER = 1001;
+    public static final String LOGIN_NO_USER_MSG = "用户不存在";
+
+    /* 用户登录CODE "密码错误" */
+    public static final int LOGIN_PWD_ERROR = 1002;
+    public static final String LOGIN_PWD_ERROR_MSG = "密码错误";
 }

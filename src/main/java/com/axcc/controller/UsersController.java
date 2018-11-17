@@ -78,17 +78,23 @@ public class UsersController {
         Map<String,Object> result = new HashMap<String, Object>();
         Users paramUsers = new Users();
         paramUsers.setLoginName(phone);
-        paramUsers.setPassword(pwd);
         Users users = userService.getUserByBean(paramUsers);
         if (users != null) {
-            // 存到session中
-            reuest.getSession().setAttribute("user", users);
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
-            result.put("result", users);
+            if (pwd.equals(users.getPassword())) {
+                // 存到session中
+                reuest.getSession().setAttribute("user", users);
+                result.put("code", BaseResult.SUCCESS_CODE);
+                result.put("msg", BaseResult.SUCCESS_MSG);
+                result.put("result", users);
+            } else {
+                // 密码错误
+                result.put("code", BaseResult.LOGIN_PWD_ERROR);
+                result.put("msg", BaseResult.LOGIN_PWD_ERROR_MSG);
+            }
         } else {
-            result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
+            // 用户不存在
+            result.put("code", BaseResult.LOGIN_NO_USER);
+            result.put("msg", BaseResult.LOGIN_NO_USER_MSG);
         }
         logger.info("login---end" + result.toString());
         return result;
