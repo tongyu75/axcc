@@ -82,7 +82,7 @@ public class UsersController {
         if (users != null) {
             if (pwd.equals(users.getPassword())) {
                 // 存到session中
-                reuest.getSession().setAttribute("user", users);
+                reuest.getSession().setAttribute(phone + "user", users);
                 result.put("code", BaseResult.SUCCESS_CODE);
                 result.put("msg", BaseResult.SUCCESS_MSG);
                 result.put("result", users);
@@ -104,11 +104,12 @@ public class UsersController {
      * 用户退出
      */
     @RequestMapping(value="/logout",method = RequestMethod.POST)
-    public Map<String,Object> logout(HttpServletRequest reuest){
+    public Map<String,Object> logout(HttpServletRequest reuest,
+                                     @RequestParam(value = "loginName", required = true) String loginName){
         logger.info("login---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
-        reuest.getSession().removeAttribute("user");
+        reuest.getSession().removeAttribute(loginName + "user");
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("msg", BaseResult.SUCCESS_MSG);
         return result;
@@ -789,18 +790,16 @@ public class UsersController {
      */
     @RequestMapping(value = "listBusinessByAgent",method = RequestMethod.POST)
     public Map<String,Object> listBusinessByAgent(HttpServletRequest request,
-            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "loginName", required = true) String loginName,
             @RequestParam(value = "pageNum", required = true) Integer pageNum,
             @RequestParam(value = "pageSize", required = true) Integer pageSize){
         logger.info("listWait---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         //从session中获取当前登录的用户信息
-        Users user = (Users)request.getSession().getAttribute("user");
+        //Users user = (Users)request.getSession().getAttribute(loginName + "user");
         BusinessUser bean = new BusinessUser();
-        if(!"".equals(phone)) {
-            bean.setLoginName(phone);
-        }
+        Users user = userService.getUserByLoginName(loginName);
         bean.setAgentId(user.getId());
         // 查询记录总条数
         int count = businessService.countBusinessByAgent(bean);
@@ -1127,11 +1126,13 @@ public class UsersController {
      */
     @RequestMapping(value="/uploadPhoto", method = RequestMethod.POST)
     public Map<String, Object> uploadPhoto(@RequestParam(value = "file", required = true) MultipartFile file,
+                                           @RequestParam(value = "loginName", required = true) String loginName,
                                            HttpServletRequest request) {
         logger.info("uploadPhoto-----------start---------");
         //获取用户
-        Users session = (Users)request.getSession().getAttribute("user");
-        Users users = userService.getUserById(session.getId());
+        // Users session = (Users)request.getSession().getAttribute(loginName + "user");
+        //Users users = userService.getUserById(session.getId());
+        Users users = userService.getUserByLoginName(loginName);
         //返回类型
         Map<String, Object> result = new HashMap<String, Object>();
         //定义时间格式
@@ -1177,9 +1178,10 @@ public class UsersController {
 
         //同步session
      //   Users user = (Users)request.getSession().getAttribute("user");
-        session.setImage(path+fileName);
-        request.getSession().setAttribute("user", session);
-
+        //session.setImage(path+fileName);
+        //request.getSession().setAttribute(loginName + "user", session);
+        users.setImage(path+fileName);
+        userService.updateUserForBean(users);
         logger.info("updateUserInfo-----" + value + "----end" + result.toString());
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("msg", BaseResult.SUCCESS_MSG);

@@ -279,10 +279,54 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="listMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultMap="BaseResultMap">
-    select ma.id, ma.user_id, ma.apply_money,
-    ma.apply_time, ma.user_status, ma.check_status,
-    ma.create_time, ma.level1_count, ma.description, u.user_name
+  <select id="getWithdrawCashes" parameterType="com.axcc.model.MoneyApply" resultType="Map">
+    select id AS id, user_id AS userId, apply_money AS applyMoney,
+    DATE_FORMAT(
+    apply_time,
+    '%Y-%m-%d %H:%i:%s'
+    ) applyTime, user_status AS userStatus, check_status AS checkStatus,
+    DATE_FORMAT(
+    create_time,
+    '%Y-%m-%d %H:%i:%s'
+    ) createTime, level1_count AS level1Count, description AS description
+    from money_apply
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INTEGER}
+      </if>
+      <if test="applyMoney != null">
+        and apply_money = #{applyMoney,jdbcType=REAL}
+      </if>
+      <if test="applyTime != null">
+        and apply_time = #{applyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="userStatus != null">
+        and user_status = #{userStatus,jdbcType=INTEGER}
+      </if>
+      <if test="checkStatus != null">
+        and check_status = #{checkStatus,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="level1Count != null">
+        and level1_count = #{level1Count,jdbcType=INTEGER}
+      </if>
+      <if test="description != null">
+        and description = #{description,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="listMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultType="Map">
+    select ma.id AS id, ma.user_id AS userId, ma.apply_money AS applyMoney,
+    DATE_FORMAT(
+          ma.apply_time,
+          '%Y-%m-%d %H:%i:%s'
+      ) applyTime, ma.user_status AS userStatus, ma.check_status AS checkStatus,
+    DATE_FORMAT(
+          ma.create_time,
+          '%Y-%m-%d %H:%i:%s'
+      ) createTime, ma.level1_count AS level1Count, ma.description AS description, u.user_name AS userName
     from money_apply ma
     INNER JOIN users u ON ma.user_id = u.id
     order by check_status ASC, apply_time DESC
