@@ -15,6 +15,8 @@ public interface MoneyApplyDao {
 
     List<MoneyApply> listMoneyApplyByBean(MoneyApply bean);
 
+    List<Map<String, Object>> getWithdrawCashes(MoneyApply bean);
+
     int countMoneyApplyByBean(MoneyApply bean);
 
     int countOnlyOneMoneyApply(MoneyApply bean);
@@ -23,7 +25,7 @@ public interface MoneyApplyDao {
 
     int updateMoneyApplyForBean(MoneyApply bean);
 
-    List<MoneyApply> listMoneyApplyForManager();
+    List<Map<String, Object>> listMoneyApplyForManager();
 
     int countMoneyApplyForManager();
 

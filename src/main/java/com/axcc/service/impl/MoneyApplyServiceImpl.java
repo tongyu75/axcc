@@ -46,6 +46,12 @@ public class MoneyApplyServiceImpl implements MoneyApplyService {
     }
 
     @Override
+    public List<Map<String, Object>> getWithdrawCashes(MoneyApply bean, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return moneyApplyDao.getWithdrawCashes(bean);
+    }
+
+    @Override
     public int countMoneyApplyByBean(MoneyApply bean) {
         return moneyApplyDao.countMoneyApplyByBean(bean);
     }
@@ -56,7 +62,7 @@ public class MoneyApplyServiceImpl implements MoneyApplyService {
     }
 
     @Override
-    public List<MoneyApply> listMoneyApplyForManager(int pageNum, int pageSize) {
+    public List<Map<String, Object>> listMoneyApplyForManager(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return moneyApplyDao.listMoneyApplyForManager();
     }

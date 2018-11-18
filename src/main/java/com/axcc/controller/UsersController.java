@@ -1343,7 +1343,7 @@ public class UsersController {
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         int count = moneyApplyService.countMoneyApplyForManager();
-        List<MoneyApply> lstBean = moneyApplyService.listMoneyApplyForManager(pageNum, pageSize);
+        List<Map<String,Object>> lstBean = moneyApplyService.listMoneyApplyForManager(pageNum, pageSize);
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("info", lstBean);
@@ -1399,7 +1399,7 @@ public class UsersController {
     }
 
     /**
-     * 用户查看自己的提现明细列表
+     * 会员和代理员：查询提现列表
      */
     @RequestMapping(value="/getWithdrawCashes",method = RequestMethod.POST)
     public Map<String,Object> getWithdrawCashes(
@@ -1412,7 +1412,7 @@ public class UsersController {
         MoneyApply bean = new MoneyApply();
         bean.setUserId(userId);
         int count = moneyApplyService.countMoneyApplyByBean(bean);
-        List<MoneyApply> lstBean = moneyApplyService.listMoneyApplyByBean(bean, pageNum, pageSize);
+        List<Map<String, Object>> lstBean = moneyApplyService.getWithdrawCashes(bean, pageNum, pageSize);
         result.put("code", BaseResult.SUCCESS_CODE);
         result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("info", lstBean);

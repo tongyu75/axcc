@@ -20,11 +20,13 @@ public interface MoneyApplyService {
 
     List<MoneyApply> listMoneyApplyByBean(MoneyApply bean, int pageNum, int pageSize);
 
+    List<Map<String, Object>> getWithdrawCashes(MoneyApply bean, int pageNum, int pageSize);
+
     int countMoneyApplyByBean(MoneyApply bean);
 
     int countOnlyOneMoneyApply(MoneyApply bean);
 
-    List<MoneyApply> listMoneyApplyForManager(int pageNum, int pageSize);
+    List<Map<String, Object>> listMoneyApplyForManager(int pageNum, int pageSize);
 
     int countMoneyApplyForManager();
 }
