@@ -758,6 +758,25 @@ public class UsersController {
     }
 
     /**
+     * 会员取车，改变购车状态为“已出车”
+     * @param businessId
+     * @return
+     */
+    @RequestMapping(value="takeCar",method = RequestMethod.POST)
+    public Map<String,Object> takeCar(
+            @RequestParam(value = "businessId", required = false) Integer businessId){
+        logger.info("takeCar------------start");
+        Map<String,Object> result = new HashMap<String,Object>();
+        Business bean = new Business();
+        bean.setId(businessId);
+        bean.setBuyStatus(2);
+        int value = businessService.updateBusinessForBean(bean);
+        result = BaseResult.checkResult(value);
+        logger.info("takeCar------------end");
+        return result;
+    }
+
+    /**
      * 代理员：代办业务列表,即没付费的用户信息
      */
     @RequestMapping(value = "listBusinessNoMoney",method = RequestMethod.POST)
