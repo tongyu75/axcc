@@ -1,0 +1,295 @@
+﻿.mymessage{
+	width: 100%;
+	height: 300px;
+	/*border:1px solid;*/
+	position: fixed;
+	max-width: 640px;	
+	background-color: #2C3E54;
+	color: white;
+	text-align: center;
+}
+
+.meg-1{
+	width: 100%;
+	height: 8%;
+	/*border:1px solid red;*/
+	
+}
+.meg-2{
+	width: 100%;
+	height: 12%;
+	/*border:1px solid yellow;*/
+}
+.meg-3-img{
+	width: 125px;
+	height: 100%;
+	/*border:1px solid green;*/
+	margin: auto;
+}
+.meg-3-img img{
+	width: 85%;
+}
+.meg-3{
+	width: 100%;
+	height: 41%;
+	/*border:1px solid green;*/
+}
+.name{
+	width: 60px;
+    height: 25px;
+    border: 1px solid #0099CC;
+    color: #0099CC;
+    border-radius: 20px;
+    /* float: right; */
+    margin-top: -24px;
+    margin-right: 30%;
+    line-height: 22px;
+    display: inline-block;
+}
+.name1{
+	/*margin-top: 5px;
+	margin-right:16%;*/
+	margin: 5px 5px 0 25%;
+	display: inline-block;
+}
+.meg-4{
+	width: 100%;
+	height:13%;
+	/*border:1px solid hotpink;*/
+}
+
+.meg-5{
+	width: 100%;
+	height: 13%;
+	/*border:1px solid aquamarine;*/
+	line-height: 35px;
+}
+
+.meg-6{
+	width: 100%;
+	height: 13%;
+	/*border:1px solid lawngreen;*/
+	/*background-color: rgba(255,255,255,.05);*/
+	line-height: 35px;
+	
+}
+
+
+.my-content{
+	width: 100%;
+	height: 75%;
+	/*border:1px solid red;*/
+	margin-top: 295px;
+	background-color:white;
+}
+.my-content-1{
+	width: 90%;
+	height: 50px;
+	/*border:1px solid red;*/
+	line-height: 50px;
+	margin: auto;
+}
+.my-content-1 a{display: inline-block;width: 100%;}
+.head-t{
+	width:7%;
+	margin-right: 15px;
+}
+
+.you-t{
+	float: right;
+	width: 10px;
+	height: 18px;
+	margin-top: 15px;
+}
+/*二维码*/
+.mycode{
+	width:100%;
+	/*height: 92%;*/
+	background-color: white;
+	position: relative;
+}
+.mycode-1{
+	/*border:1px solid red;*/
+	text-align: center;
+	width:100%;
+	position: relative;
+	margin:0 auto;
+	top:150px;
+}
+/*个人资料*/
+.mycode-h{
+	width:90%;
+	height: 70px;
+	/*border:1px solid red;*/
+	margin: auto;
+}
+.mycode-h span{
+	line-height: 70px;
+}
+.lr{
+	float: right;
+}
+
+.img-a{
+	margin-top: -70px;
+	width: 25px;
+	height: 70px;
+	/*border:1px solid red;*/
+	
+}
+.img-b{
+	margin-right: 30px;
+	margin-top: -70px;
+	width: 70px;
+	height: 70px;	
+}
+.img-a img{
+	width: 40%;
+	margin-top: 30px;
+}
+.img-b img{
+	width: 90%;
+		margin-top: 5px;
+}
+.img-b span{
+	line-height: 78px;
+}
+
+.tel1{
+	margin-top: 21px;
+	border: 0;
+	outline: none;
+	direction: rtl;
+}
+.sure{
+	margin-top: 50px;
+}
+/*我的会员页面*/
+.mymember{
+	width:100%;
+	height: 22%;
+	margin-top: 50px;
+	background-color:#2C3E54;
+}
+.z-member img{
+	width: 60%;
+	margin-left: 25%;
+}
+
+.q-member img{
+	width: 60%;
+	margin-left: 15%;
+	
+}
+
+
+.z-member{
+	width:50%;
+	height: 140px;
+	float: left;
+}
+.q-member{
+	width:50%;
+	height: 140px;
+
+	float: left;
+}
+
+.mymember-1{
+	width:100%;
+	background-color: white;
+
+}
+.mymember-2{
+	width:90%;
+
+	margin: auto;
+}
+
+.mymember-2-a{
+	color: #939393;
+	width:100%;
+	height:30px;
+	border:1px solid white;
+}
+.mymember-2-b{
+	width:100%;
+	height:65px;
+	/*border:1px solid;*/
+	
+}
+.mymember-2-c img{
+	width:85%;
+}
+
+.mar-top{
+	margin-top: 15px;
+}
+.mymember-2-c{
+	width:65px;
+	height:65px;
+	/*border:1px solid;*/
+	float: left;
+	
+}
+.mymember-2-d{
+	width:220px;
+	height:65px;
+	/*border:1px solid;*/
+	float: left;
+	line-height: 65px;
+}
+.mymember-3{
+	color: #939393;
+}
+
+/*银行卡管理界面*/
+.card-y{
+	width: 100%;
+	/*border:1px solid red;*/
+	margin-top: 70px;
+}
+.card-y-1{
+	width: 90%;
+	height: 30px;
+	/*border:1px solid red;*/
+	margin: auto;
+	color:red;
+	font-size: 1rem;
+}
+.card-y-2{
+	width: 90%;
+	height: 50px;
+	/*border:1px solid red;*/
+	line-height: 50px;
+	margin: auto;
+}
+
+.c-name{
+	width: 10px;
+	height: 50px;
+	/*border:1px solid red;*/
+	float: left;
+	color: red;
+}
+.c-name-1{
+	width: 100px;
+	height: 50px;
+	/*border:1px solid red;*/
+	float: left;
+}
+.c-name-2{
+	width: 172px;
+	height: 50px;
+	/*border:1px solid red;*/
+	float: left;
+}
+
+.c-name-2 input{
+	border:0;
+	outline: none;
+	margin-top: -3px;
+}
+.out{
+	margin-top: 100px;
+}

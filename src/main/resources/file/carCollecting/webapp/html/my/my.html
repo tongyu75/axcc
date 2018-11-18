@@ -1,0 +1,159 @@
+﻿<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>我的</title>
+		<meta name="description" content="爱心共享筹车">
+  		<meta name="keywords" content="共享筹车">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<!--<link rel="icon" type="image/png" href="assets/i/favicon.png">-->
+		<link rel="stylesheet" href="../../css/public/amazeui.min.css">
+		<link rel="stylesheet" href="../../css/public/base.css">
+		<link rel="stylesheet" href="../../css/loginAReg/login.css">
+		<link rel="stylesheet" href="../../css/my/my.css">
+		<style type="text/css">
+			a{
+				color: #333;				
+			}
+			.imgg{border-radius: 50%;}
+	  		.inputt{width:0 !important;height:0 !important;opacity: 0;}
+	  		.dl_name{
+  			   width: 60px;
+					 height: 25px;
+					 border: 1px solid #0099CC;
+					 color: #0099CC;
+					 border-radius: 5px;
+					 margin-left: 10px;
+					 display: inline-block;
+					 font-size: 13px;
+					 line-height: 24px;
+					 display: inline-block;
+	  		}
+	  		#upload3{
+	  			position: relative;
+	  		}
+	  		#file3{ 
+	  			width:100% !important;
+	  			height:100% !important;
+	  			position: absolute;
+	  		}
+		</style>
+	</head>
+
+	<body>
+		<div class="mymessage" style="height:220px;">
+			<div class="meg-1" style="height: 4%;"></div>
+			<!--<div class="meg-2 am-u-sm-12 am-vertical-align">
+				<div class="am-u-sm-2"></div>
+				<div class="am-u-sm-8 am-u-sm-offset-2 am-vertical-align-middle am-text-center">我</div>
+				<div class="am-u-sm-2 am-vertical-align-middle">
+					<a href="change.html">
+						<img src="picture/shezhi.png" style="vertical-align: text-top;" alt="" />
+						<span style="font-size:15px;color:#fff;">设置</span>
+					</a>
+				</div>
+				
+			</div>-->
+			<div class="meg-3" style="clear:both;height:47%;position: relative;">
+				<div class="meg-3-img">
+					<form id="upload3" style="width:100px;display:inline-block;height: 100%;">
+						<div style="display:inline-block;width:100%;height: 100%;">
+							<input type="file" name="file" id="file3" style="font-size:0;" class="inputt" onchange="doUpload(3,3,this)">	
+							<img src="../../img/my/huiyuanh.png" class="img3 imgg" style="width:100%;height:100%" onclick="img_click(3)">
+						</div>
+					</form>
+				</div>
+				<div style="position: absolute;top:0;right:10px;">
+					<a href="change.html">
+						<!--<img src="picture/shezhi.png" style="vertical-align: text-top;" alt="" />-->
+						<span style="font-size:15px;color:#fff;">设置</span>
+					</a>
+				</div>
+			</div>
+			<div class="meg-4">
+				<div class="name1" id="username"></div>
+				<div class="name isReal" ></div>
+			</div>
+			<div class="meg-1" style="height:1%;"></div>
+			<div class="meg-5">手机号：<span class="mobile"></span><span class="dl_name" ></span></div>
+			<div class="meg-1" style="height:5%;"></div>
+			<div class="meg-6" style="margin:1% 0;line-height: inherit;">推荐人：<span class="recommendMobile"></span></div>
+		</div>
+
+		<div class="my-content" style="margin-top:220px;">
+			<div class="my-content-1">
+				<a href="PersonalData.html">
+					<img src="../../img/my/gerenziliao.png" class="head-t"><span>个人资料</span>
+					<img src="../../img/my/youjiantou.png" class="you-t">
+				</a>
+			</div>
+		
+			<div class="my-content-1">
+				<a href="jifen.html">
+					<img src="../../img/my/yinhangka.png" class="head-t"><span>我的分享奖</span>
+					<img src="../../img/my/youjiantou.png" class="you-t">
+				</a>
+			</div>
+			<!--<div class="my-content-1 dl_jiang">
+				<a href="agency.html">
+					<img src="../../img/my/yinhangka.png" class="head-t"><span>我的代理奖</span>
+					<img src="../../img/my/youjiantou.png" class="you-t">
+				</a>
+			</div>-->
+			<div class="my-content-1">
+				<a href="MyCode.html">
+					<img src="../../img/my/erweima.png" class="head-t"><span>我的二维码</span>
+					<img src="../../img/my/youjiantou.png" class="you-t">
+				</a>
+			</div>
+			<div class="my-content-1">
+				<a href="MyMember.html">
+					<img src="../../img/my/huiyuan.png" class="head-t"><span>我的会员</span>
+					<img src="../../img/my/youjiantou.png" class="you-t">
+				</a>
+			</div>
+			<div class="my-content-1">
+				<a href="CarPurchaseFund.html">
+					<img src="../../img/my/qianbao.png" class="head-t"><span>我的购车基金</span>
+					<img src="../../img/my/youjiantou.png" class="you-t">
+				</a>
+			</div>
+			<div class="my-content-1">
+				<a href="FlatMessage.html">
+					<img src="../../img/my/message.png" class="head-t"><span>平台消息</span>
+					<img src="../../img/my/youjiantou.png" class="you-t"></div>
+				</a>
+			
+			</div>
+		<div class="am-g dibu">
+			<div class="am-u-sm-4 dibu2" id="homepage-1">
+				<a href="../../html/home/home.html" style="color: #929292;">
+					<img src="../../img/home/home1.png" class=""><br/><span>首页</span>
+				</a>
+			</div>
+			<div class="am-u-sm-4 dibu2" id="item-pai-1">
+				<a href="../../html/list/addList.html" style="color: #929292;">
+					<img src="../../img/list/team1.png" class=""><br/><span>排队</span>
+				</a>
+			</div>
+			<div class="am-u-sm-4 dibu1" id="my-con">
+				<a href="My.html" style="color: #929292;">
+					<img src="../../img/my/mine.png" class=""><br/><span style="color: #333;">我的</span>
+				</a>
+			</div>
+		</div>
+
+		<script src="../../js/public/jquery.min.js"></script>
+		<script src="../../js/public/amazeui.min.js"></script>
+		<script src="../../js/public/new_file.js"></script>
+		<script src="../../js/my/my.js"></script>
+		<script type="text/javascript">
+			
+		</script>
+	</body>
+
+</html>

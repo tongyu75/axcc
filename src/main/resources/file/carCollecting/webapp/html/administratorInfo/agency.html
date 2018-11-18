@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title>我的代理奖</title>
+		<link rel="stylesheet" href="../../css/public/amazeui.min.css" />
+		<link rel="stylesheet" href="../../css/my/app.css" />
+		<link rel="stylesheet" href="../../css/public/base.css">
+		<link rel="stylesheet" href="../../css/my/pagecode.css" />
+		<style>
+			body {
+				max-width: 640px;
+				margin: 0 auto;
+				font-size: 10px;
+				background: #EDEDED;
+			}
+			
+			* {
+				box-sizing: border-box;
+			}
+			
+			[class*=am-u-] {
+				padding: 0;
+			}
+			
+			.dfh {
+				margin: 8px 0 0px 0;
+			}
+			
+			.dfh .am-u-sm-4 {
+				text-align: center;
+				height: 45px;
+				line-height: 45px;
+				background: #fff;
+				font-size: 14px;
+			}
+			#aaa{display: none;position:fixed;top:0;left:0;right:0;bottom:0;margin:auto;background:rgba(0,0,0,0.5)}
+	  		#ddd{
+	  			display: none;
+				width:80%;
+				background: #fff;
+				position: fixed;
+				top: 33%;
+				left: 0;
+				right: 0;
+				margin: auto;
+				padding-bottom:10px;
+				font-size:14px;
+			}
+			.am-vertical-align-middle{font-size:14px;}
+			.tx_btn{border:none;background:#009A9A;color:#fff;border-radius: 5px;width:60px;line-height:25px;margin-left:10px;}
+		</style>
+	</head>
+
+	<body>
+		<!--头部-->
+		<div class="am-g">
+			<div class="am-u-sm-12 header">
+				<div class="am-u-sm-3 am-text-left">
+					<a href="my.html"><img src="../../img/public/jiantouzuo.png" class="l-jian" style="position:static;margin-left:17px;"></a>
+					
+				</div>
+				<div class="am-u-sm-6 am-text-center">代理奖</div>
+				<div class="am-u-sm-3 am-text-right" onclick="javascript:location.href='dltx_ms.html';" style="padding-right:10px;font-size:12px;">提现明细</div>
+			</div>
+		</div>
+		<div style="margin-top:60px;">
+			<div class="am-vertical-align" style="margin-bottom:10px;font-size:13px;text-align: center;">
+				<label class="am-vertical-align-middle" style="margin:0;">我的代理奖：</label>
+				<span class="am-vertical-align-middle balance"></span>
+				<button class="am-vertical-align-middle tx_btn" type="button">提现</button>
+			</div>
+			<table class="am-table" style="background: #fff;">
+				<thead >
+					<tr>
+						<th  style="text-align: center;">级别</th>
+						<th  style="text-align: center;">来源会员</th>
+						<th  style="text-align: center;">奖金额</th>
+						<th  style="text-align: center;">添加时间</th>
+					</tr>
+				</thead>
+				<tbody class="income" style="text-align: center;">
+					<!--<tr>
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>
+					<tr class="am-active">
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>
+					<tr >
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>
+					<tr>
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>
+					<tr>
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>-->
+				</tbody>
+			</table>
+		</div>
+		<div class="tcdPageCode" style="color: red;text-align: center;"></div>
+		<!--弹框-->
+		<div id="aaa"></div>
+		<div id="ddd" style="padding:10px;border-radius: 5px;">
+			<div>
+				您当前代理奖余额为：<span class="account_jf"></span>,可提现金额为：<span class="balance_jf"></span>,目前的提现费率为：<span class="rate_jf"></span><span class="remark_jf"></span>。
+			</div>
+			<div style="text-align: center;">
+				<button type="button" class="Modify_confirm" style="line-height:28px;margin-top:10px;border:none;outline:none;background:#2F39D6;width:80px;border-radius: 5px;color:#fff;">确定</button>
+				<button type="button" class="close1" style="line-height:28px;margin-top:10px;border:1px solid #ddd;background:#fff;outline:none;width:80px;border-radius: 5px;">取消</button>
+			</div>
+		</div>
+		<script src="../../js/public/jquery.min.js"></script> 	
+		<script src="../../js/public/jquery.page.js"></script>
+		<script src="../../js/public/new_file.js"></script>
+		<script src="../../js/my/agency.js"></script>
+	</body>
+
+</html>

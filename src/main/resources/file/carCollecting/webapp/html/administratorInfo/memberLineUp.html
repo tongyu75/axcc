@@ -1,0 +1,165 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>会员排队</title>
+  <meta name="description" content="爱心共享筹车">
+  <meta name="keywords" content="共享筹车">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="stylesheet" href="../../css/public/amazeui.min.css">
+  <link rel="stylesheet" href="../../css/public/base.css">
+  <link rel="stylesheet" href="../../css/my/pagecode.css" />
+	<link rel="stylesheet" href="../../css/loginAReg/login.css" />
+	<link rel="stylesheet" href="../../css/member/member.css" type="text/css"/>
+  <style type="text/css">
+			a{
+				color: #333;				
+			}
+			.one-login-a input{
+				width: 170px;
+			}
+			.exit {
+			    width: 30%;
+			    height: 40px;
+			    background-color: #0099CC;
+			    border-radius: 10px;
+			    margin: auto;
+			    color: #fff;
+			    line-height: 30px;
+			    text-align: center;
+			    margin-top: 15px;
+			    letter-spacing: 6px;
+			    font-size: 18px;
+			    margin-left: 20px;
+			}
+			#popLayer {
+				display: none;
+				position: absolute;
+				width: 90%;
+				left: 5%;
+				top: 10%;
+				/*height: 42%;*/
+				background: #009A9A;
+				z-index: 9;
+				padding: 5% 0;
+				border-radius: 6px;
+			}
+			
+			#popBox {
+				display: none;
+				position: absolute;
+				width: 100%;
+				left: 0;
+				top: 0;
+				height: 100%;
+				background: rgba(23, 23, 25, 1);
+				z-index: 8;
+			}
+			#popLayer td,
+			#popLayer table {
+				width:100%;
+				color: #FFF;
+				border: 1px solid rgba(255, 255, 255, 0.6);
+				background: transparent;
+			}
+			.gbtn {
+				background:#0099CC;
+				padding: 4px 4px;
+				border-radius: 6px;
+				display: inline-block;
+				text-align: center;
+				color: #FFF;
+				border: 0;
+				vertical-align: middle;
+			}
+		</style>
+</head>
+<body  >
+		<div class="am-u">
+			<div class="am-u-sm-12 header">
+				<a href="member.html"><img src="../../img/public/jiantouzuo.png" class="l-jian"></a>
+				  会员排队列表
+			</div>		
+		</div>
+		<div style="clear: both;"></div>
+		<div class="search_content">
+			 <span>手机号:</span>
+			 <input class="search_text" type="text" name="" id="searchText" value="" />
+			 <button class="search_btn" id="searchBtn">查询</button>
+		</div>
+		<div class="car" style="margin-top: 20px;">
+			<table style="width:100%;">
+				<thead>
+					<tr>
+						<th style="width:20%;">排位</th>
+						<th style="width:30%;">姓名</th>
+						<th style="width:30%;">手机号</th>
+						<th style="width:20%;">操作</th>
+					</tr>
+				</thead>
+				
+				<tbody class="show_List">
+				</tbody>
+			</table>
+			<div class="tcdPageCode" style="color: red;text-align: center;"></div>
+		</div>
+		<div id="popBox" class="ng-hide"></div>
+		<div id="popLayer" class="ng-hide">
+			<div class="agentInfo">
+				<h4 class="agent_d_title" style="color:#fff;text-align: center;">会员详情</h4>
+				<table>
+				<tbody>
+					<tr>
+						<td style="width:34%;">排位</td>
+						<td style="width:66%;" id="agentWaitName"></td>
+					</tr>
+					<tr>
+						<td>姓名</td>
+						<td id="agentName"></td>
+					</tr>
+					<tr>
+						<td>手机号</td>
+						<td id="agentPhone"></td>
+					</tr>
+					<tr>
+						<td>身份证号</td>
+						<td id="agentCode"></td>
+					</tr>	
+					<tr>
+						<td>订购金额</td>
+						<td id="agentMoney"></td>
+					</tr>	
+					<tr>
+						<td>购车类型</td>
+						<td id="agentBuyType"></td>
+					</tr>	
+					<tr>
+						<td>购车状态</td>
+						<td id="agentPay"></td>
+					</tr>	
+				</tbody>
+			</table>
+			</div>
+			<div class="closeLayer" style="text-align: center;margin-top:10px;"><img src="../../img/list/close_white_24.png"/></div>
+		</div>
+
+<script src="../../js/public/jquery.min.js"></script>
+<script src="../../js/public/amazeui.min.js"></script>
+<script src="../../js/public/jquery.page.js"></script>
+<script src="../../js/public/new_file.js"></script>
+<script src="../../js/administratorInfo/memberLineUp.js">
+	
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
