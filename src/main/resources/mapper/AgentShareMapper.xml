@@ -196,7 +196,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="sumAgentShareMoney" parameterType="java.lang.Integer" resultType="Map">
-    SELECT IF(SUM(agent_money) IS NULL, 0, SUM(agent_money)) sumMoney
+    SELECT IF(SUM(agent_money) IS NULL, 0, SUM(agent_money * 0.05)) sumMoney
     FROM agent_share
     WHERE agent_id = #{agentId,jdbcType=INTEGER}
   </select>
@@ -209,7 +209,7 @@
     SELECT
 	  A.id id,
       A.agent_id agentId,
-      A.agent_money agentMoney,
+      IF (A.agent_money IS NULL, 0, A.agent_money) * 0.05 AS agentMoney,
       B.login_name agentName,
       A.user_id userId,
       C.login_name userName,
