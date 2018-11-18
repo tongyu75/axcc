@@ -1,0 +1,158 @@
+﻿<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>排队列表</title>
+	  <meta name="description" content="爱心共享筹车">
+  <meta name="keywords" content="共享筹车">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="icon" type="image/png" href="assets/i/favicon.png">
+		<link rel="stylesheet" href="../../css/public/amazeui.min.css">
+		<link rel="stylesheet" href="../../css/public/base.css">
+		<link rel="stylesheet" href="../../css/loginAReg/login.css">
+		<link rel="stylesheet" href="../../css/my/my.css">
+		<link rel="stylesheet" href="../../css/public/swiper-3.3.1.min.css">
+		<link rel="stylesheet" href="../../css/my/pagecode.css" />
+		<style type="text/css">
+			th{width:25%;}
+			#popLayer {
+				display: none;
+				position: absolute;
+				width: 90%;
+				left: 5%;
+				top: 10%;
+				/*height: 42%;*/
+				background: #009A9A;
+				z-index: 9;
+				padding: 5% 0;
+				border-radius: 6px;
+			}
+			
+			#popBox {
+				display: none;
+				position: absolute;
+				width: 100%;
+				left: 0;
+				top: 0;
+				height: 100%;
+				background: rgba(23, 23, 25, 1);
+				z-index: 8;
+			}
+			#popLayer td,
+			#popLayer table {
+				width:100%;
+				color: #FFF;
+				border: 1px solid rgba(255, 255, 255, 0.6);
+				background: transparent;
+			}
+			.gbtn {
+				background:#009A9A;
+				padding: 4px 6px;
+				border-radius: 6px;
+				display: inline-block;
+				text-align: center;
+				color: #FFF;
+				border: 0;
+				vertical-align: middle;
+			}
+			.red_tr td{color:red;}
+		</style>
+	</head>
+
+	<body>
+		<div class="am-g">
+			<div class="am-u-sm-12 header">
+				<a href="../home/home.html"><img src="../../img/list/jiantouzuo.png" class="l-jian"></a>
+				排队列表
+			</div>
+		</div>
+
+		<div class="swiper-container">
+			<img src="" class="url_li" alt="" />
+			<!--<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<img src="static/picture/banner1.png">
+				</div>
+				<div class="swiper-slide">
+					<img src="static/picture/banner2.png">
+				</div>
+			</div>
+			<!-- 如果需要分页器 -->
+			<!--<div class="swiper-pagination"></div>-->
+		</div>
+
+		<!--<div class="exit">【 5 进 1 - 30 万 】</div>-->
+
+		<div class="exit-a title_li"></div>
+
+		<div class="car">
+
+			<table style="width:100%;">
+				<thead>
+					<tr>
+						<th style="width:15%;">排位</th>
+						<th style="width:25%;">姓名</th>
+						<th style="width:30%;">手机号</th>
+						<th style="width:30%;">操作</th>
+					</tr>
+				</thead>
+				
+				<tbody class="show_List">
+					<!--<tr>
+						<td>1</td>
+						<td>小敏</td>
+						<td>139****5401</td>
+						<td>
+							<button type="button" class="gbtn">查看详情</button>
+						</td>
+					</tr>-->
+				</tbody>
+			</table>
+			<div class="tcdPageCode" style="color: red;text-align: center;"></div>
+		</div>
+		<div id="popBox" class="ng-hide"></div>
+		<div id="popLayer" class="ng-hide">
+			<table>
+				<tbody>
+					<tr>
+						<td>排位</td>
+						<td class="list_1"></td>
+					</tr>
+					<tr>
+						<td>姓名</td>
+						<td class="list_2"></td>
+					</tr>
+					<tr>
+						<td>手机号</td>
+						<td class="list_3"></td>
+					</tr>
+					<tr>
+						<td>身份证号</td>
+						<td class="list_4"></td>
+					</tr>
+					<tr>
+						<td>订购金额</td>
+						<td class="list_5"></td>
+					</tr>
+					<tr>
+						<td>购车状态</td>
+						<td class="list_6"></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="closeLayer" style="text-align: center;margin-top:10px;"><img src="../../img/list/close_white_24.png"/></div>
+		</div>
+		<script src="../../js/public/jquery.min.js"></script>
+		<script src="../../js/public/amazeui.min.js"></script>
+		<script src="../../js/public/swiper-3.3.1.min.js"></script>
+		<script src="../../js/public/public.js"></script>
+		<script src="../../js/public/jquery.page.js"></script>
+		<script src="../../js/public/new_file.js"></script>
+		<script src="../../js/list/list.js"></script>
+	</body>
+
+</html>

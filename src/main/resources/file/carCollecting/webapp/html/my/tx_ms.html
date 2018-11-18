@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+		<title>提现明细</title>
+		<link rel="stylesheet" href="../../css/public/amazeui.min.css" />
+		<link rel="stylesheet" href="../../css/my/app.css" />
+		<link rel="stylesheet" href="../../css/public/base.css">
+		<link rel="stylesheet" href="../../css/my/pagecode.css" />
+		<style>
+			body {
+				max-width: 640px;
+				margin: 0 auto;
+				font-size: 10px;
+				background: #EDEDED;
+			}
+			
+			* {
+				box-sizing: border-box;
+			}
+			
+			[class*=am-u-] {
+				padding: 0;
+			}
+			
+			.dfh {
+				margin: 8px 0 0px 0;
+			}
+			
+			.dfh .am-u-sm-4 {
+				text-align: center;
+				height: 45px;
+				line-height: 45px;
+				background: #fff;
+				font-size: 14px;
+			}
+			#aaa{display: none;position:fixed;top:0;left:0;right:0;bottom:0;margin:auto;background:rgba(0,0,0,0.5)}
+	  		#ddd{
+	  			display: none;
+				width:80%;
+				background: #fff;
+				position: fixed;
+				top: 33%;
+				left: 0;
+				right: 0;
+				margin: auto;
+				padding-bottom:10px;
+				font-size:14px;
+			}
+			.am-vertical-align-middle{font-size:14px;}
+			.tx_btn{border:none;background:#009A9A;color:#fff;border-radius: 5px;width:60px;line-height:25px;margin-left:10px;}
+		</style>
+	</head>
+
+	<body>
+		<!--头部-->
+		<div class="am-g">
+			<div class="am-u-sm-12 header">
+				<div class="am-u-sm-3 am-text-left">
+					<a href="jifen.html"><img src="../../img/public/jiantouzuo.png" class="l-jian" style="position:static;margin-left:17px;"></a>
+					
+				</div>
+				<div class="am-u-sm-6 am-text-center">提现明细</div>
+				<div class="am-u-sm-3 am-text-right"></div>
+			</div>
+		</div>
+		<div style="margin-top:60px;">
+			<table class="am-table" style="background: #fff;">
+				<thead >
+					<tr>
+						<th  style="text-align: center;width:25%;">提现时间</th>
+						<th  style="text-align: center;width:25%;">金额(元)</th>
+						<th  style="text-align: center;width:25%;">状态</th>
+						<th  style="text-align: center;width:25%;">发放时间</th>
+					</tr>
+				</thead>
+				<tbody class="income" style="text-align: center;">
+					<!--<tr>
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>
+					<tr class="am-active">
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>
+					<tr >
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>
+					<tr>
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>
+					<tr>
+						<td>gh201321235</td>
+						<td>5积分</td>
+						<td>2012-10-01</td>
+					</tr>-->
+				</tbody>
+			</table>
+		</div>
+		<div class="tcdPageCode" style="color: red;text-align: center;"></div>
+		<script src="../../js/public/jquery.min.js"></script> 	
+		<script src="../../js/public/jquery.page.js"></script>
+		<script src="../../js/public/new_file.js"></script>
+		<script src="../../js/my/tx_mx.js"></script>
+	</body>
+
+</html>

@@ -1,0 +1,407 @@
+﻿
+/*登录界面*/
+.one-login{
+	width: 80%;
+	height: 160px;
+	/*border:1px solid white;*/
+	margin: auto;
+	margin-top: 180px;
+}
+.one-login-a{
+	width: 100%;
+	height: 50px;
+	background-color: white;
+	margin-top: 15px;
+	border-radius: 10px;
+}
+.one-login-b{
+	float: right;	
+	margin-top: 10px;
+	text-decoration:underline;
+}
+.one-login-b a{
+	color: #fff;
+}
+.two-login{
+	width: 100%;
+	height: 120px;
+	/*border:1px solid white;*/
+	margin: auto;
+	margin-top: 30px;
+}
+.reg{
+	background-color: white;
+	color: black;
+}
+
+.login-b1{
+	width: 100%;
+	height: 50px;
+	border: 0;
+}
+.login-b2{
+	width: 100%;
+	height: 50px;
+	border: 0;
+	color: black;
+	margin-top: 20px;
+}
+
+.one-login-a img{
+	width:50%;
+	/*height: 30px;*/
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.one-login-a input{
+	/*font-size: 0.35rem;*/
+	width:150px;
+	margin-top: 13px;
+	margin-left: 18px;
+	border:0;
+	outline: none;
+}
+.line{
+	width: 0;
+	height: 20px;
+	border:1px solid darkgray;
+	float: left;
+	margin-top: 15px;
+}
+/*注册页面*/
+.three-login{
+	width: 80%;
+	height: 340px;
+	/*border:1px solid white;*/
+	margin: auto;
+	margin-top: 70px;
+}
+.two-login-r{
+	width: 100%;
+	height: 80px;
+	/*border:1px solid white;*/
+	margin: auto;
+	margin-top: 25px;
+	text-align: center;
+}
+.two-login-r span{
+	font-size: 1.25rem;
+}
+.one-login-c{
+	float: right;
+	margin-top: 14px;
+	text-decoration:underline;
+	font-size: 1.25rem;
+}
+.one-login-c button{
+	color: #009A9A;
+	background: transparent;
+	border:none;
+	outline:none;
+	color: #009A9A;
+}
+/*重置密码界面*/
+.four-login{
+	width: 80%;
+	height: 270px;
+	/*border:1px solid white;*/
+	margin: auto;
+	margin-top: 70px;
+}
+/*购车基金页面*/
+.to-user{
+	width: 100%;
+	/*height: 92%;
+	background-color: lightgray;*/
+	margin-top: 59px;
+
+}
+.to-user-b{
+	/*width:320px;*/
+	width:90%;
+	height: 148px;
+	/*border:1px solid red;*/
+	margin: auto;
+	background-color: white;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;	
+	overflow: hidden;
+}
+.to-user-1{
+	/*width:83px;*/
+	width:25%;
+	height: 100px;
+	float: left;
+	
+}
+.to-user-2{
+	/*width:150px;*/
+	width:50%;
+	height: 100px;
+	float: left;
+}
+.to-user-3{
+	/*width:85px;*/
+	width:25%;
+	height: 100px; 
+	float: left;
+}
+.to-user-4{
+	width:100%;
+	height: 48px;
+	background-color:#009A9A ;
+	float: left;
+}
+
+.to-user-4 span{
+	color: white;
+	margin-left: 20px;
+}
+.money-1{
+	text-align: center;
+	font-size: 2rem;
+	color: #009A9A;
+	margin-top: 20px;
+}
+
+.money-2{
+	font-size: 1.25rem;
+	color: #009A9A;
+}
+.money-3{
+	font-size: 1.5rem;
+	color:#BDBDBD;
+	margin-top: 25px;
+	margin-bottom: 3px;
+}
+
+.money-4{
+	font-size: 0.35rem;
+	color:#BDBDBD;
+}
+.money-5{
+	width:70px;
+	height:25px;
+	background-color:#FE4200;
+	border-radius: 20px;
+	text-align: center;
+	font-size: 1.25rem;
+	line-height: 25px;
+	margin-top:37px;
+	color: white;
+}
+.yuan{
+	width:10px;
+	height: 10px; 
+	border-radius: 0 0 10px 0;
+	background-color: white;
+}
+/*平台消息页面*/
+.message-con{
+	width: 100%;
+	background-color: #FFFFFF;
+	margin-top: 70px;
+}
+.message-con-b{
+	width:90%;
+	height: 70px;
+	/*border:1px solid red;*/
+	margin: auto;
+}
+.message-con-1{
+	width:40px;
+	height: 40px;
+	border-radius: 20px;
+	float: left;
+	margin-top: 15px;
+	margin-left: 10px;
+	background-color: #009A9A;
+	text-align: center;
+	line-height: 35px;
+}
+.message-con-1 img{
+	width: 65%;
+	
+}
+.message-con-2{
+	width:150px;
+	height: 25px;
+	/*border:1px solid red;*/
+	float: left;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.message-con-3{
+	width:150px;
+	height: 25px;
+	margin-left: 60px;
+	color:#BDBDBD;
+}
+
+
+/*加入排队页面*/
+.classify{
+	width: 95%;
+	height: 70px;
+	/*border:1px solid red;*/
+	margin: auto;
+	font-size: 1.25rem;
+}
+.fen-lei{
+	width: 100%;
+	height: 33px;
+	border-radius: 5px;
+	background-color: gainsboro;
+	border: 0;
+	outline: none;
+	color: #adacac;
+}
+
+.no-w{
+	width: 40px;
+	line-height: 40px;
+}
+
+.car{
+	width: 95%;
+	height: 400px;
+	border-radius: 5px;
+	border:1px solid #009A9A;
+	margin: auto;
+	margin-top: 45px;
+	margin-bottom: 100px;
+	overflow:auto;
+}
+.car-1{
+	width: 100%;
+	height: 45px;
+	background-color: #009A9A;
+	font-size: 1.35rem;
+	color: white;
+	line-height: 45px;
+}
+.car-1 span{
+	margin-left: 10px;
+}
+.car-2{
+	width: 90%;
+	margin: auto;
+	font-size: 1.35rem;
+}
+
+/*排队列表页*/
+table{
+	border:1px solid #009A9A;
+	 /*关键设置：间距5px*/
+    border-spacing: 5px;
+	 /*均匀分布效果*/
+    table-layout: fixed;
+}
+
+    table th {
+        height: 44px;
+ 		border:1px solid gainsboro;
+        font-size: 17px;
+        /*设置表格字体不换行*/
+        white-space: nowrap;
+        color: #fff;
+        text-align: center;
+        background-color: #0099CC;
+        padding: 10px 10px;
+        font-weight: normal;
+}
+              
+    table td {
+        height: 44px;
+ 		border:1px solid #ccc;
+        font-size: 14px;
+        white-space: nowrap;
+        color: #000;
+        text-align: center;
+        background-color: #e5e5e5;
+        padding: 0 10px;
+}
+
+
+/*首页*/
+.bo-bao{
+	width: 100%;
+	height:65px;
+	/*border:1px solid red;*/
+	margin-top: 10px;
+}
+.bo-bao img{
+	width: 65px;
+	height: 65px;
+}
+
+
+.bo-bao-b{
+	height: 65px;
+	/*border:1px solid red;*/
+}
+.small-1{
+	width: 100%;
+	
+	height: 40%;
+	/*border:1px solid red;*/
+	font-size: 1rem;
+}
+.small-2{
+	width: 100%;
+	height: 60%;
+	/*border:1px solid red;*/
+	font-size:1rem;
+}
+.y-s{
+	color:#FE4200;
+}
+.pay-car{
+	width: 95%;
+	height:140px;
+	/*border:1px solid red;*/
+	margin: auto;
+	margin-top: 30px;
+}
+.pay-car-1{
+	width: 100%;
+	height:40px;
+	/*border:1px solid red;*/
+	text-align: center;
+	font-size:1rem;
+	color: #009C9C;
+}
+.pay-car-1 img{
+	width: 25px;
+	height: 25px;
+}
+.pay-car-2{
+	width: 100%;
+	height:98px;
+	/*border:1px solid red;*/
+	text-align: center;
+	font-size:1rem;
+}
+.car-img{
+	width: 19%;
+	height:77px;
+	/*border:1px solid red;*/
+	background-color:#DEDEDE;
+	float: left;
+	margin-left: 3px;
+}
+.car-img img{
+	width:100%;
+	height:50px;
+}
+.car-img span{
+	text-align: center;
+	line-height: 30px;
+	font-weight: bold;
+	font-size: 12px;
+}
+.big-car{
+	width: 100%;
+	margin-bottom: 100px;
+	/*border:1px solid red;*/
+}

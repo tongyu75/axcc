@@ -1,0 +1,48 @@
+.gbtn {
+		background: #0099CC;
+		padding: 4px 4px;
+		border-radius: 6px;
+		display: inline-block;
+		text-align: center;
+	    color: #FFF;
+		border: 0;
+		vertical-align: middle;
+	}
+.search_content{
+		width: 90%;
+		height: 40px;
+		margin: 90px auto 0;
+}
+.search_content .search_text{
+		width:50%;
+		outline:none;
+		text-indent: 2px;
+		border-radius:4px ;
+		border:1px solid #c6c6c6;
+}
+.search_btn{
+	    width:80px;
+     	background: #0099CC;
+		padding: 4px 6px;
+		border-radius: 6px;
+		display: inline-block;
+		text-align: center;
+	    color: #FFF;
+		border: 0;
+		vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

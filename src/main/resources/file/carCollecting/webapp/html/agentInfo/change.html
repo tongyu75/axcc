@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>设置</title>
+  <meta name="description" content="爱心共享筹车">
+  <meta name="keywords" content="共享筹车">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="stylesheet" href="../../css/public/amazeui.min.css">
+  <link rel="stylesheet" href="../../css/public/base.css">
+  <link rel="stylesheet" href="../../css/my/my.css">
+  <style type="text/css">
+			a{
+				color: #333;				
+			}
+			.my-content-1{border-bottom: 1px solid #C5C5C5;}
+		</style>
+</head>
+<body  style="background-color: white;">
+		<div class="am-u">
+			<div class="am-u-sm-12 header">
+				<a href="my.html"><img src="../../img/public/jiantouzuo.png" class="l-jian"></a>
+				设置
+			</div>		
+		</div>
+		<div style="clear: both;"></div>
+		<div class="my-content" style="margin-top: 50px;height: 30%;">
+			<div class="my-content-1" >
+				<a href="changemine.html">
+					<img src="../../img/my/gerenziliao.png" class="head-t"><span>修改个人资料</span>
+					<img src="../../img/my/youjiantou.png" class="you-t">
+				</a>
+			</div>
+			<div class="my-content-1">
+				<a href="changepassw.html">
+					<img src="../../img/my/pws1.png" class="head-t"><span>修改登录密码</span>
+					<img src="../../img/my/youjiantou.png" class="you-t">
+				</a>
+			</div>
+			
+		</div>
+	
+		<div style="text-align: center;">
+				<button type="button" class="exit quit_btn" style="border:none;">退出登录</button>	
+			</div>
+<script src="../../js/public/jquery.min.js"></script>
+<script src="../../js/public/new_file.js"></script>
+<script type="text/javascript">
+	   //	取消弹框
+	$(".exit").on("click",function(){
+		      var data={};	
+	      	data.loginName = JSON.parse(sessionStorage.getItem('userInfo')).loginName;
+	       $.ajax({
+									type:"post",
+									url:url+"/logout",
+									data:data,
+									crossDomain: true,
+			            xhrFields: {withCredentials: true},
+									success:function(result1){
+										//console.log(result1);
+										var resultData = result1
+										$(".exit").prop("disabled",false);				
+										if(resultData.msg =="SUCCESS"){
+									   	location.href="../loginAReg/login.html";	
+										}else{
+                        Errfun1(result1.msg);
+										}
+									
+									},
+									error:function(){
+										 Errfun3();
+									}
+								})
+	        })
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

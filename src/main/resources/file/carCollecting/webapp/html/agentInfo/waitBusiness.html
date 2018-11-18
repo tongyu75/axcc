@@ -1,0 +1,207 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>待办业务</title>
+  <meta name="description" content="爱心共享筹车">
+  <meta name="keywords" content="共享筹车">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+ <!-- <link rel="icon" type="image/png" href="assets/i/favicon.png">-->
+  <link rel="stylesheet" href="../../css/public/amazeui.min.css">
+  <link rel="stylesheet" href="../../css/my/pagecode.css" />
+  <link rel="stylesheet" href="../../css/public/base.css">
+	<link rel="stylesheet" href="../../css/loginAReg/login.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/member/member.css"/>
+  <style type="text/css">
+			a{
+				color: #929292;				
+			}
+			.one-login-a input{
+				width: 170px;
+			}
+			.exit {
+			    width: 30%;
+			    height: 40px;
+			    background-color: #0099CC;
+			    border-radius: 10px;
+			    margin: auto;
+			    color: #fff;
+			    line-height: 30px;
+			    text-align: center;
+			    margin-top: 15px;
+			    letter-spacing: 6px;
+			    font-size: 18px;
+			    margin-left: 20px;
+			}
+		#popLayer {
+				display: none;
+				position: absolute;
+				width: 90%;
+				left: 5%;
+				top: 10%;
+				/*height: 42%;*/
+				background: #009A9A;
+				z-index: 9;
+				padding: 5% 0;
+				border-radius: 6px;
+			}
+			
+			#popBox {
+				display: none;
+				position: absolute;
+				width: 100%;
+				left: 0;
+				top: 0;
+				height: 100%;
+				background: rgba(23, 23, 25, 1);
+				z-index: 8;
+			}
+			#popLayer td,
+			#popLayer table {
+				width:100%;
+				color: #FFF;
+				border: 1px solid rgba(255, 255, 255, 0.6);
+				background: transparent;
+			}
+			.gbtn {
+				background:#0099CC;
+				padding: 4px 4px;
+				border-radius: 6px;
+				display: inline-block;
+				text-align: center;
+				color: #FFF;
+				border: 0;
+				vertical-align: middle;
+			}
+			.red_tr td{color:red;}
+			/*添加按钮*/
+			.add_btn_wrap{width: 90%;height: 40px;background: #fff;margin-top: 24px;}
+			.add_btn{background-color: #0099CC;width: 25%;height:30px;border-radius: 4px;float: right;line-height: 20px;color: #fff;border:none;letter-spacing: 4px;}
+			.det_btn{margin-left:2px}
+			.agent_d_title{color:#fff;text-align: center;vertical-align: middle;font-size: 16px;}
+			.message_btn_wrap{width: 90%;height: 40px;margin-top: 24px;}
+			.message_btn{max-width:150px;min-width:120px;background-color: #0099CC;width: 38%;height:30px;border-radius: 4px;float: right;line-height: 20px;color: #fff;border:none;letter-spacing: 4px;}
+	  	.message_s_btn{max-width:150px;min-width:120px;margin-right:10px;background-color: #0099CC;width: 38%;height:30px;border-radius: 4px;float: right;line-height: 20px;color: #fff;border:none;letter-spacing: 4px;}
+		</style>
+</head>
+<body  >
+		<div class="am-u">
+			<div class="am-u-sm-12 header">
+				   待办业务
+			</div>		
+		</div>
+		<div style="clear: both;"></div>
+		<div class="search_content">
+			 <span>手机号:</span>
+			 <input class="search_text" type="text" name="" id="searchText" value="" />
+			 <button class="search_btn" id="searchBtn">查询</button>
+		</div>
+		<div class="car" style="margin-top: 10px;">
+			<table style="width:100%;">
+				<thead>
+					<tr>
+						<th style="width:22%;">会员号</th>
+						<th style="width:26%;">手机名</th>
+						<th style="width:36%;">车型</th>
+						<th style="width:20%;">操作</th>
+					</tr>
+				</thead>
+				
+				<tbody class="show_List">					
+				</tbody>
+			</table>
+			<div class="tcdPageCode" style="color: red;text-align: center;"></div>
+		</div>
+		<div id="popBox" class="ng-hide"></div>
+		<div id="popLayer" class="ng-hide">
+			<div class="agentInfo">
+				<h4 class="agent_d_title">办理业务</h4>
+				<table>
+				<tbody>
+					<tr>
+						<td style="width:34%;">姓名</td>
+						<td style="width:66%;" id="agentName"></td>
+					</tr>
+					<tr>
+						<td>手机号</td>
+						<td id="agentPhone"></td>
+					</tr>
+					<tr>
+						<td>身份证号</td>
+						<td id="agentCode"></td>
+					</tr>	
+					<!--<tr>
+						<td>订购金额</td>
+						<td id="agentMoney"></td>
+					</tr>	-->
+					<tr>
+						<td>购车类型</td>
+						<td id="agentbuyType"></td>
+					</tr>
+					<tr>
+						<td style="width:34%;">优惠券</td>
+						<td style="width:66%;" id="voucherMoney" >	
+							<div  id="voucherMoneyHove" style="display: none;">
+								<label class="am-radio" style="font-size: 16px;line-height: 1.2;display: inline-block;">
+					     	 <input type="radio" name="radio1" value="1">
+					      	<span id="useMoney" data-id=""></span>
+					      </label> 
+				        <label class="am-radio" style="font-size: 16px;line-height: 1.2;display: inline-block;margin: 10px;">
+				     	    <input type="radio" name="radio1" value="0">
+				        	<span>不使用优惠券</span>
+				        </label>
+				        </div>
+				        <div id="voucherMoneyNo">优惠券暂无</div>
+						</td>
+					</tr>
+					<tr>
+						<td>实缴金额</td>
+						<td id="agentpayMoney"><input type="text" id="buyMoney" style="width: 100px;margin: 0 2px 0 10px;color:#009A9A;border-radius: 2px;text-align:center"/><span>(元)</span></td>
+					</tr>
+					<tr>
+						<td>申请时间</td>
+						<td id="agentapplyTime"></td>
+					</tr>
+				</tbody>
+			</table>
+				<div class="message_btn_wrap">
+			  	  <button class="message_btn"   data-id="">返回</button>	
+			  	  <button class="message_s_btn" data-id="">办理</button>			
+				</div>
+			</div>
+			<div class="closeLayer" style="text-align: center;margin-top:10px;"><img src="../../img/list/close_white_24.png"/></div>
+		</div>
+    <div class="am-g dibu">
+			<div class="am-u-sm-4 dibu2" id="homepage">
+				<a href="waitBusiness.html" >
+					<img src="../../img/public/waitBusiness.png" class=""><br/><span style="color: #333;">待办业务</span>
+				</a>
+			</div>
+			<div class="am-u-sm-4 dibu1" id="item-pai-1">
+				<a href="doneBusiness.html">
+					<img src="../../img/public/overBusiness1.png" class=""><br/><span>已办业务</span>
+				</a>
+			</div>
+			<div class="am-u-sm-4 dibu2" id="my-con-1">
+				<a href="my.html">
+					<img src="../../img/my/mine1.png" class=""><br/><span>我的</span>
+				</a>
+			</div>
+		</div>
+<script src="../../js/public/jquery.min.js"></script>
+<script src="../../js/public/amazeui.min.js"></script>
+<script src="../../js/public/jquery.page.js"></script>
+<script src="../../js/public/new_file.js"></script>
+<script src="../../js/agentInfo/waitBusiness.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
