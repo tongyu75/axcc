@@ -29,23 +29,22 @@ $(function(){
 					   	var html ="";
 					   //会员列表
 						for(var i in dataInfo.listAgentShare){
-							var dataInfo = dataInfo.listAgentShare[i];
-							
+							var data = dataInfo.listAgentShare[i];
 							var userName="";						
-							if(dataInfo.userName!=null&&dataInfo.userName!=""&&dataInfo.userName!=undefined){
-								userName=dataInfo.userName;
+							if(data.userName!=null&&data.userName!=""&&data.userName!=undefined){
+								userName=data.userName;
 							}
 							
 							var agentMoney="";						
-							if(dataInfo.agentMoney!=null&&dataInfo.agentMoney!=""&&dataInfo.agentMoney!=undefined){
-								agentMoney=dataInfo.agentMoney;
+							if(data.agentMoney!=null&&data.agentMoney!=""&&data.agentMoney!=undefined){
+								agentMoney=data.agentMoney;
 							}
 							
 							var applyStatus="已缴费";
 							
 							
 							html += '<tr><td>'+userName+'</td><td>'+agentMoney+'</td>';
-						    html += '<td>'+applyStatus+'</td><td>'+dataInfo.createTime+'</td></tr>';
+						    html += '<td>'+applyStatus+'</td><td>'+data.createTime+'</td></tr>';
 						}
 						$(".income").html(html);
 						var r = result1.total;
@@ -90,11 +89,11 @@ $(function(){
 		
 		//1代理员；2普通会员
 		var dataT = {};
-		dataT.userId = JSON.parse(sessionStorage.getItem('userInfo')).id;
+		dataT.agentId = JSON.parse(sessionStorage.getItem('userInfo')).id;
 		dataT.userStatus = "2";
 		$.ajax({
 			type: "post",
-			url: url + "/withdrawCashes",
+			url: url + "/agentWithdrawCashes",
 			data: dataT,
 			async: true,
 			crossDomain: true,
