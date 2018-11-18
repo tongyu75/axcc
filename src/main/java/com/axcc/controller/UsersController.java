@@ -791,6 +791,7 @@ public class UsersController {
     @RequestMapping(value = "listBusinessByAgent",method = RequestMethod.POST)
     public Map<String,Object> listBusinessByAgent(HttpServletRequest request,
             @RequestParam(value = "loginName", required = true) String loginName,
+            @RequestParam(value = "phone", required = false) String phone,
             @RequestParam(value = "pageNum", required = true) Integer pageNum,
             @RequestParam(value = "pageSize", required = true) Integer pageSize){
         logger.info("listWait---start");
@@ -800,7 +801,10 @@ public class UsersController {
         //Users user = (Users)request.getSession().getAttribute(loginName + "user");
         BusinessUser bean = new BusinessUser();
         Users user = userService.getUserByLoginName(loginName);
+        // 代理员ID
         bean.setAgentId(user.getId());
+        // 页面中查询的手机号
+        bean.setLoginName(phone);
         // 查询记录总条数
         int count = businessService.countBusinessByAgent(bean);
         // 查询记录
