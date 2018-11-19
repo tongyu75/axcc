@@ -69,4 +69,9 @@ public class AgentShareServiceImpl implements AgentShareService {
     public int updateAgentShareForBean(AgentShare bean) {
         return agentShareDao.updateAgentShareForBean(bean);
     }
+
+    @Override
+    public int updateAgentShareByAgentId(AgentShare bean) {
+        return agentShareDao.updateAgentShareByAgentId(bean);
+    }
 }

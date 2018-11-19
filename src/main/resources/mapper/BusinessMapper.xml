@@ -325,7 +325,7 @@
         and A.agent_id = #{agentId,jdbcType=INTEGER}
       </if>
       <if test="loginName != null">
-        and B.login_name = #{loginName,jdbcType=VARCHAR}
+        and B.login_name LIKE CONCAT('%',#{loginName,jdbcType=VARCHAR},'%')
       </if>
     </where>
   </select>
@@ -479,7 +479,7 @@
         and A.agent_id = #{agentId,jdbcType=INTEGER}
       </if>
       <if test="loginName != null">
-        and B.login_name = #{loginName,jdbcType=VARCHAR}
+        and B.login_name LIKE CONCAT('%',#{loginName,jdbcType=VARCHAR},'%')
       </if>
     </where>
   </select>

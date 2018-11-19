@@ -18,11 +18,12 @@ $(function(){
 	
 	//显示会员列表
 	function showAgent(page){
-		/*var searchText = $("#searchText").val();
-		console.log(searchText);*/
+		var searchText = $("#searchText").val();
+		//console.log(searchText);
 		var data={};
 		var loginName = JSON.parse(sessionStorage.getItem('userInfo')).loginName;
 		data.loginName = loginName;
+		data.phone = searchText;
 		data.pageNum = page;
 		data.pageSize = pageSize;
 		$.ajax({

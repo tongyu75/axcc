@@ -15,6 +15,8 @@ public class AgentShare {
 
     private Date createDate;
 
+    private Integer applyStatus;
+
     public Integer getId() {
         return id;
     }
@@ -59,5 +61,17 @@ public class AgentShare {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Integer getBusinessId() {
+        return businessId;
+    }
+
+    public Integer getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(Integer applyStatus) {
+        this.applyStatus = applyStatus;
     }
 }

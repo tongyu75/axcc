@@ -40,9 +40,13 @@ $(function(){
 								agentMoney=data.agentMoney;
 							}
 							
-							var applyStatus="已缴费";
-							
-							
+							var applyStatus="";
+							if(data.applyStatus == 0) {
+								applyStatus = "未提现"
+							} else if(data.applyStatus == 1) {
+								applyStatus = "已提现"
+							}
+
 							html += '<tr><td>'+userName+'</td><td>'+agentMoney+'</td>';
 						    html += '<td>'+applyStatus+'</td><td>'+data.createTime+'</td></tr>';
 						}
@@ -86,11 +90,18 @@ $(function(){
 	})
 	//	申请提现
 	$(".tx_btn").on("click", function() {
-		
+		// 提现时首先判断业绩奖是否为0.00
+		var sumShareMoney = $(".balance").text();
+		if (sumShareMoney == '0.00元') {
+			alert("业绩奖为0.00，不允许进行提现");
+			$("#aaa").css("display", "none");
+	        $("#ddd").css("display", "none");	
+	        return true;
+		}
 		//1代理员；2普通会员
 		var dataT = {};
 		dataT.agentId = JSON.parse(sessionStorage.getItem('userInfo')).id;
-		dataT.userStatus = "2";
+		dataT.userStatus = "1";
 		$.ajax({
 			type: "post",
 			url: url + "/agentWithdrawCashes",
@@ -111,6 +122,10 @@ $(function(){
 	                 	$("#ddd").css("display", "block");
 				} else if(resultData.code=="2"){
 					alert("会员提现于每周周一申请，公司审核并发放");
+					$("#aaa").css("display", "none");
+	                $("#ddd").css("display", "none");		
+				} else if(resultData.code=="4"){
+					alert("业绩奖为0.00，不允许进行提现");
 					$("#aaa").css("display", "none");
 	                $("#ddd").css("display", "none");		
 				}else{

@@ -6,6 +6,7 @@ import com.axcc.utils.BaseResult;
 import com.axcc.utils.FileResourcePathUtil;
 import com.axcc.utils.QRCodeConstants;
 import com.axcc.utils.QRCodeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
@@ -810,7 +811,7 @@ public class UsersController {
     @RequestMapping(value = "listBusinessByAgent",method = RequestMethod.POST)
     public Map<String,Object> listBusinessByAgent(HttpServletRequest request,
             @RequestParam(value = "loginName", required = true) String loginName,
-            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "phone", required = true) String phone,
             @RequestParam(value = "pageNum", required = true) Integer pageNum,
             @RequestParam(value = "pageSize", required = true) Integer pageSize){
         logger.info("listWait---start");
@@ -823,7 +824,9 @@ public class UsersController {
         // 代理员ID
         bean.setAgentId(user.getId());
         // 页面中查询的手机号
-        bean.setLoginName(phone);
+        if (StringUtils.isNotEmpty(phone)) {
+            bean.setLoginName(phone);
+        }
         // 查询记录总条数
         int count = businessService.countBusinessByAgent(bean);
         // 查询记录
@@ -981,6 +984,8 @@ public class UsersController {
         agentShare.setUserId(businessService.getBusinessById(id).getUserId());
         agentShare.setBusinessId(id);
         agentShare.setAgentMoney(buyMoney);
+        // 提现状态(0:未提现 1:已提现)
+        agentShare.setApplyStatus(0);
         agentShare.setCreateDate(new Date());
         int val = agentShareService.insertAgentShareByBean(agentShare);
         return BaseResult.checkResult(val);
@@ -1054,16 +1059,29 @@ public class UsersController {
                 // 业绩奖
                 Map<String,Object> mp = agentShareService.sumAgentMoney(agentId);
                 Double sumMoney = (Double)mp.get("sumMoney");
-                moneyApply.setLevel1Count(0); //代理员为了计算方便，设置为0，可以直接累加结果
-                moneyApply.setUserId(agentId);
-                moneyApply.setApplyMoney(sumMoney.floatValue());
-                moneyApply.setApplyTime(new Date());
-                // 审核状态（0：未审核，1：审核通过，2审核未通过）
-                moneyApply.setCheckStatus(0);
-                // 申请人身份（1：代理员；2：普通会员）
-                moneyApply.setUserStatus(userStatus);
-                int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
-                result = BaseResult.checkResult(value);
+                // 如果业绩奖为0则不允许进行提现操作
+                if (sumMoney.compareTo(0.0) == 1) {
+                    moneyApply.setLevel1Count(0); //代理员为了计算方便，设置为0，可以直接累加结果
+                    moneyApply.setUserId(agentId);
+                    moneyApply.setApplyMoney(sumMoney.floatValue());
+                    moneyApply.setApplyTime(new Date());
+                    // 审核状态（0：未审核，1：审核通过，2审核未通过）
+                    moneyApply.setCheckStatus(0);
+                    // 申请人身份（1：代理员；2：普通会员）
+                    moneyApply.setUserStatus(userStatus);
+                    int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
+
+                    // 更新代理员提现状态
+                    AgentShare agentShare = new AgentShare();
+                    agentShare.setAgentId(agentId);
+                    // 提现状态(0:未提现 1:已提现)
+                    agentShare.setApplyStatus(1);
+                    agentShareService.updateAgentShareByAgentId(agentShare);
+                    result = BaseResult.checkResult(value);
+                } else {
+                    result.put("code", "4");
+                    result.put("msg", "业绩奖为0.00，不允许进行提现");
+                }
             }else{
                 result.put("code", "3");
                 result.put("msg", "请不要重复提交申请");
@@ -1322,27 +1340,50 @@ public class UsersController {
                 // 分享奖
                 Map<String,Object> mp = userRelateService.sumShareMoney(userId);
                 Double sumMoney = (Double)mp.get("sumMoney");
-                // 进行提现申请时，如果直推会员达到20人就奖励5000
-                if (countLevel1 >= 20) {
-                    sumMoney = sumMoney + 5000f;
-                    // 1代表直推人数超过20人状态标志
-                    moneyApply.setLevel1Count(1);
-                }
-                moneyApply.setUserId(userId);
-                moneyApply.setApplyMoney(sumMoney.floatValue());
-                moneyApply.setApplyTime(new Date());
-                // 审核状态（0：未审核，1：审核通过，2审核未通过）
-                moneyApply.setCheckStatus(0);
-                // 申请人身份（1：代理员；2：普通会员）
-                moneyApply.setUserStatus(userStatus);
-                int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
-                if (value == 1) {
-                    result.put("code", BaseResult.SUCCESS_CODE);
-                    result.put("msg", BaseResult.SUCCESS_MSG);
-
+                // 如果业绩奖为0则不允许进行提现操作
+                if (sumMoney.compareTo(0.0) == 1) {
+                    // 进行提现申请时，如果直推会员达到20人就奖励5000
+                    if (countLevel1 >= 20) {
+                        sumMoney = sumMoney + 5000f;
+                        // 1代表直推人数超过20人状态标志
+                        moneyApply.setLevel1Count(1);
+                    }
+                    moneyApply.setUserId(userId);
+                    moneyApply.setApplyMoney(sumMoney.floatValue());
+                    moneyApply.setApplyTime(new Date());
+                    // 审核状态（0：未审核，1：审核通过，2审核未通过）
+                    moneyApply.setCheckStatus(0);
+                    // 申请人身份（1：代理员；2：普通会员）
+                    moneyApply.setUserStatus(userStatus);
+                    int value = moneyApplyService.insertMoneyApplyForBean(moneyApply);
+                    if (value == 1) {
+                        // 提现申请成功之后，将users_relate表的对应记录标注已提现完成状态
+                        UsersRelate ur = new UsersRelate();
+                        ur.setUserId(userId);
+                        List<UsersRelate> lstUser = userRelateService.listUserRelateByBean(ur);
+                        for (UsersRelate relate : lstUser) {
+                            UsersRelate param = new UsersRelate();
+                            param.setId(relate.getId());
+                            // 提现状态(0:未提现 1:已提现)
+                            param.setApplyStatus(1);
+                            int val = userRelateService.updateUserRelateForBean(param);
+                            if (val == 1) {
+                                result.put("code", BaseResult.SUCCESS_CODE);
+                                result.put("msg", BaseResult.SUCCESS_MSG);
+                            } else {
+                                result.put("code", BaseResult.FAIL_CODE);
+                                result.put("msg", BaseResult.FAIL_MSG);
+                            }
+                        }
+                        result.put("code", BaseResult.SUCCESS_CODE);
+                        result.put("msg", BaseResult.SUCCESS_MSG);
+                    } else {
+                        result.put("code", BaseResult.FAIL_CODE);
+                        result.put("msg", BaseResult.FAIL_MSG);
+                    }
                 } else {
-                    result.put("code", BaseResult.FAIL_CODE);
-                    result.put("msg", BaseResult.FAIL_MSG);
+                    result.put("code", "4");
+                    result.put("msg", "业绩奖为0.00，不允许进行提现");
                 }
             }else{
                 result.put("code", "3");
@@ -1395,26 +1436,8 @@ public class UsersController {
         moneyApply.setCheckStatus(checkStatus);
         int value = moneyApplyService.updateMoneyApplyForBean(moneyApply);
         if (value == 1) {
-            // 提现审批通过之后，将users_relate表的对应记录标注已提现完成状态
-            if (checkStatus == 1) {
-                UsersRelate bean = new UsersRelate();
-                bean.setUserId(moneyApplyService.getMoneyApplyById(id).getUserId());
-                List<UsersRelate> lstUser = userRelateService.listUserRelateByBean(bean);
-                for (UsersRelate relate : lstUser) {
-                    UsersRelate param = new UsersRelate();
-                    param.setId(relate.getId());
-                    // 提现状态(0:未提现 1:已提现)
-                    param.setApplyStatus(1);
-                    int val = userRelateService.updateUserRelateForBean(param);
-                    if (val == 1) {
-                        result.put("code", BaseResult.SUCCESS_CODE);
-                        result.put("msg", BaseResult.SUCCESS_MSG);
-                    } else {
-                        result.put("code", BaseResult.FAIL_CODE);
-                        result.put("msg", BaseResult.FAIL_MSG);
-                    }
-                }
-            }
+            result.put("code", BaseResult.SUCCESS_CODE);
+            result.put("msg", BaseResult.SUCCESS_MSG);
         } else {
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);

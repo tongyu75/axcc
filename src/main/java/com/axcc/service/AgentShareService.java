@@ -26,4 +26,5 @@ public interface AgentShareService {
 
     int updateAgentShareForBean(AgentShare bean);
 
+    int updateAgentShareByAgentId(AgentShare bean);
 }

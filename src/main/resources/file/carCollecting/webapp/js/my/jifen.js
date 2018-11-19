@@ -84,6 +84,14 @@ $(function() {
 	})
 	//	申请提现
 	$(".tx_btn").on("click", function() {
+		// 提现时首先判断业绩奖是否为0.00
+		var sumShareMoney = $(".balance").text();
+		if (sumShareMoney == '0.00元') {
+			alert("业绩奖为0.00，不允许进行提现");
+			$("#aaa").css("display", "none");
+	        $("#ddd").css("display", "none");
+	        return true;
+		}
 		var data1 = {};
 		data1.userId = JSON.parse(sessionStorage.getItem('userInfo')).id;
 		//data1.userId = "33";
@@ -136,6 +144,10 @@ $(function() {
 	                 	$("#ddd").css("display", "block");
 				} else if(resultData.code=="2"){
 					alert("会员提现于每周周一申请，公司审核并发放");
+					$("#aaa").css("display", "none");
+	                $("#ddd").css("display", "none");		
+				} else if(resultData.code=="4"){
+					alert("业绩奖为0.00，不允许进行提现");
 					$("#aaa").css("display", "none");
 	                $("#ddd").css("display", "none");		
 				}else{
