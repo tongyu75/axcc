@@ -702,16 +702,20 @@ public class UsersController {
 
     /**
      * 管理员登录：为会员购车排号
+     * @param buyType 购车类型
+     * @param waitNum 排号
      */
     @RequestMapping(value="/updateWaitNum",method = RequestMethod.POST)
     public Map<String,Object> updateQueueNum(
             @RequestParam(value = "id", required = true) Integer id,
+            @RequestParam(value = "buyType", required = true) Integer buyType,
             @RequestParam(value = "waitNum", required = true) Integer waitNum){
         logger.info("updateQueueNum---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         Business bean = new Business();
         bean.setWaitNum(waitNum);
+        bean.setBuyType(buyType);
         Business waitBean = businessService.getBusinessByBean(bean);
         // waitBean为null代表排号已存在
         if (waitBean == null) {

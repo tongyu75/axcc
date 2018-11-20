@@ -142,6 +142,8 @@ $(function(){
 										$(".agent_d_Info #agentCode").html(card);
 										//$("#agentMoney").html(buyMoney);
 										$(".agent_d_Info #agentbuyType").html(buyType);
+										// 购车类型ID
+										$(".agent_d_Info #buyType").html(dataInfo.buyType);
 										$(".agent_d_Info #agentPay").html(checkStatus);
 										$(".agent_d_Info #agentapplyTime").html(applyTime);
 										$(".agent_d_Info #agentcheckTime").html(checkTime);										
@@ -221,6 +223,8 @@ $(function(){
 										$(".agent_a_Info #agentCode").html(card);
 										//$(".agent_a_Info #agentMoney").html(buyMoney);
 										$(".agent_a_Info #agentbuyType").html(buyType);
+										// 购车类型ID
+										$(".agent_a_Info #buyType").html(dataInfo.buyType);
 										$(".agent_a_Info #agentTime").html(applyTime);
 										$(".agent_a_Info .message_s_btn").attr("data-id",delId);
 										$(".agent_a_Info .message_btn").attr("data-id",delId);
@@ -302,6 +306,8 @@ $(function(){
 										$(" .agent_o_Info #agentCode").html(card);
 										//$("#agentMoney").html(buyMoney);
 										$(".agent_o_Info #agentbuyType").html(buyType);
+										// 购车类型ID
+										$(".agent_o_Info #buyType").html(dataInfo.buyType);
 										$(".agent_o_Info #lineNum").val(waitNum);
 										$(".agent_o_Info .message_s_btn").attr("data-id",delId);
 									}
@@ -406,9 +412,12 @@ $(function(){
 	$(".agent_o_Info .message_s_btn").on("click",function(){
 		    var delId = $(".agent_o_Info .message_s_btn").attr("data-id");
 		    var waitNum = $("#lineNum").val();
+		    var agentbuyType = $(".agent_o_Info #agentbuyType").html();
+		    var buyType = $(".agent_o_Info #buyType").html();
 		    var data={};
 		    data.id = delId;
 		    data.waitNum = waitNum;
+		    data.buyType = buyType;
 	      	 $.ajax({
 					type:"post",
 					url:url+"/updateWaitNum",
