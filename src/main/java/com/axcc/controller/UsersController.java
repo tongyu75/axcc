@@ -710,18 +710,27 @@ public class UsersController {
         logger.info("updateQueueNum---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
-        Business business = new Business();
-        business.setId(id);
-        business.setBuyStatus(1);
-        // 排位号
-        business.setWaitNum(waitNum);
-        int value = businessService.updateBusinessForBean(business);
-        if (value == 1) {
-            result.put("code", BaseResult.SUCCESS_CODE);
-            result.put("msg", BaseResult.SUCCESS_MSG);
+        Business bean = new Business();
+        bean.setWaitNum(waitNum);
+        Business waitBean = businessService.getBusinessByBean(bean);
+        // waitBean为null代表排号已存在
+        if (waitBean == null) {
+            Business business = new Business();
+            business.setId(id);
+            business.setBuyStatus(1);
+            // 排位号
+            business.setWaitNum(waitNum);
+            int value = businessService.updateBusinessForBean(business);
+            if (value == 1) {
+                result.put("code", BaseResult.SUCCESS_CODE);
+                result.put("msg", BaseResult.SUCCESS_MSG);
+            } else {
+                result.put("code", BaseResult.FAIL_CODE);
+                result.put("msg", BaseResult.FAIL_MSG);
+            }
         } else {
-            result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
+            result.put("code", BaseResult.WAIT_NUM_ERROR);
+            result.put("msg", BaseResult.WAIT_NUM_ERROR_MSG);
         }
         logger.info("updateQueueNum---end");
         return result;

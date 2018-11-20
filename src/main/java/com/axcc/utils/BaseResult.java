@@ -58,4 +58,8 @@ public class BaseResult {
     /* 用户登录CODE "密码错误" */
     public static final int LOGIN_PWD_ERROR = 1002;
     public static final String LOGIN_PWD_ERROR_MSG = "密码错误";
+
+    /* 管理员排号CODE "排号已存在" */
+    public static final int WAIT_NUM_ERROR = 2;
+    public static final String WAIT_NUM_ERROR_MSG = "排号已存在";
 }

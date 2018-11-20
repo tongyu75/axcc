@@ -426,6 +426,8 @@ $(function(){
 							$(".agent_d_Info").css("display","none");
 							$(".agent_a_Info").css("display","none");
 							$(".agent_o_Info").css("display","none");
+						}else if(result.code=="2"){
+							alert("排号已存在，请重新输入");	
 						}else{
 							Errfun1(result1.msg);
 						}
