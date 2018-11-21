@@ -26,7 +26,14 @@ public interface BusinessDao {
 
     List<BusinessUser> listBusinessUserByBean(BusinessUser bean);
 
+    /**会员登录，获取所有已排队、出车的用户信息*/
+    List<BusinessUser> listBusinessUser(BusinessUser bean);
+
     int countBusinessUserByBean(BusinessUser bean);
+    /**管理员登录，获取会员申请列表*/
+    List<BusinessUser> listApplyUserByBean(BusinessUser bean);
+
+    int countApplyUserByBean(BusinessUser bean);
 
     List<Map<String,Object>> listAllUserByBean(BusinessUser bean);
 

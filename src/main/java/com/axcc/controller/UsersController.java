@@ -416,7 +416,7 @@ public class UsersController {
         //记录查询总数
         int count = businessService.countBusinessUserByBean(bean);
         //查询记录
-        List<BusinessUser> lstBusinessUser = businessService.listBusinessUserByBean(bean,pageNum,pageSize);
+        List<BusinessUser> lstBusinessUser = businessService.listBusinessUser(bean,pageNum,pageSize);
         result.put("code",BaseResult.SUCCESS_CODE);
         result.put("msg",BaseResult.SUCCESS_MSG);
         result.put("info",lstBusinessUser);
@@ -741,21 +741,48 @@ public class UsersController {
     }
 
     /**
-     * 排队列表
+     * 管理员：会员申请排队列表
      * @param pageNum 第几页
      * @param pageSize 每页显示的个数
      */
-    @RequestMapping(value="/listWait",method = RequestMethod.POST)
-    public Map<String,Object> listWait(
+    @RequestMapping(value="/listApply",method = RequestMethod.POST)
+    public Map<String,Object> listApply(
             @RequestParam(value = "phone", required = false) String phone,
-            @RequestParam(value = "buyStatus", required = false) Integer buyStatus,
             @RequestParam(value = "pageNum", required = true) Integer pageNum,
             @RequestParam(value = "pageSize", required = true) Integer pageSize){
         logger.info("listWait---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bean = new BusinessUser();
-        bean.setBuyStatus(buyStatus);
+        if(!"".equals(phone)){
+            bean.setLoginName(phone);
+        }
+        // 查询记录总条数
+        int count = businessService.countApplyUserByBean(bean);
+        // 查询记录
+        List<BusinessUser> lstBusinessUser = businessService.listApplyUserByBean(bean, pageNum, pageSize);
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        result.put("info", lstBusinessUser);
+        result.put("total", count);
+        logger.info("listWait---end" + result.toString());
+        return result;
+    }
+
+    /**
+     * 管理员：会员排队列表
+     * @param pageNum 第几页
+     * @param pageSize 每页显示的个数
+     */
+    @RequestMapping(value="/listWait",method = RequestMethod.POST)
+    public Map<String,Object> listWait(
+            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "pageNum", required = true) Integer pageNum,
+            @RequestParam(value = "pageSize", required = true) Integer pageSize){
+        logger.info("listWait---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        BusinessUser bean = new BusinessUser();
         if(!"".equals(phone)){
             bean.setLoginName(phone);
         }

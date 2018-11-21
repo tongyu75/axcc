@@ -86,9 +86,25 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
+    public List<BusinessUser> listApplyUserByBean(BusinessUser bean, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return BusinessDao.listApplyUserByBean(bean);
+    }
+
+    @Override
+    public int countApplyUserByBean(BusinessUser bean) {
+        return BusinessDao.countApplyUserByBean(bean);
+    }
+
+    @Override
     public List<BusinessUser> listBusinessUserByBean(BusinessUser bean, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return BusinessDao.listBusinessUserByBean(bean);
+    }
+    @Override
+    public List<BusinessUser> listBusinessUser(BusinessUser bean, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return BusinessDao.listBusinessUser(bean);
     }
     @Override
     public int countAllUserList(BusinessUser bean) {
