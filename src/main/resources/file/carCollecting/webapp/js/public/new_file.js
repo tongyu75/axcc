@@ -5,7 +5,7 @@
 	//图片路径
 	var img_url="http://47.105.71.191:8081";
     //	登陆地址地址
-	var loginUrl = url+"/carCollecting/webapp/html/loginAReg/login.html";
+	var loginUrl = img_url+"carCollecting/webapp/html/loginAReg/login.html";
 	
 	var userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 	if(userInfo == undefined||userInfo == ""||userInfo == null){

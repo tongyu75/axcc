@@ -13,7 +13,7 @@ $(function(){
 		data.pageSize = pageSize;
 		$.ajax({
 			type:"post",
-			url:url+"/listWait",
+			url:url+"/listApply",
 			data:data,
 			async:true,
 			crossDomain: true,

@@ -7,11 +7,14 @@ $(function(){
 	//查询按钮
 	$("#searchBtn").on('click',function(){
 		var searchText = $("#searchText").val();
-		console.log(searchText);
+		var searchType = $("#selType").val();
+		console.log(searchText+"-------"+searchType);
 		var data={};
 		data.loginName = searchText;
+		data.buyType = searchType;
 		data.pageNum = pageCur;
 		data.pageSize = pageSize;
+//		data.buyStatus = '1';
 		showAgent(1);
 	});
 	
@@ -19,12 +22,14 @@ $(function(){
 	//显示会员列表
 	function showAgent(page){
 		var searchText = $("#searchText").val();
-		console.log(searchText);
+		var searchType = $("#selType").val();
+		console.log(searchText+"-------"+searchType);
 		var data={};
 		data.phone = searchText;
+		data.buyType = searchType;
 		data.pageNum = page;
 		data.pageSize = pageSize;
-		data.buyStatus = '1';
+//		data.buyStatus = '1';
 		$.ajax({
 			type:"post",
 			url:url+"/listWait",
@@ -52,8 +57,8 @@ $(function(){
 							 userPhone=data.loginName.substr(0,4)+"**"+data.loginName.substr(-2);						  
 						}
 							html += '<tr><td>'+waitNum+'</td><td>'+userName+'</td><td>'+userPhone+'</td>';
-							//html += '<td><button type="button" data="'+data.id+'" class="gbtn del_btn">删除</button>';
-							html += '<td><button type="button" data="'+data.id+'" class="gbtn det_btn">详情</button></td></tr>';						
+							html += '<td><button type="button" data="'+data.id+'" class="gbtn take_btn">出车</button>&nbsp;';
+							html += '<button type="button" data="'+data.id+'" class="gbtn det_btn">详情</button></td></tr>';						
 					}
 			        $(".show_List").html(html);
 			        var pageTotal = result1.total;
@@ -63,6 +68,31 @@ $(function(){
 							pageCount: pageNum,
 							current: page,
 							backFn: function(p) {}
+					});
+					//会员出车
+					$(".take_btn").on("click",function(){
+						var takeId = $(this).attr("data");
+						console.log(takeId);
+						var data={};
+						data.businessId = takeId;
+						$.ajax({
+							type:"post",
+							url:url+"/takeCar",
+							data:data,
+							async:true,
+							crossDomain: true,
+			                xhrFields: {withCredentials: true},
+							success:function(result){
+								var data=result;
+								if(data.msg == "SUCCESS"){
+									alert("出车成功！");
+									showAgent(page);
+								}
+							},
+							error:function(){
+								Errfun3();
+							}
+						});
 					});
 				     //会员详情
 					$(".det_btn").on("click",function(){

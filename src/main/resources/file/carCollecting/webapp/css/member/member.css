@@ -10,10 +10,18 @@
 	}
 .search_content{
 		width: 90%;
-		height: 40px;
-		margin: 90px auto 0;
+		height: 52px;
+		margin: 70px auto 0;
 }
 .search_content .search_text{
+		width:50%;
+		outline:none;
+		text-indent: 2px;
+		border-radius:4px ;
+		border:1px solid #c6c6c6;
+		margin: 4px 16px;
+}
+.search_content .sel_list{
 		width:50%;
 		outline:none;
 		text-indent: 2px;
