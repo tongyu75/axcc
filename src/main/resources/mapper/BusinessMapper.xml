@@ -213,7 +213,12 @@
       A.id, A.user_id, A.agent_id, A.admin_id, A.wait_num, A.buy_money, A.buy_type, A.buy_status, A.check_status,
       A.check_time, A.pay_time, A.apply_time, A.is_delete, B.login_name, B.user_name, B.card, B.parent_id
     from business A inner join users B on A.user_id = B.id
-    where B.is_delete = 0 and A.is_delete = 0 and A.check_status in (0,1,2)
+    <where>
+      B.is_delete = 0 and A.is_delete = 0 and A.check_status in (0,1,2)
+      <if test="loginName != null">
+        and B.login_name = #{loginName,jdbcType=VARCHAR}
+      </if>
+    </where>
     order by A.check_status
   </select>
   <select id="listBusinessUserByBean" parameterType="com.axcc.model.BusinessUser" resultMap="BusinessUserResultMap">
@@ -263,7 +268,7 @@
         and A.money_apply_status = #{moneyApplyStatus,jdbcType=INTEGER}
       </if>
     </where>
-    order by A.check_status
+    order by A.wait_num
   </select>
   <select id="listBusinessUser" parameterType="com.axcc.model.BusinessUser" resultMap="BusinessUserResultMap">
     select
@@ -394,9 +399,13 @@
   </select>
   <select id="countApplyUserByBean" parameterType="com.axcc.model.BusinessUser" resultType="java.lang.Integer">
     select count(A.id) from business A inner join users B on A.user_id = B.id
-    where
+    <where>
       B.is_delete = 0 and A.is_delete = 0
       and A.check_status in (0,1,2)
+      <if test="loginName != null">
+        and B.login_name = #{loginName,jdbcType=VARCHAR}
+      </if>
+    </where>
   </select>
   <select id="countBusinessUserByBean" parameterType="com.axcc.model.BusinessUser" resultType="java.lang.Integer">
     select count(A.id) from business A inner join users B on A.user_id = B.id
@@ -424,7 +433,7 @@
         and A.buy_status = #{buyStatus,jdbcType=INTEGER}
       </if>
       <if test="checkStatus != null">
-        and A.check_status #{checkStatus,jdbcType=INTEGER}
+        and A.check_status = #{checkStatus,jdbcType=INTEGER}
       </if>
       <if test="checkTime != null">
         and A.check_time = #{checkTime,jdbcType=TIMESTAMP}

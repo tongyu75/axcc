@@ -777,12 +777,17 @@ public class UsersController {
     @RequestMapping(value="/listWait",method = RequestMethod.POST)
     public Map<String,Object> listWait(
             @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "buyType", required = false) Integer buyType,
             @RequestParam(value = "pageNum", required = true) Integer pageNum,
             @RequestParam(value = "pageSize", required = true) Integer pageSize){
         logger.info("listWait---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bean = new BusinessUser();
+        bean.setBuyStatus(1);
+        if(buyType != 0){
+            bean.setBuyType(buyType);
+        }
         if(!"".equals(phone)){
             bean.setLoginName(phone);
         }
