@@ -21,6 +21,12 @@
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="proxy_area" jdbcType="VARCHAR" property="proxyArea" />
   </resultMap>
+  <resultMap id="MobileCodeMap" type="com.axcc.model.MobileCode">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+    <result column="short_code" jdbcType="INTEGER" property="shortCode"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createDate"/>
+  </resultMap>
   <sql id="Base_Column_List">
     id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr, 
     parent_id, original, user_role, create_time, update_time, is_delete, description, proxy_area
@@ -501,4 +507,16 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <insert id="insertMobileCode" parameterType="com.axcc.model.MobileCode">
+    insert into mobile_code (id, login_name, short_code, create_time)
+    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR},
+      #{shortCode,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="selectMobileCode" parameterType="com.axcc.model.MobileCode" resultMap="MobileCodeMap">
+    select id, login_name, short_code, create_time
+    from  mobile_code
+    where login_name = #{loginName,jdbcType=VARCHAR}
+    order by create_time desc
+    limit 1
+  </select>
 </mapper>

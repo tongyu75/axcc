@@ -1,5 +1,6 @@
 package com.axcc.dao;
 
+import com.axcc.model.MobileCode;
 import com.axcc.model.Users;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -36,5 +37,9 @@ public interface UsersDao {
     int updateByPrimaryKey(Users record);
 
     List<Users> selectAllUser();
+
+    int insertMobileCode(MobileCode mobileCode);
+
+    MobileCode selectMobileCode(MobileCode mobileCode);
 
 }

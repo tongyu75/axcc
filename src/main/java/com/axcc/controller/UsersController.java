@@ -824,6 +824,7 @@ public class UsersController {
         Business bean = new Business();
         bean.setId(businessId);
         bean.setBuyStatus(2);
+        bean.setIsDelete(1);
         int value = businessService.updateBusinessForBean(bean);
         result = BaseResult.checkResult(value);
         logger.info("takeCar------------end");
@@ -1111,7 +1112,7 @@ public class UsersController {
                 MoneyApply moneyApply = new MoneyApply();
                 // 业绩奖
                 Map<String,Object> mp = agentShareService.sumAgentMoney(agentId);
-                Double sumMoney = (Double)mp.get("sumMoney");
+                Double sumMoney = (Double)mp.get("sumMoney")*0.12; //代理员申请提现收取12%手续费
                 // 如果业绩奖为0则不允许进行提现操作
                 if (sumMoney.compareTo(0.0) == 1) {
                     moneyApply.setLevel1Count(0); //代理员为了计算方便，设置为0，可以直接累加结果
@@ -1392,7 +1393,7 @@ public class UsersController {
                 int countLevel1 = userRelateService.countLevel1(userId);
                 // 分享奖
                 Map<String,Object> mp = userRelateService.sumShareMoney(userId);
-                Double sumMoney = (Double)mp.get("sumMoney");
+                Double sumMoney = (Double)mp.get("sumMoney")*0.1; //会员申请收取10%手续费
                 // 如果业绩奖为0则不允许进行提现操作
                 if (sumMoney.compareTo(0.0) == 1) {
                     // 进行提现申请时，如果直推会员达到20人就奖励5000
@@ -1544,7 +1545,7 @@ public class UsersController {
      */
     @RequestMapping(value="/sendSms",method = RequestMethod.POST)
     public Map<String,Object> sendSms(
-            @RequestParam(value = "phone", required = true) Integer phone){
+            @RequestParam(value = "phone", required = true) String phone){
         logger.info("myMember---start");
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
@@ -1556,8 +1557,8 @@ public class UsersController {
             final String product = "Dysmsapi";//短信API产品名称（短信产品名固定，无需修改）
             final String domain = "dysmsapi.aliyuncs.com";//短信API产品域名（接口地址固定，无需修改）
             //替换成你的AK
-            final String accessKeyId = baseWebService.getSysConfig(orgCode, "accessKeyId");
-            final String accessKeySecret = baseWebService.getSysConfig(orgCode,"accessKeySecret");
+            final String accessKeyId = BaseResult.ACCESSKEYID;
+            final String accessKeySecret = BaseResult.ACCESSKEYSECRET;
             //final String accessKeySecret = CommonUtil.getKeyValue(orgCode, "accessKeySecret", userAuthClient, entityLogicClient);//你的accessKeySecret，参考本文档步骤2
             //初始化ascClient,暂时不支持多region（请勿修改）
             IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId,accessKeySecret);
@@ -1571,9 +1572,9 @@ public class UsersController {
             //必填:待发送手机号。支持以逗号分隔的形式进行批量调用，批量上限为1000个手机号码,批量调用相对于单条调用及时性稍有延迟,验证码类型的短信推荐使用单条调用的方式
             request.setPhoneNumbers(String.valueOf(phone));
             //必填:短信签名-可在短信控制台中找到
-            request.setSignName(baseWebService.getSysConfig(orgCode, "signName"));
+            request.setSignName(BaseResult.SIGNNAME);
             //必填:短信模板-可在短信控制台中找到
-            request.setTemplateCode(baseWebService.getSysConfig(orgCode, "templateCode"));
+            request.setTemplateCode("SMS_154586597");
             //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
             //友情提示:如果JSON中需要带换行符,请参照标准的JSON协议对换行符的要求,比如短信内容中包含\r\n的情况在JSON中需要表示成\\r\\n,否则会导致JSON在服务端解析失败
             //生成6位随机数
@@ -1593,6 +1594,12 @@ public class UsersController {
             String resultMsg = sendSmsResponse.getMessage();
             // 短信发送成功
             if(resultStatus.equals("OK") || resultStatus.equals("success")) {
+                //保存验证码信息
+                MobileCode mobileCode = new MobileCode();
+                mobileCode.setLoginName(phone);
+                mobileCode.setShortCode(random);
+                mobileCode.setCreateTime(new Date());
+                userService.insertMobileCode(mobileCode);
                 result.put("code", BaseResult.SUCCESS_CODE);
                 result.put("msg", BaseResult.SUCCESS_MSG);
             } else {
