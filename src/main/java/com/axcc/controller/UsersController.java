@@ -207,8 +207,8 @@ public class UsersController {
             }
         }else{
             //验证码失败
-            result.put("code", BaseResult.FAIL_CODE);
-            result.put("msg", BaseResult.FAIL_MSG);
+            result.put("code", 2);
+            result.put("msg", "验证码错误");
         }
         logger.info("user---end" + result.toString());
         return result;
