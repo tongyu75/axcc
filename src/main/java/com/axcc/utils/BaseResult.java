@@ -7,6 +7,17 @@ import java.util.Map;
  * 基础的返回值
  */
 public class BaseResult {
+    /* 短信accessKeyId */
+    public static final String ACCESSKEYID = "LTAI02G6zPxy8yCS";
+
+    /* 短信accessKeySecret */
+    public static final String ACCESSKEYSECRET = "C5vc64sQSG6xlvKTfOVNLqGzZEJEx9";
+
+    /* 短信签名 */
+    public static final String SIGNNAME = "亿宏顺达";
+
+    /* 短信模板 */
+    public static final String TEMPLATECODE = "您的验证码为：${code}，您正在注册成为平台会员，感谢您的支持！";
 
     /* 返回值CODE 0 成功*/
     public static final int SUCCESS_CODE = 0;
