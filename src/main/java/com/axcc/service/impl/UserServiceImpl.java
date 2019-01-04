@@ -1,6 +1,7 @@
 package com.axcc.service.impl;
 
 import com.axcc.dao.UsersDao;
+import com.axcc.model.MobileCode;
 import com.axcc.model.Users;
 import com.axcc.service.UserService;
 import com.github.pagehelper.PageHelper;
@@ -86,4 +87,15 @@ public class UserServiceImpl implements UserService {
         PageHelper.startPage(pageNum,pageSize);
         return usersDao.;
     }*/
+
+    @Override
+    public int insertMobileCode(MobileCode mobileCode){
+        return usersDao.insertMobileCode(mobileCode);
+    }
+
+    @Override
+    public MobileCode selectMobileCode(String loginName)
+    {
+        return usersDao.selectMobileCode(loginName);
+    }
 }

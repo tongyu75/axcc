@@ -512,7 +512,7 @@
     values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR},
       #{shortCode,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <select id="selectMobileCode" parameterType="com.axcc.model.MobileCode" resultMap="MobileCodeMap">
+  <select id="selectMobileCode" parameterType="java.lang.String" resultMap="MobileCodeMap">
     select id, login_name, short_code, create_time
     from  mobile_code
     where login_name = #{loginName,jdbcType=VARCHAR}

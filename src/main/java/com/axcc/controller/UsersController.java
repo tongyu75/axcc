@@ -132,7 +132,8 @@ public class UsersController {
      * @param pwd 密码
      */
     @RequestMapping(value="/user",method = RequestMethod.POST)
-    public Map<String,Object> password(@RequestParam(value = "phone", required = true) String phone,
+    public Map<String,Object> password(@RequestParam(value = "shortCode", required = true) Integer shortCode,
+                                       @RequestParam(value = "phone", required = true) String phone,
                                        @RequestParam(value = "userName", required = true) String userName,
                                        @RequestParam(value = "parentId", required = true) String parentId,
                                        @RequestParam(value = "pwd", required = true) String pwd){
@@ -146,58 +147,66 @@ public class UsersController {
         Users refUses = userService.getUserByBean(paramRef);
         // refOriginal的值如:32-31
         String refOriginal = refUses.getOriginal();
-
-        // 插入注册会员
-        Users paramUsers = new Users();
-        paramUsers.setLoginName(phone);
-        paramUsers.setUserName(userName);
-        paramUsers.setPassword(pwd);
-        paramUsers.setParentId(parentId);
-        paramUsers.setIsDelete(0);
-        // 会员角色
-        paramUsers.setUserRole(2);
-        Date date = new Date();
-        paramUsers.setCreateTime(date);
-        paramUsers.setUpdateTime(date);
-        int value = userService.insertUserForBean(paramUsers);
-        if (value == 1) {
-            // 更新注册会员的original
-            int addId = paramUsers.getId();
-            // original的值如：32-32-30
-            String original = refOriginal + "-" + addId;
-            Users updateBean = new Users();
-            updateBean.setId(addId);
-            updateBean.setOriginal(original);
-            int updateValue = userService.updateUserForBean(updateBean);
-            if (updateValue == 1) {
-                // 获取用户信息
-                //Users users = userService.getUserById(bean.getUserId());
-                String[] ori = original.split("-");
-                // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
-                for(int i = 0; i < ori.length - 1; i++) {
-                    // 注册会员的上级ID
-                    String parId = ori[i];
-                    UsersRelate usersRelate = new UsersRelate();
-                    usersRelate.setUserId(Integer.valueOf(parId));
-                    usersRelate.setOriginal(parId);
-                    // 会员级别
-                    usersRelate.setLevel(ori.length - 1 - i);
-                    // 注册会员的用户ID作为插入数据的子ID
-                    usersRelate.setChildId(addId);
-                    int val = userRelateService.insertUserRelateForBean(usersRelate);
-                    if (val == 1) {
-                        result.put("code", BaseResult.SUCCESS_CODE);
-                        result.put("msg", BaseResult.SUCCESS_MSG);
-                    } else {
-                        result.put("code", BaseResult.FAIL_CODE);
-                        result.put("msg", BaseResult.FAIL_MSG);
+        MobileCode mobileCode = userService.selectMobileCode(phone);
+        Integer codes = mobileCode.getShortCode();
+        //验证码正确
+        if(null != codes && codes.equals(shortCode)){
+            // 插入注册会员
+            Users paramUsers = new Users();
+            paramUsers.setLoginName(phone);
+            paramUsers.setUserName(userName);
+            paramUsers.setPassword(pwd);
+            paramUsers.setParentId(parentId);
+            paramUsers.setIsDelete(0);
+            // 会员角色
+            paramUsers.setUserRole(2);
+            Date date = new Date();
+            paramUsers.setCreateTime(date);
+            paramUsers.setUpdateTime(date);
+            int value = userService.insertUserForBean(paramUsers);
+            if (value == 1) {
+                // 更新注册会员的original
+                int addId = paramUsers.getId();
+                // original的值如：32-32-30
+                String original = refOriginal + "-" + addId;
+                Users updateBean = new Users();
+                updateBean.setId(addId);
+                updateBean.setOriginal(original);
+                int updateValue = userService.updateUserForBean(updateBean);
+                if (updateValue == 1) {
+                    // 获取用户信息
+                    //Users users = userService.getUserById(bean.getUserId());
+                    String[] ori = original.split("-");
+                    // "ori.length - 1"这里减1是因为插入的数据只有当前用户之前的数据而不包括自己的
+                    for(int i = 0; i < ori.length - 1; i++) {
+                        // 注册会员的上级ID
+                        String parId = ori[i];
+                        UsersRelate usersRelate = new UsersRelate();
+                        usersRelate.setUserId(Integer.valueOf(parId));
+                        usersRelate.setOriginal(parId);
+                        // 会员级别
+                        usersRelate.setLevel(ori.length - 1 - i);
+                        // 注册会员的用户ID作为插入数据的子ID
+                        usersRelate.setChildId(addId);
+                        int val = userRelateService.insertUserRelateForBean(usersRelate);
+                        if (val == 1) {
+                            result.put("code", BaseResult.SUCCESS_CODE);
+                            result.put("msg", BaseResult.SUCCESS_MSG);
+                        } else {
+                            result.put("code", BaseResult.FAIL_CODE);
+                            result.put("msg", BaseResult.FAIL_MSG);
+                        }
                     }
+                } else {
+                    result.put("code", BaseResult.FAIL_CODE);
+                    result.put("msg", BaseResult.FAIL_MSG);
                 }
             } else {
                 result.put("code", BaseResult.FAIL_CODE);
                 result.put("msg", BaseResult.FAIL_MSG);
             }
-        } else {
+        }else{
+            //验证码失败
             result.put("code", BaseResult.FAIL_CODE);
             result.put("msg", BaseResult.FAIL_MSG);
         }

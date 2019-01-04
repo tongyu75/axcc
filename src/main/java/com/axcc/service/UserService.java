@@ -1,5 +1,6 @@
 package com.axcc.service;
 
+import com.axcc.model.MobileCode;
 import com.axcc.model.Users;
 
 import java.util.List;
@@ -26,5 +27,10 @@ public interface UserService {
     int countUserByBean(Users bean);
 
     List<Users> findAllUser(int pageNum, int pageSize);
+
+    //保存验证码
+    int insertMobileCode(MobileCode mobileCode);
+    //读取验证码
+    MobileCode selectMobileCode(String loginName);
 
 }

@@ -40,6 +40,6 @@ public interface UsersDao {
 
     int insertMobileCode(MobileCode mobileCode);
 
-    MobileCode selectMobileCode(MobileCode mobileCode);
+    MobileCode selectMobileCode(String loginName);
 
 }
