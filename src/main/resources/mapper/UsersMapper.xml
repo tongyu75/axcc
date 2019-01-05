@@ -25,7 +25,7 @@
     <id column="id" jdbcType="INTEGER" property="id"/>
     <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
     <result column="short_code" jdbcType="INTEGER" property="shortCode"/>
-    <result column="create_time" jdbcType="TIMESTAMP" property="createDate"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
   </resultMap>
   <sql id="Base_Column_List">
     id, login_name, user_name, real_name, password, sex, card, image, bank_card, bank_addr, 

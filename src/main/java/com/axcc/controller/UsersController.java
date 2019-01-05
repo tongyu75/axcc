@@ -802,7 +802,7 @@ public class UsersController {
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bean = new BusinessUser();
         bean.setBuyStatus(1);
-        if(buyType != 0){
+        if(null != buyType && buyType != 0){
             bean.setBuyType(buyType);
         }
         if(!"".equals(phone)){
@@ -874,7 +874,7 @@ public class UsersController {
     @RequestMapping(value = "listBusinessByAgent",method = RequestMethod.POST)
     public Map<String,Object> listBusinessByAgent(HttpServletRequest request,
             @RequestParam(value = "loginName", required = true) String loginName,
-            @RequestParam(value = "phone", required = true) String phone,
+            @RequestParam(value = "phone", required = false) String phone,
             @RequestParam(value = "pageNum", required = true) Integer pageNum,
             @RequestParam(value = "pageSize", required = true) Integer pageSize){
         logger.info("listWait---start");
