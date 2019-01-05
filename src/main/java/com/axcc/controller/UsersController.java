@@ -833,7 +833,6 @@ public class UsersController {
         Business bean = new Business();
         bean.setId(businessId);
         bean.setBuyStatus(2);
-        bean.setIsDelete(1);
         int value = businessService.updateBusinessForBean(bean);
         result = BaseResult.checkResult(value);
         logger.info("takeCar------------end");
