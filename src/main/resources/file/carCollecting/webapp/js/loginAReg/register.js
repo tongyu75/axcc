@@ -50,11 +50,11 @@
 			$(".zc_btn").prop("disabled",false);
 			return false;
 		}
-		/*if(!code){
+		if(!code){
 			alert("请输入验证码");
 			$(".zc_btn").prop("disabled",false);
 			return false;
-		}*/
+		}
 		if(!password){
 			alert("请设置登录密码");
 			$(".zc_btn").prop("disabled",false);
@@ -104,7 +104,7 @@
 						    	 var regData={};
 									regData.phone=mobile1;
 									regData.userName=name;
-									regData.code=code;
+									regData.shortCode=code;
 									regData.parentId=rmobile;
 									regData.pwd=password;
 									console.log(url+"/user");
@@ -122,6 +122,9 @@
 													location.href="login.html?loginName="+mobile1;
 											}else{
 												Errfun1(result1.msg);
+												if(result1.code=='2'){
+													$(".code1").val("")
+												}
 											}
 										}
 									})		
@@ -139,20 +142,19 @@
 				 Errfun3();
 			}
 		})
-		//		注册
-	 if(flag){
-	 	
-	 }
-			
-	
-	
-	
-   //点击获取手机验证码
-	/*$(".sendSMS").on("click",function(){
+  })
+//点击获取手机验证码
+	$(".sendSMS").on("click",function(){
+		console.log(1)
 		$(".sendSMS").prop("disabled",true);
 		var mobile1=$(".mobile1").val();
 		var myreg=/^[1][3,4,5,6,7,8][0-9]{9}$/;
-		if(!myreg.test(mobile1)){
+		console.log(mobile1)
+		if(mobile1==''){
+			alert("请输入手机号");
+			$(".sendSMS").prop("disabled",false);
+			return false;
+		}else if(!myreg.test(mobile1)){
 			alert("请输入正确的手机号");
 			$(".sendSMS").prop("disabled",false);
 			return false;
@@ -160,12 +162,13 @@
 		//验证图形码的有效性
 		$.ajax({
 			type:"post",
-			url:url+"/api/index/sendCheckSMS",
-			data:{"mobile":mobile1},
+			url:url+"/sendSms",
+			data:{"phone":mobile1},
 			dataType:"JSON",
 			success:function(result){
 				$(".sendSMS").prop("disabled",false);
-				if(result.success == true){
+				console.log(result);
+				if(result.msg=='SUCCESS'){
 					var time = 60;
 	                var ttime=setInterval(function () {
 	                    time--;
@@ -183,6 +186,5 @@
 				}
 			}
 		});
-	})*/
-  })
+	})
 })

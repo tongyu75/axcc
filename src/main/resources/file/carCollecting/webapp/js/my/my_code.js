@@ -4,7 +4,9 @@ $(function(){
 	var userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 	var data={};
 	//data.registerUrl = url+"/carCollecting/webapp/html/loginAReg/register.html";
-	data.registerUrl = "http://127.0.0.1:8080/carCollecting/webapp/html/loginAReg/register.html";
+	//data.registerUrl = "http://192.168.31.254:8020/carCollecting/webapp/html/loginAReg/register.html";
+	//data.registerUrl = "http://47.105.71.191:80/carCollecting/webapp/html/loginAReg/register.html";
+	data.registerUrl = "http://www.zxgouche.cn/carCollecting/webapp/html/loginAReg/register.html";
 	data.userId =userInfo.id;
 	data.phone =userInfo.loginName;
 	console.log(data);

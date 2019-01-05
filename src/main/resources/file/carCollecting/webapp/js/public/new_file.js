@@ -3,9 +3,11 @@
 	var url="http://47.105.71.191:8080";
 	//var url="http://47.105.71.191:8081";
 	//图片路径
-	var img_url="http://47.105.71.191:8081";
+	//var img_url="http://47.105.71.191:8081";
+	var img_url="http://47.105.71.191:80";
     //	登陆地址地址
-	var loginUrl = img_url+"carCollecting/webapp/html/loginAReg/login.html";
+	//var loginUrl = url+"/carCollecting/webapp/html/loginAReg/login.html";
+	var loginUrl = "http://www.zxgouche.cn/carCollecting/webapp/html/loginAReg/login.html";
 	
 	var userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 	if(userInfo == undefined||userInfo == ""||userInfo == null){

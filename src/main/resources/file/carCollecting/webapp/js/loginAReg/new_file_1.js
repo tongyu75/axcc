@@ -1,9 +1,11 @@
 
 	//服务器路径
 	var url="http://47.105.71.191:8080";
-	//var url="http://47.105.71.191:8081";
+	//var url="http://47.105.71.191:80";
 	//图片路径
-	var img_url="http://47.105.71.191:8081";
+	//var img_url="http://47.105.71.191:8081";
+	var img_url="http://47.105.71.191:80";
+	
 
 //	操作才有
 	function Errfun1(err){

@@ -43,11 +43,7 @@ $(function(){
 	});*/
 	
 	var userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-  	if(userInfo.image == "" || userInfo.image == null || userInfo.image == undefined){
-		$(".tx_li").attr("src","../../img/my/huiyuanh.png");
-	}else{
-		$(".tx_li").attr("src",img_url+userInfo.image);
-	}
+  
 	var sex="";
 	if(userInfo.sex =="1"&&userInfo.sex!=null&&userInfo.sex!=""){
 		sex="男"
