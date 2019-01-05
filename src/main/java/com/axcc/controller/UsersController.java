@@ -801,7 +801,7 @@ public class UsersController {
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bean = new BusinessUser();
-        bean.setBuyStatus(1);
+        bean.setBuyStatus(0);
         if(null != buyType && buyType != 0){
             bean.setBuyType(buyType);
         }
