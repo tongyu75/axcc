@@ -1130,7 +1130,7 @@ public class UsersController {
         cal.setTime(new Date());
         int day = cal.get(Calendar.DAY_OF_MONTH);
         // TODO 为了测试 先注释掉
-        /*if (day == 5) {*/
+        //if (day == 5) {
             // 判断是否重复提交
             MoneyApply bean = new MoneyApply();
             bean.setUserId(agentId);
@@ -1142,6 +1142,7 @@ public class UsersController {
                 MoneyApply moneyApply = new MoneyApply();
                 // 业绩奖
                 Map<String,Object> mp = agentShareService.sumAgentMoney(agentId);
+                Double sumApplyMoney = (Double)mp.get("sumMoney"); //代理员业绩奖
                 Double sumMoney = (Double)mp.get("sumMoney")*0.85; //代理员申请提现收取15%手续费
                 // 如果业绩奖为0则不允许进行提现操作
                 if (sumMoney.compareTo(0.0) == 1) {
@@ -1162,6 +1163,15 @@ public class UsersController {
                     agentShare.setApplyStatus(1);
                     agentShareService.updateAgentShareByAgentId(agentShare);
                     result = BaseResult.checkResult(value);
+                    if (value == 1) {
+                        result.put("sumShareMoney",sumApplyMoney); //业绩奖
+                        result.put("realShareMoney",sumMoney); //实际提现金额,去掉15%手续费
+                        result.put("code", BaseResult.SUCCESS_CODE);
+                        result.put("msg", BaseResult.SUCCESS_MSG);
+                    }else{
+                        result.put("code", BaseResult.FAIL_CODE);
+                        result.put("msg", BaseResult.FAIL_MSG);
+                    }
                 } else {
                     result.put("code", "4");
                     result.put("msg", "业绩奖为0.00，不允许进行提现");
@@ -1423,6 +1433,7 @@ public class UsersController {
                 //int countLevel1 = userRelateService.countLevel1(userId);
                 // 分享奖
                 Map<String,Object> mp = userRelateService.sumShareMoney(userId);
+                Double sumApplyMoney = (Double)mp.get("sumMoney"); //会员分享奖
                 Double sumMoney = (Double)mp.get("sumMoney")*0.88; //会员申请收取12%手续费
                 // 如果业绩奖为0则不允许进行提现操作
                 if (sumMoney.compareTo(0.0) == 1) {
@@ -1457,9 +1468,9 @@ public class UsersController {
                                 return result;
                             }
                         }
-                        Map<String,Object> lstMap = userRelateService.sumShareMoney(userId);
-                        result.put("sumShareMoney",lstMap.get("sumMoney")); //分享奖
-                        result.put("realShareMoney",(Double)lstMap.get("sumMoney")*0.88); //实际提现金额
+                        //Map<String,Object> lstMap = userRelateService.sumShareMoney(userId);
+                        result.put("sumShareMoney",sumApplyMoney); //分享奖
+                        result.put("realShareMoney",sumMoney); //实际提现金额,去掉12%手续费
                         result.put("code", BaseResult.SUCCESS_CODE);
                         result.put("msg", BaseResult.SUCCESS_MSG);
                     } else {

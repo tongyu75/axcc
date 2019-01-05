@@ -141,14 +141,22 @@
     where agent_id=#{agentId,jdbcType=INTEGER} AND apply_status = 0 AND period_diff(date_format(now(),'%Y%m'), date_format(create_date,'%Y%m')) = 1
   </update>
   <select id="sumAgentShareMoney" parameterType="java.lang.Integer" resultType="Map">
-    SELECT IF(SUM(agent_money) IS NULL, 0, SUM(agent_money)) * 0.05 AS sumMoney
-    FROM agent_share
-    WHERE agent_id = #{agentId,jdbcType=INTEGER} AND apply_status = 0 AND period_diff(date_format(now(),'%Y%m'), date_format(create_date,'%Y%m')) = 1
+    SELECT IF(SUM(A.agent_money) IS NULL, 0, SUM(A.agent_money)) * 0.05 AS sumMoney
+    FROM agent_share A
+    INNER JOIN users B ON A.agent_id = B.id
+    INNER JOIN users C ON A.user_id = C.id
+    WHERE A.agent_id = #{agentId,jdbcType=INTEGER}
+    AND A.apply_status = 0
   </select>
   <select id="sumAgentMoney" parameterType="java.lang.Integer" resultType="Map">
-    SELECT IF(SUM(agent_money) IS NULL, 0, SUM(agent_money)) * 0.05 AS sumMoney
-    FROM agent_share
-    WHERE agent_id = #{agentId,jdbcType=INTEGER} AND apply_status = 0 AND period_diff(date_format(now(),'%Y%m'), date_format(create_date,'%Y%m')) = 1
+    SELECT IF(SUM(A.agent_money) IS NULL, 0, SUM(A.agent_money)) * 0.05 AS sumMoney
+    FROM
+	  agent_share A
+    INNER JOIN users B ON A.agent_id = B.id
+    INNER JOIN users C ON A.user_id = C.id
+    WHERE A.agent_id = #{agentId,jdbcType=INTEGER}
+    AND A.apply_status = 0
+    AND period_diff(date_format(now(),'%Y%m'), date_format(A.create_date,'%Y%m')) = 1
   </select>
   <select id="listAgentShareByAgentId" parameterType="java.lang.Integer" resultType="Map">
     SELECT
@@ -167,7 +175,7 @@
 	  agent_share A
     INNER JOIN users B ON A.agent_id = B.id
     INNER JOIN users C ON A.user_id = C.id
-    WHERE A.agent_id = #{agentId,jdbcType=INTEGER} AND period_diff(date_format(now(),'%Y%m'), date_format(A.create_date,'%Y%m')) = 1
+    WHERE A.agent_id = #{agentId,jdbcType=INTEGER}/* AND period_diff(date_format(now(),'%Y%m'), date_format(A.create_date,'%Y%m')) = 1*/
     ORDER BY
       A.apply_status ASC,
       A.create_date DESC
