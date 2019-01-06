@@ -542,7 +542,7 @@ public class UsersController {
     }
 
     /**
-     * 根据用户手机号删除
+     * 根据用户手机号删除listApply
      */
     @RequestMapping(value = "delUserByLoginName",method = RequestMethod.DELETE)
     public Map<String,Object> delUserByLoginName(
@@ -1208,13 +1208,13 @@ public class UsersController {
         //获取优惠券状态，查看用户是否获取过优惠券/是否已过期/是否已使用
         Voucher vou = new Voucher();
         vou.setUserId(userId);
-        vou.setIsDelete(0);
+        //vou.setIsDelete(0);
         List<Voucher> listVou = voucherService.listVoucherByBean(vou);
         int count = 0;
         //用户有优惠券，且优惠券都是 “未使用且已过期” 状态，则发放优惠券
         if( listVou.size()>0 ){
             for(Voucher vouche : listVou){
-                if(2 == vouche.getVoucherStatus()){
+                if(3 == vouche.getVoucherStatus() || 2 == vouche.getVoucherStatus()){
                     count++;
                 }
             }

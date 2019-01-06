@@ -71,6 +71,8 @@ public class VoucherController {
         //获取优惠券
         Voucher voucher = new Voucher();
         voucher.setUserId(userId);
+        voucher.setVoucherStatus(1); //未使用且未过期
+        voucher.setIsDelete(0); //未删除
         List<Voucher> vou = voucherService.listVoucherByBean(voucher);
         result.put("msg", BaseResult.SUCCESS_MSG);
         result.put("code", BaseResult.SUCCESS_CODE);
