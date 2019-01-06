@@ -318,7 +318,7 @@
     </where>
   </select>
   <select id="listMoneyApplyForManager" parameterType="com.axcc.model.MoneyApply" resultType="Map">
-    select ma.id AS id, ma.user_id AS userId, ma.apply_money AS applyMoney,
+    select ma.id AS id, ma.user_id AS userId, ma.apply_money AS applyMoney,u.login_name AS loginName,
     DATE_FORMAT(
           ma.apply_time,
           '%Y-%m-%d %H:%i:%s'

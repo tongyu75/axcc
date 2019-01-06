@@ -1174,7 +1174,7 @@ public class UsersController {
                     }
                 } else {
                     result.put("code", "4");
-                    result.put("msg", "业绩奖为0.00，不允许进行提现");
+                    result.put("msg", "上个月业绩奖为0.00，无法进行提现");
                 }
             }else{
                 result.put("code", "3");
