@@ -95,7 +95,7 @@ $(function() {
 		var data1 = {};
 		data1.userId = JSON.parse(sessionStorage.getItem('userInfo')).id;
 		//data1.userId = "33";
-		$.ajax({
+		/*$.ajax({
 			type:"post",
 			url:url+"/countLevel1",
 			data:data1,
@@ -119,7 +119,7 @@ $(function() {
 			error:function(){
 					Errfun3();
 			}
-		})
+		})*/
 		//1代理员；2普通会员
 		var dataT = {};
 		dataT.userId = JSON.parse(sessionStorage.getItem('userInfo')).id;
@@ -136,10 +136,9 @@ $(function() {
 				var resultData = result1;
 				if(resultData.msg == "SUCCESS") {	
 					   // console.log(resultData.info);
-					    $(".account_jf").html($(".balance").html());
-						//$(".balance_jf").html($(".balance").html());					
-						//$(".rate_jf").html($(".balance").html());
-						$(".account_jf").html($(".balance").html());
+					    $(".account_jf").html(resultData.sumShareMoney);
+						$(".account_tx").html(resultData.realShareMoney);
+						$(".balance").html("0.00元");					
 						$("#aaa").css("display", "block");
 	                 	$("#ddd").css("display", "block");
 				} else if(resultData.code=="2"){

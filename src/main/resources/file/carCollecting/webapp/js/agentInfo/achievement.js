@@ -113,11 +113,11 @@ $(function(){
 				console.log(result1);
 				var resultData = result1;
 				if(resultData.msg == "SUCCESS") {	
-					   // console.log(resultData.info);
-					    $(".account_jf").html($(".balance").html());
-						//$(".balance_jf").html($(".balance").html());					
-						//$(".rate_jf").html($(".balance").html());
-						$(".account_jf").html($(".balance").html());
+					   console.log(resultData.sumShareMoney);
+					    $(".account_jf").html(resultData.sumShareMoney);
+						$(".account_tx").html(resultData.realShareMoney);
+						var yj_num =parseFloat($(".balance").html())-parseFloat(resultData.sumShareMoney)+"元"
+						$(".balance").html(yj_num);							
 						$("#aaa").css("display", "block");
 	                 	$("#ddd").css("display", "block");
 				} else if(resultData.code=="2"){
