@@ -47,7 +47,8 @@ $(function(){
 					console.log(resultData.info);
 					for(var i in resultData.info){
 						var data = resultData.info[i];
-						var userName = data.userName.substr(0,1)+"**";
+						//var userName = data.userName.substr(0,1)+"**";
+						var userName = data.userName;
 						var waitNum = '';
 						if(data.waitNum!=null&&data.waitNum!=''){
 							 waitNum=data.waitNum;						  

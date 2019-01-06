@@ -33,16 +33,16 @@ $(function(){
 			crossDomain: true,
 			xhrFields: {withCredentials: true},
 			success:function(result1){
-				console.log(result1);
+			//	console.log(result1);
 				var resultData = result1;	
 				if(resultData.msg =="SUCCESS"){					
 					//会员列表
 					var html="";
 					pageCur = page;
-					console.log(resultData.info);
+				//	console.log(resultData.info);
 					for(var i in resultData.info){
 						var data = resultData.info[i];
-						var userName = data.userName.substr(0,1)+"**";
+						var userName = data.userName;
 						var parentId = '';
 						if(data.parentId!=null&&data.parentId!=''){
 							 parentId=data.parentId.substr(0,4)+"**"+data.parentId.substr(-2);						  
@@ -53,7 +53,7 @@ $(function(){
 						}
 							html += '<tr><td>'+userName+'</td><td>'+userPhone+'</td><td>'+parentId+'</td>';
 							html += '<td><button type="button" data="'+data.loginName+'" class="gbtn del_btn">删除</button>';
-							html += '<button type="button" data-userName="'+data.userName+'" data-userPhone="'+data.loginName+'"  data-card="'+data.card+'" data-status="'+data.buyStatus+'" data="'+data.loginName+'" class="gbtn det_btn">详情</button></td></tr>';						
+							html += '<button type="button" data-userName="'+data.userName+'" data-userPhone="'+data.loginName+'" data-parentId="'+data.parentId+'"  data-card="'+data.card+'" data-status="'+data.buyStatus+'" data="'+data.loginName+'" class="gbtn det_btn">详情</button></td></tr>';						
 					}
 			        $(".show_List").html(html);
 			        var pageTotal = result1.total;
@@ -68,12 +68,13 @@ $(function(){
 					$(".det_btn").on("click",function(){
 							var loginName = $(this).attr("data");
 							var userName1 = $(this).parent().parent().find("td").eq(2).text()
-							console.log(userName1);
-							console.log(loginName);
-							console.log($(this).attr("data-status"));
+						//	console.log(userName1);
+						//	console.log(loginName);
+						//	console.log($(this).attr("data-status"));
 							$("#agentName").html($(this).attr("data-userName"));
 							$("#agentPhone").html($(this).attr("data-userPhone"));
 							$("#agentCode").html($(this).attr("data-card"));
+							$("#parentPhone").html($(this).attr("data-parentId"));
 							$("#agentPay").html($(this).attr("data-status"));
 							
 							/*var data={};
