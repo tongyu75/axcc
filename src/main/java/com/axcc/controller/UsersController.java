@@ -1017,6 +1017,8 @@ public class UsersController {
                 usersRelate.setCheckTime(bean.getCheckTime());
                 // 会员付款时间
                 usersRelate.setPayTime(bean.getPayTime());
+                //查询我的分享奖需要这个值为1
+                usersRelate.setSearchType(1);
                 int val = userRelateService.updateUserRelateForBean(usersRelate);
                 if (val == 1) {
                     result.put("code", BaseResult.SUCCESS_CODE);
@@ -1120,7 +1122,7 @@ public class UsersController {
                 MoneyApply moneyApply = new MoneyApply();
                 // 业绩奖
                 Map<String,Object> mp = agentShareService.sumAgentMoney(agentId);
-                Double sumMoney = (Double)mp.get("sumMoney")*0.15; //代理员申请提现收取12%手续费
+                Double sumMoney = (Double)mp.get("sumMoney")*0.85; //代理员申请提现收取15%手续费
                 // 如果业绩奖为0则不允许进行提现操作
                 if (sumMoney.compareTo(0.0) == 1) {
                     moneyApply.setLevel1Count(0); //代理员为了计算方便，设置为0，可以直接累加结果
@@ -1398,18 +1400,18 @@ public class UsersController {
                 // 将代理员业务表中信息的提现状态变为已提现
                 MoneyApply moneyApply = new MoneyApply();
                 // 直推会员人数
-                int countLevel1 = userRelateService.countLevel1(userId);
+                //int countLevel1 = userRelateService.countLevel1(userId);
                 // 分享奖
                 Map<String,Object> mp = userRelateService.sumShareMoney(userId);
-                Double sumMoney = (Double)mp.get("sumMoney")*0.1; //会员申请收取10%手续费
+                Double sumMoney = (Double)mp.get("sumMoney")*0.88; //会员申请收取12%手续费
                 // 如果业绩奖为0则不允许进行提现操作
                 if (sumMoney.compareTo(0.0) == 1) {
                     // 进行提现申请时，如果直推会员达到20人就奖励5000
-                    if (countLevel1 >= 20) {
+                    /*if (countLevel1 >= 20) {
                         sumMoney = sumMoney + 5000f;
                         // 1代表直推人数超过20人状态标志
                         moneyApply.setLevel1Count(1);
-                    }
+                    }*/
                     moneyApply.setUserId(userId);
                     moneyApply.setApplyMoney(sumMoney.floatValue());
                     moneyApply.setApplyTime(new Date());
