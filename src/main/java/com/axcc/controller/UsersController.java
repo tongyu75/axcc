@@ -833,7 +833,6 @@ public class UsersController {
         Business bean = new Business();
         bean.setId(businessId);
         bean.setBuyStatus(2);
-        bean.setIsDelete(1);
         int value = businessService.updateBusinessForBean(bean);
         result = BaseResult.checkResult(value);
         logger.info("takeCar------------end");
@@ -1121,7 +1120,7 @@ public class UsersController {
                 MoneyApply moneyApply = new MoneyApply();
                 // 业绩奖
                 Map<String,Object> mp = agentShareService.sumAgentMoney(agentId);
-                Double sumMoney = (Double)mp.get("sumMoney")*0.12; //代理员申请提现收取12%手续费
+                Double sumMoney = (Double)mp.get("sumMoney")*0.15; //代理员申请提现收取12%手续费
                 // 如果业绩奖为0则不允许进行提现操作
                 if (sumMoney.compareTo(0.0) == 1) {
                     moneyApply.setLevel1Count(0); //代理员为了计算方便，设置为0，可以直接累加结果
