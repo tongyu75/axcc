@@ -34,7 +34,7 @@
 						$(".pd_btn").prop("disabled",false);
 						return false;
 					}
-					if(buyType == ""){
+					if(buyType == 0 || buyType == ""){
 						alert("请选择分类");
 						$(".pd_btn").prop("disabled",false);
 						return false;
