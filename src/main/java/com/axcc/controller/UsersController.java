@@ -1459,7 +1459,7 @@ public class UsersController {
                         }
                         Map<String,Object> lstMap = userRelateService.sumShareMoney(userId);
                         result.put("sumShareMoney",lstMap.get("sumMoney")); //分享奖
-                        result.put("realShareMpney",(Double)lstMap.get("sumMoney")*0.88); //实际提现金额
+                        result.put("realShareMoney",(Double)lstMap.get("sumMoney")*0.88); //实际提现金额
                         result.put("code", BaseResult.SUCCESS_CODE);
                         result.put("msg", BaseResult.SUCCESS_MSG);
                     } else {
