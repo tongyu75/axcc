@@ -18,7 +18,7 @@ $(function() {
 			crossDomain: true,
 			xhrFields: {withCredentials: true},
 			success: function(result1) {
-				console.log(result1);
+				//console.log(result1);
 				var resultData = result1;
 				if(resultData.msg == "SUCCESS") {
 					var dataInfo = resultData.info;
@@ -132,7 +132,7 @@ $(function() {
 			crossDomain: true,
 			xhrFields: {withCredentials: true},
 			success: function(result1) {
-				console.log(result1);
+				//console.log(result1);
 				var resultData = result1;
 				if(resultData.msg == "SUCCESS") {	
 					   // console.log(resultData.info);

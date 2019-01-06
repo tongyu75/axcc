@@ -17,7 +17,7 @@ $(function(){
 			crossDomain: true,
 			xhrFields: {withCredentials: true},
 			success:function(result1){
-				console.log(result1);
+				//console.log(result1);
 				var resultData = result1;	
 				if(resultData.msg =="SUCCESS"){			
 					    var  dataInfo =resultData.info;
@@ -110,10 +110,10 @@ $(function(){
 			crossDomain: true,
 			xhrFields: {withCredentials: true},
 			success: function(result1) {
-				console.log(result1);
+				//console.log(result1);
 				var resultData = result1;
 				if(resultData.msg == "SUCCESS") {	
-					   console.log(resultData.sumShareMoney);
+					   //console.log(resultData.sumShareMoney);
 					    $(".account_jf").html(resultData.sumShareMoney);
 						$(".account_tx").html(resultData.realShareMoney);
 						var yj_num =parseFloat($(".balance").html())-parseFloat(resultData.sumShareMoney)+"元"
