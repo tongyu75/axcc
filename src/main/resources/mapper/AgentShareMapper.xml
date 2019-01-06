@@ -187,6 +187,6 @@
 	  agent_share A
     INNER JOIN users B ON A.agent_id = B.id
     INNER JOIN users C ON A.user_id = C.id
-    WHERE A.agent_id = #{agentId,jdbcType=INTEGER} AND period_diff(date_format(now(),'%Y%m'), date_format(A.create_date,'%Y%m')) = 1
+    WHERE A.agent_id = #{agentId,jdbcType=INTEGER}/* AND period_diff(date_format(now(),'%Y%m'), date_format(A.create_date,'%Y%m')) = 1/*
   </select>
 </mapper>
