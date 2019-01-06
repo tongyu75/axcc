@@ -28,9 +28,9 @@ $(function(){
 					
 					html += '<div class="to-user-1"><div class="money-1" style="color:#fff;">￥'+data.info[i].voucherMoney+'</div>';
 					html += '<div class="money-2" align="center" style="color:#fff;">抵用券</div></div>';
-					html += '<div class="to-user-2"><div class="money-3" style="color:#fff;">爱心筹车购车基金</div>';
+					html += '<div class="to-user-2"><div class="money-3" style="color:#fff;">众鑫购车购车基金</div>';
 					var voucherTime=data.info[i].voucherTime.substr(0,10);
-					html += '<div class="money-4" >'+voucherTime+'</div><span class="lineM">—</span>';
+					html += '<div class="money-4" >'+voucherTime+'</div><span class="lineM">到</span>';
 					html += '<div class="money-4">'+data.info[i].voucherFinish.substr(0,10)+'</div></div>';
 					html += '<div class="to-user-3"></div>';
 					html += '<div class="to-user-4"><span>'+userInfo.userName+'</span></div></div>';

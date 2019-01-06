@@ -34,7 +34,7 @@ public class VoucherController {
     /**
      * 根据用户ID查询用户可用的优惠券，缴费时使用本方法
      */
-    @RequestMapping(value = "getUseVoucherInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/getUseVoucherInfo",method = RequestMethod.POST)
     public Map<String,Object> getUseVoucherInfo(@RequestParam(value = "userId") int userId) {
         logger.info("getVoucherByBean-----------start");
         //返回类型
@@ -62,7 +62,7 @@ public class VoucherController {
      * 根据用户ID查询优惠券列表
      *
      * */
-    @RequestMapping(value = "getListVoucherByUserId",method = RequestMethod.POST)
+    @RequestMapping(value = "/getListVoucherByUserId",method = RequestMethod.POST)
     public Map<String,Object> getVoucherByUserId(@RequestParam(value = "userId") int userId){
         logger.info("getListVoucherByUserId-----------start");
 

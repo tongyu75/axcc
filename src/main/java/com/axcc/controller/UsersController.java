@@ -1246,7 +1246,7 @@ public class UsersController {
         //发放优惠券
         Voucher bean = new Voucher();
         bean.setUserId(userId);
-        bean.setVoucherMoney((2000f*buyType)); //优惠券金额
+        bean.setVoucherMoney((5000f*buyType)); //优惠券金额
         bean.setVoucherStatus(1);
         bean.setVoucherTime(payTime);
         bean.setVoucherFinish(DateUtils.addDays(payTime, 30)); //获取到期时间，有效期30天
