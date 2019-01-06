@@ -268,7 +268,7 @@
   </insert>
   <select id="listShareMoney" parameterType="java.lang.Integer" resultType="Map">
     SELECT
-      B.user_name userName,
+      C.user_name userName,
       B.login_name loginName,
       CASE A.`level` WHEN 1 THEN A.buy_money*0.05 ELSE A.buy_money*0.03 END buyMoney,
       DATE_FORMAT(
@@ -280,6 +280,7 @@
     FROM
 	  users_relate A
     INNER JOIN users B ON A.user_id = B.id
+    INNER JOIN users C ON A.child_id = C.id
     WHERE A.`level` in (1,2) AND A.search_type = 1 AND A.user_id = #{userId,jdbcType=INTEGER}
     ORDER BY
       A.apply_status ASC,
