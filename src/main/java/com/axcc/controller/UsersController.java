@@ -460,6 +460,26 @@ public class UsersController {
         return result;
     }
     /**
+     * 会员登录：会员申请排队时，判断是否有未出车的申请，如果有则不能进行申请排队，否则可以申请
+     *
+     * */
+    @RequestMapping(value="/getTakeCareInfo",method = RequestMethod.POST)
+    public Map<String,Object> getTakeCareInfo(HttpServletRequest request, @RequestParam(value = "userId", required = true) Integer userId){
+        logger.info("getTakeCareInfo---start");
+        // 返回值
+        Map<String,Object> result = new HashMap<String, Object>();
+        BusinessUser bUser = businessService.getBusinessUsersByUserId(userId); //根据用户ID获取用户及排队信息
+        if (bUser == null || bUser.getBuyStatus() == 2) {
+            result.put("info", null);
+        } else {
+            result.put("info", bUser);
+        }
+        result.put("code", BaseResult.SUCCESS_CODE);
+        result.put("msg", BaseResult.SUCCESS_MSG);
+        logger.info("getTakeCareInfo---end");
+        return result;
+    }
+    /**
      * 获取会员列表，可以按登录名条件查询
      *
      */

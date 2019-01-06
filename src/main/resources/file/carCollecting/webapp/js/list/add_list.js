@@ -13,7 +13,7 @@
 		$(".pd_btn").prop("disabled",true);
 		$.ajax({
 			type: "post",
-			url: url+"/getMemberInfo",
+			url: url+"/getTakeCareInfo",
 			data: data1,
 			async: true,
 			crossDomain: true,
