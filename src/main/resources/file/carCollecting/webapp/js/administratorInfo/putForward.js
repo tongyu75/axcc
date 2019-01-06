@@ -81,6 +81,7 @@ $(function(){
 		console.log(status)
 		console.log(e)
 		$("#userName").html("");
+		$("#loginName").html("");
 						$("#userStatus").html("");
 						$("#applyMoney").html("");
                         $("#checkStatus").html("");
@@ -106,7 +107,7 @@ $(function(){
 										var dataInfo = data.info;
 										//var  proxyName =dataInfo.userName.substr(0,1)+"**";
 										var  userName =dataInfo.userName;
-																	            
+										var  loginName= dataInfo.loginName;       
 										var applyMoney = '0';
 										if(dataInfo.applyMoney!=null&&dataInfo.applyMoney!=''){
 											 applyMoney=dataInfo.applyMoney;						  
@@ -131,6 +132,7 @@ $(function(){
 										}
 																          						    							         
 										$("#userName").html(userName);
+										$("#loginName").html(loginName);
 										$("#userStatus").html(userStatus);
 										$("#applyMoney").html(applyMoney);									
 										$("#checkStatus").html(checkStatus);
