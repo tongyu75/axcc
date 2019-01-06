@@ -1451,14 +1451,15 @@ public class UsersController {
                             // 提现状态(0:未提现 1:已提现)
                             param.setApplyStatus(1);
                             int val = userRelateService.updateUserRelateForBean(param);
-                            if (val == 1) {
-                                result.put("code", BaseResult.SUCCESS_CODE);
-                                result.put("msg", BaseResult.SUCCESS_MSG);
-                            } else {
+                            if (val != 1) {
                                 result.put("code", BaseResult.FAIL_CODE);
                                 result.put("msg", BaseResult.FAIL_MSG);
+                                return result;
                             }
                         }
+                        Map<String,Object> lstMap = userRelateService.sumShareMoney(userId);
+                        result.put("sumShareMoney",lstMap.get("sumMoney")); //分享奖
+                        result.put("realShareMpney",(Double)lstMap.get("sumMoney")*0.88); //实际提现金额
                         result.put("code", BaseResult.SUCCESS_CODE);
                         result.put("msg", BaseResult.SUCCESS_MSG);
                     } else {
