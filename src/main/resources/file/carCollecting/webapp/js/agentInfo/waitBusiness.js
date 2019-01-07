@@ -7,7 +7,7 @@ $(function(){
 	//查询按钮
 	$("#searchBtn").on('click',function(){
 		var searchText = $("#searchText").val();
-		console.log(searchText);
+		//console.log(searchText);
 		var data={};
 		data.loginName = searchText;
 		data.pageNum = pageCur;
@@ -19,7 +19,7 @@ $(function(){
 	//显示会员列表
 	function showAgent(page){
 		var searchText = $("#searchText").val();
-		console.log(searchText);
+		//console.log(searchText);
 		var data={};
 		data.phone = searchText;
 		data.pageNum = page;
@@ -32,14 +32,14 @@ $(function(){
 			crossDomain: true,
 			xhrFields: {withCredentials: true},
 			success:function(result1){
-				console.log(result1);
+				//console.log(result1);
 				var resultData = result1;	
 				if(resultData.msg =="SUCCESS"){		
 					
 					//会员列表
 					var html="";
 					pageCur = page;
-					console.log(resultData.info);
+					//console.log(resultData.info);
 					var array=[];
 					for(var i in resultData.info){
 					  	
@@ -80,211 +80,6 @@ $(function(){
 								backFn: function(p) {}
 						});
 					
-			      
-			        
-				     //会员办理弹出框
-					$(".det_btn").on("click",function(){
-						   
-						   //初始化数据
-						    $("#voucherMoneyHove").css("display","none");
-						    $("#agentName").html("");
-							$("#agentPhone").html("");
-							$("#agentCode").html("");										
-							$(" #agentbuyType").html("");
-							$(" #agentapplyTime").html("");
-							$(".agentInfo .message_s_btn").attr("data-id","");
-							
-							var delId = $(this).attr("data");
-							console.log(delId);
-							var data={};
-							data.id = delId;
-							$.ajax({
-								type:"post",
-								url:url+"/businessDetail",
-								data:data,
-								async:true,
-								crossDomain: true,
-		                     	xhrFields: {withCredentials: true},
-								success:function(result){
-									var data=result;
-									if(data.msg =="SUCCESS"){
-										console.log(data);
-										var dataInfo = data.result;
-										var  proxyName =dataInfo.userName.substr(0,1)+"**";
-										var userPhone = '';
-										if(dataInfo.loginName!=null&&dataInfo.loginName!=''){
-											 userPhone=dataInfo.loginName.substr(0,4)+"**"+dataInfo.loginName.substr(-2);						  
-										}
-							            var card = '';
-										if(dataInfo.card!=null&&dataInfo.card!=''&&dataInfo.card!='未认证'){
-											 card=dataInfo.card.substr(0,4)+"**"+dataInfo.card.substr(-4);						  
-										}else if(dataInfo.card=='未认证'){
-											 card=dataInfo.card;
-										}
-										var buyMoney = '';
-										if(dataInfo.buyMoney!=null&&dataInfo.buyMoney!=''){
-											 buyMoney=dataInfo.buyMoney+"(元)";						  
-										}
-										var  buyType='';
-										if(dataInfo.buyType==1){
-											    buyType ='十万车型';
-										}else if(dataInfo.buyType==2){
-											    buyType ='二十万车型';
-										}else if(dataInfo.buyType==3){
-											    buyType ='三十万车型';
-										}else if(dataInfo.buyType==4){
-											    buyType ='四十万车型';
-										}else if(dataInfo.buyType==5){
-											    buyType ='五十万车型';
-										}
-										var applyTime = '';
-										if(dataInfo.applyTime!=null&&dataInfo.applyTime!=''){
-											 applyTime=dataInfo.applyTime.substr(0,10);						  
-										}
-										
-							          							    							         
-										$("#agentName").html(proxyName);
-										$("#agentPhone").html(userPhone);
-										$("#agentCode").html(card);
-										//$("#agentMoney").html(buyMoney);
-										$(" #agentbuyType").html(buyType);
-										$(" #agentapplyTime").html(applyTime);
-										$(".agentInfo .message_s_btn").attr("data-id",delId);
-									}
-								},
-								error:function(){
-									Errfun3();
-								}
-							});
-							//查询优惠券
-							var data1={};
-							data1.userId = delId;
-							$.ajax({
-								type:"post",
-								url:url+"/getUseVoucherInfo",
-								data:data1,
-								async:true,
-								crossDomain: true,
-			                    xhrFields: {withCredentials: true},
-								success:function(result){
-								console.log(result);
-								 if(result.msg =="SUCCESS"){
-									if(result.info!=null&&result.info!=""){
-											useMoney = result.info.voucherMoney;
-											//voucherId = result.info.voucherId;
-											$("#voucherMoneyHove").css("display","block");
-											$("#voucherMoneyNo").css("display","none");
-											$("#useMoney").html(useMoney);
-											$("#useMoney").attr("data-id",result.info.id);
-									}else{
-										$("#voucherMoneyHove").css("display","none");
-										$("#voucherMoneyNo").css("display","block");
-									}
-								  }
-								},
-								error:function(){
-									Errfun3();
-								}
-							});
-							$("#popBox").css("display","block");
-							$("#popLayer").css("display","block");
-						});
-						// 返回
-						$(".agentInfo .message_btn").on("click",function(){
-							$("#popBox").css("display","none");
-							$("#popLayer").css("display","none");
-						})
-						//办理
-						$(".agentInfo .message_s_btn").on("click",function(){
-							var delId = $(".agentInfo .message_s_btn").attr("data-id");
-							var data={};
-							var dataMoney={};
-							//优惠券
-							var useMoney="";
-							var voucherId="";
-		                    data.userId = delId;
-		                    console.log(data);
-		                                dataMoney.id = delId;
-										//dataMoney.useMoney = useMoney;
-										dataMoney.buyMoney = $("#buyMoney").val();
-										var  voucherUsed = 0;
-										var voucherUsedC =$("input[name='radio1']:checked").val()
-								
-										if(voucherUsedC!=undefined&&voucherUsedC!=null&&voucherUsedC!=''){
-											voucherUsed = $("input[name='radio1']:checked").val();
-										}
-										dataMoney.voucherUsed = voucherUsed;
-										if(dataMoney.voucherUsed ==1){
-											dataMoney.voucherId = $("#useMoney").attr("data-id");
-										}
-										dataMoney.agentId = JSON.parse(sessionStorage.getItem('userInfo')).id
-										//代理员 办理缴费业务
-										 $.ajax({
-											type:"post",
-											url:url+"/updateBuyMoney",
-											data:dataMoney,
-											async:true,
-											crossDomain: true,
-			                                xhrFields: {withCredentials: true},
-											success:function(result){
-											console.log(result);
-												if(result.msg =="SUCCESS"){
-													showAgent(1);
-													alert("办理成功")
-													$("#popBox").css("display","none");
-													$("#popLayer").css("display","none");
-												}else{
-													Errfun1(result1.msg);
-												}
-											},
-											error:function(){
-												alert("未知异常");
-											}
-										})
-							 /*$.ajax({
-								type:"post",
-								url:url+"/getUseVoucherInfo",
-								data:data,
-								async:true,
-								success:function(result){
-								console.log(result);
-									if(result.msg =="SUCCESS"){
-										console.log(result)	
-										if(result.info!=null&&result.info!=""){
-											useMoney = result.info.voucherMoney;
-											voucherId = result.info.voucherId;
-										}
-										dataMoney.id = delId;
-										dataMoney.useMoney = useMoney;
-										dataMoney.buyMoney = $("#buyMoney").val();;
-										//代理员 办理缴费业务
-										 $.ajax({
-											type:"post",
-											url:url+"/updateBuyMoney",
-											data:dataMoney,
-											async:true,
-											success:function(result){
-											console.log(result);
-												if(result.msg =="SUCCESS"){
-													showAgent(1);
-													alert("办理成功")
-													$("#popBox").css("display","none");
-													$("#popLayer").css("display","none");
-												}else{
-													Errfun1(result1.msg);
-												}
-											}
-										})
-									}else{
-										Errfun1(result1.msg);
-									}
-								}
-							})*/
-							
-							$("#popBox").css("display","none");
-							$("#popLayer").css("display","none");
-						})
-
 					}else{
 							Errfun1(result1.msg);
 					}
@@ -314,6 +109,176 @@ $(function(){
         }
 		showAgent(page);  
 	})
+    function getUseVoucherInfo(id){
+    	//查询优惠券
+							var data1={};
+							data1.userId = id;
+                            console.log(data1);
+							$.ajax({
+								type:"post",
+								url:url+"/getUseVoucherInfo",
+								data:data1,
+								async:true,
+								crossDomain: true,
+			                    xhrFields: {withCredentials: true},
+								success:function(result){
+								//console.log(result);
+								 if(result.msg =="SUCCESS"){
+									if(result.info!=null&&result.info!=""){
+											var useMoney = result.info.voucherMoney;
+											//voucherId = result.info.voucherId;
+											$("#voucherMoneyHove").css("display","block");
+											$("#voucherMoneyNo").css("display","none");
+											$("#useMoney").html(useMoney);
+											$("#useMoney").attr("data-id",result.info.id);
+									}else{
+										$("#voucherMoneyHove").css("display","none");
+										$("#voucherMoneyNo").css("display","block");
+									}
+								  }
+								},
+								error:function(){
+									Errfun3();
+								}
+							});
+    }
+			      			        
+	//会员办理弹出框
+	$(".car").on("click",".det_btn",function(){
+						   
+		//初始化数据
+		$("#voucherMoneyHove").css("display","none");
+		$("#agentName").html("");
+		$("#agentPhone").html("");
+		$("#agentCode").html("");										
+		$("#agentbuyType").html("");
+		$("#agentapplyTime").html("");
+		$("#buyMoney").val("");
+		$(".agentInfo .message_s_btn").attr("data-id","");
+							
+		var delId = $(this).attr("data");
+		//console.log(delId);
+		var voucherUserId = "";
+		var data={};
+		data.id = delId;
+		$.ajax({
+			type:"post",
+			url:url+"/businessDetail",
+			data:data,
+			async:true,
+			crossDomain: true,
+		    xhrFields: {withCredentials: true},
+			success:function(result){
+				var data=result;
+				if(data.msg =="SUCCESS"){
+					console.log(data);
+					var dataInfo = data.result;					
+					var  proxyName =dataInfo.userName.substr(0,1)+"**";				
+					getUseVoucherInfo(dataInfo.userId)
+					var userPhone = '';
+					if(dataInfo.loginName!=null&&dataInfo.loginName!=''){
+							userPhone=dataInfo.loginName.substr(0,4)+"**"+dataInfo.loginName.substr(-2);						  
+					}
+					var card = '';
+					if(dataInfo.card!=null&&dataInfo.card!=''&&dataInfo.card!='未认证'){
+							card=dataInfo.card.substr(0,4)+"**"+dataInfo.card.substr(-4);						  
+					}else if(dataInfo.card=='未认证'){
+							card=dataInfo.card;
+					}
+					var buyMoney = '';
+					if(dataInfo.buyMoney!=null&&dataInfo.buyMoney!=''){
+							buyMoney=dataInfo.buyMoney+"(元)";						  
+					}
+					var  buyType='';
+					if(dataInfo.buyType==1){
+						    buyType ='十万车型';
+					}else if(dataInfo.buyType==2){
+						    buyType ='二十万车型';
+					}else if(dataInfo.buyType==3){
+						    buyType ='三十万车型';
+					}else if(dataInfo.buyType==4){
+							buyType ='四十万车型';
+					}else if(dataInfo.buyType==5){
+							buyType ='五十万车型';
+					}																														
+					var applyTime = '';
+					if(dataInfo.applyTime!=null&&dataInfo.applyTime!=''){
+							applyTime=dataInfo.applyTime.substr(0,10);						  
+					}															
+					$("#agentName").html(proxyName);
+					$("#agentPhone").html(userPhone);
+					$("#agentCode").html(card);
+					//$("#agentMoney").html(buyMoney);
+					$(" #agentbuyType").html(buyType);
+					$(" #agentapplyTime").html(applyTime);
+					$(".agentInfo .message_s_btn").attr("data-id",delId);		          							    							         
+										
+				}
+			},
+			error:function(){
+					Errfun3();
+			}
+		});
+							
+							$("#popBox").css("display","block");
+							$("#popLayer").css("display","block");
+						});
+						// 返回
+						$(".agentInfo .message_btn").on("click",function(){
+							$("#popBox").css("display","none");
+							$("#popLayer").css("display","none");
+						})
+						//办理
+						$(".agentInfo .message_s_btn").on("click",function(){
+							var delId = $(".agentInfo .message_s_btn").attr("data-id");
+							var data={};
+							var dataMoney={};
+							//优惠券
+							var useMoney="";
+							var voucherId="";
+		                    data.userId = delId;
+		                    //console.log(data);
+		                                dataMoney.id = delId;
+										//dataMoney.useMoney = useMoney;
+										dataMoney.buyMoney = $("#buyMoney").val();
+										var  voucherUsed = 0;
+										var voucherUsedC =$("input[name='radio1']:checked").val()
+								
+										if(voucherUsedC!=undefined&&voucherUsedC!=null&&voucherUsedC!=''){
+											voucherUsed = $("input[name='radio1']:checked").val();
+										}
+										dataMoney.voucherUsed = voucherUsed;
+										if(dataMoney.voucherUsed ==1){
+											dataMoney.voucherId = $("#useMoney").attr("data-id");
+										}
+										dataMoney.agentId = JSON.parse(sessionStorage.getItem('userInfo')).id
+										//代理员 办理缴费业务
+										 $.ajax({
+											type:"post",
+											url:url+"/updateBuyMoney",
+											data:dataMoney,
+											async:true,
+											crossDomain: true,
+			                                xhrFields: {withCredentials: true},
+											success:function(result){
+											//console.log(result);
+												if(result.msg =="SUCCESS"){
+													showAgent(1);
+													alert("办理成功")
+													$("#popBox").css("display","none");
+													$("#popLayer").css("display","none");
+												}else{
+													Errfun1(result1.msg);
+												}
+											},
+											error:function(){
+												alert("未知异常");
+											}
+										})
+							 
+							$("#popBox").css("display","none");
+							$("#popLayer").css("display","none");
+						})
 
     //	取消弹框
 	$(".closeLayer").on("click",function(){
