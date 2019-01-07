@@ -1,0 +1,54 @@
+server:
+  #port: 8798
+  servlet:
+    #contextPath: /axcc
+    session:
+      timeout: PT30M
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  application:
+    name: axcc
+  # mysql-druid
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.105.71.191:3306/axcc?characterEncoding=utf8&useSSL=false
+    username: root
+    password: A2018;axcc*
+    # 初始化大小，最小，最大
+    initialSize: 5
+    minIdle: 5
+    maxIdle: 40
+    maxActive: 40
+    # 配置获取连接等待超时的时间
+    maxWait: 5000
+    # 每次使用连接时进行校验，会影响系统性能。默认为false
+    testOnBorrow: false
+    # 验证使用的SQL语句
+    validationQuery: SELECT 1
+    # 指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除
+    testWhileIdle: true
+    # 每30秒运行一次空闲连接回收器（默认-1）
+    timeBetweenEvictionRunsMillis: 30000
+    # 池中的连接空闲30分钟后被回收（默认30分钟）
+    minEvictableIdleTimeMillis: 1500000
+    # 在每次空闲连接回收器线程(如果有)运行时检查的连接数量（设置为和maxIdle一样）
+    numTestsPerEvictionRun: 40
+  aop:
+    auto: true
+
+## mybatis配置
+mybatis:
+  #mapper.xml所在位置
+  mapper-locations: classpath:mapper/*.xml
+  #实体类所做包
+  type-aliases-package: com.axcc.model
+
+#分页查询
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

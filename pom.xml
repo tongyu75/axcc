@@ -64,7 +64,11 @@
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.0.29</version>
+		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -146,7 +150,68 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<!-- 打包环境配置 -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<profileActive>dev</profileActive>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<includes>
+							<include>application-${profileActive}.yml</include>
+						</includes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>qa</id>
+			<properties>
+				<profileActive>qa</profileActive>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<includes>
+							<include>application-${profileActive}.yml</include>
+						</includes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<profileActive>prod</profileActive>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<includes>
+							<include>application-prod.yml</include>
+						</includes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
+		<!--生成class文件时包含resources下的资源文件-->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -162,18 +227,14 @@
 					<overwrite>true</overwrite>
 				</configuration>
 			</plugin>
+			<!--当有测试类的时候，出现错误开始进行忽略，否则package会不成功<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					&lt;!&ndash; 忽略测试 &ndash;&gt;
+					<skip>true</skip>
+				</configuration>
+			</plugin>-->
 		</plugins>
-		<!--<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					&lt;!&ndash;<include>**/*.properties</include>&ndash;&gt;
-					<include>mapper/*.xml</include>
-				</includes>
-				<filtering>false</filtering>
-			</resource>
-		</resources>-->
 	</build>
-
-
 </project>

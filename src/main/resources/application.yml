@@ -1,33 +1,3 @@
-#目前没有使用这个配置文件，因为24行的配置有问题，导致出现org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): 错误。
 spring:
-  datasource:
-    name: test
-    url: jdbc:mysql://localhost:3306/test
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
-    filters: stat
-    maxActive: 20
-    initialSize: 1
-    maxWait: 60000
-    minIdle: 1
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: select 'x'
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxOpenPreparedStatements: 20
-
-    ## mybatis配置
-    mapperLocations: classpath:mapper/*.xml
-    typeAliasesPackage: com.axcc.model
-
-    #pagehelper分页插件
-    pagehelper:
-      helperDialect: mysql
-      reasonable: true
-      supportMethodsArguments: true
-      params: count=countSql
-      returnPageInfo: check
+  profiles:
+    active: "@profileActive@"
