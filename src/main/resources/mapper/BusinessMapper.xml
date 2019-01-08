@@ -281,6 +281,7 @@
         and A.buy_type = #{buyType,jdbcType=INTEGER}
       </if>
     </where>
+    order by A.wait_num
   </select>
   <select id="listAllUserByBean" parameterType="com.axcc.model.BusinessUser" resultType="Map">
     select U.id uId, U.login_name loginName, U.user_name userName, U.card, U.parent_id parentId,B4.*
