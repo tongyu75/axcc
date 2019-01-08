@@ -469,7 +469,8 @@ public class UsersController {
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bUser = businessService.getBusinessUsersByUserId(userId); //根据用户ID获取用户及排队信息
-        if (bUser == null || bUser.getBuyStatus() == 2) {
+        // 查询不到数据或已经出车或管理员审核未通过，上述的三种状态才允许排队
+        if (bUser == null || bUser.getBuyStatus() == 2|| bUser.getCheckStatus() == 4) {
             result.put("info", null);
         } else {
             result.put("info", bUser);
