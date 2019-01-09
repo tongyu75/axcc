@@ -284,7 +284,8 @@
     order by A.wait_num
   </select>
   <select id="listAllUserByBean" parameterType="com.axcc.model.BusinessUser" resultType="Map">
-    select U.id uId, U.login_name loginName, U.user_name userName, U.card, U.parent_id parentId,B4.*
+    select U.id uId, U.login_name loginName, U.user_name userName, U.card, U.parent_id parentId,
+      U.bank_card,U.bank_addr,B4.*
     from users U
     left join (
         SELECT B3.id, B3.user_id userId, B3.agent_id agentId, B3.admin_id adminId,B3.is_delete isDelete,

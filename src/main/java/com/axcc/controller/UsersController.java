@@ -1131,7 +1131,7 @@ public class UsersController {
         cal.setTime(new Date());
         int day = cal.get(Calendar.DAY_OF_MONTH);
         // TODO 为了测试 先注释掉
-        //if (day == 5) {
+        if (day == 5) {
             // 判断是否重复提交
             MoneyApply bean = new MoneyApply();
             bean.setUserId(agentId);
@@ -1181,10 +1181,10 @@ public class UsersController {
                 result.put("code", "3");
                 result.put("msg", "请不要重复提交申请");
             }
-        /*} else {
+        } else {
             result.put("code", "2");
             result.put("msg", "代理员每月5号才能申请提现");
-        }*/
+        }
 
         logger.info("agentWithdrawCashes---start" + result.toString());
         return result;
@@ -1418,9 +1418,9 @@ public class UsersController {
         // 首先判断提现的时间是否是星期一，如果不是星期一就不能继续提现操作
         Calendar cal= Calendar.getInstance();
         cal.setTime(new Date());
-        /* TODO 临时注释方便测试
+        /* TODO 临时注释方便测试 */
         int week = cal.get(Calendar.DAY_OF_WEEK)-1;
-        if (week == 1) {*/
+        if (week == 1) {
             // 判断是否重复提交
             MoneyApply bean = new MoneyApply();
             bean.setUserId(userId);
@@ -1480,16 +1480,16 @@ public class UsersController {
                     }
                 } else {
                     result.put("code", "4");
-                    result.put("msg", "业绩奖为0.00，不允许进行提现");
+                    result.put("msg", "业绩奖为0.00，无法申请提现");
                 }
             }else{
                 result.put("code", "3");
                 result.put("msg", "请不要重复提交申请");
             }
-        /*} else {
+        } else {
             result.put("code", "2");
-            result.put("msg", "申请提现时间不是星期一，不允许提现");
-        }*/
+            result.put("msg", "申请提现时间不是星期一，无法申请提现");
+        }
 
         logger.info("user---end" + result.toString());
         return result;
