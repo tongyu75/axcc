@@ -1,5 +1,6 @@
 package com.axcc;
 
+import com.axcc.utils.redis.RedisUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,27 +10,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = AxccApplication.class)
 @ActiveProfiles("dev")
-@WebAppConfiguration
-public class AxccApplicationTests {
+@SpringBootTest
+public class RedisTest {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Before
 	public void init() {
-		System.out.println("开始测试-----------------");
+		logger.info("开始测试-----------------");
 	}
+
+	//@Autowired
+	//ShardedJedisPool jedisPool;
 
 	@Test
 	public void test() {
-		System.out.println("测试啦-----------------");
+		logger.info("测试啦-----------------" + RedisUtils.setex("bbb", 10, "2222"));
+		logger.info("测试啦-----------------" + RedisUtils.exists("bbb"));
+		logger.info("测试啦-----------------" + RedisUtils.get("1123"));
 	}
 
 	@After
 	public void after() {
-		System.out.println("测试结束-----------------");
+		logger.info("测试结束-----------------");
 	}
 
 

@@ -38,7 +38,20 @@ spring:
     numTestsPerEvictionRun: 40
   aop:
     auto: true
-
+  # redis
+  redis:
+    database: 0       # Redis数据库索引（默认为0）
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    jedis:
+      pool:
+        max-active: -1   # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1     # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 4      # 连接池中的最大空闲连接
+        min-idle: 1      # 连接池中的最小空闲连接
+        testOnBorrow: true
+    timeout: 4000 # 这里出现红色目前看没有影响
 ## mybatis配置
 mybatis:
   #实体类所做包
