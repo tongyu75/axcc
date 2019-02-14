@@ -44,7 +44,7 @@ $(function(){
 					for(var i in resultData.info){
 					  	
 						var data = resultData.info[i];
-						var userName = data.userName.substr(0,1)+"**";
+						var userName = data.userName;
 						var parentId = '';
 						if(data.parentId!=null&&data.parentId!=''){
 							 parentId=data.parentId.substr(0,4)+"**"+data.parentId.substr(-2);						  

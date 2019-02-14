@@ -887,7 +887,7 @@ public class UsersController {
         // 返回值
         Map<String,Object> result = new HashMap<String, Object>();
         BusinessUser bean = new BusinessUser();
-        if(!"".equals(phone)) {
+        if(!"".equals(phone) || ""!=phone) {
             bean.setLoginName(phone);
         }
         bean.setCheckStatus(1);
