@@ -37,7 +37,9 @@ public interface BusinessService {
 
     /**会员登录，获取所有已排队、出车的用户信息*/
     List<BusinessUser> listBusinessUser(BusinessUser bean, int pageNum, int pageSize);
-
+    /**会员登录，获取所有已排队、出车用户总数*/
+    int countBusinessUserWaitOrOut(BusinessUser bean);
+    /**获取所有排队会员总数*/
     int countBusinessUserByBean(BusinessUser bean);
     /**管理员登录，获取会员申请列表*/
     List<BusinessUser> listApplyUserByBean(BusinessUser bean, int pageNum, int pageSize);

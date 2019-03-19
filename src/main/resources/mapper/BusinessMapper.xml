@@ -276,7 +276,7 @@
     A.check_time, A.pay_time, A.apply_time, A.is_delete, B.login_name, B.user_name, B.card, B.parent_id
     from business A inner join users B on A.user_id = B.id
     <where>
-      B.is_delete = 0 and A.is_delete = 0 and A.buy_status = 1 and A.check_status = 2
+      B.is_delete = 0 and A.is_delete = 0 and A.buy_status != 0 and A.check_status = 2
       <if test="buyType != null">
         and A.buy_type = #{buyType,jdbcType=INTEGER}
       </if>
@@ -409,10 +409,19 @@
       </if>
     </where>
   </select>
+  <select id="countBusinessUserWaitOrOut" parameterType="com.axcc.model.BusinessUser" resultType="java.lang.Integer">
+  select count(A.id) from business A inner join users B on A.user_id = B.id
+    <where>
+      B.is_delete = 0 and A.is_delete = 0 and A.buy_status != 0
+      <if test="buyType != null">
+          and A.buy_type = #{buyType,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
   <select id="countBusinessUserByBean" parameterType="com.axcc.model.BusinessUser" resultType="java.lang.Integer">
     select count(A.id) from business A inner join users B on A.user_id = B.id
     <where>
-      B.is_delete = 0 and A.is_delete = 0 and A.buy_status = 1
+      B.is_delete = 0 and A.is_delete = 0
       <if test="userId != null">
         and A.user_id = #{userId,jdbcType=INTEGER}
       </if>

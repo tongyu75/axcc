@@ -33,6 +33,8 @@ public interface BusinessDao {
     /**管理员登录，获取会员申请列表*/
     List<BusinessUser> listApplyUserByBean(BusinessUser bean);
 
+    int countBusinessUserWaitOrOut(BusinessUser bean);
+
     int countApplyUserByBean(BusinessUser bean);
 
     List<Map<String,Object>> listAllUserByBean(BusinessUser bean);

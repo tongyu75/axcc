@@ -445,8 +445,8 @@ public class UsersController {
         //查询条件，buyType:购车类型，1:10万车型，2:20万车型；3:30万车型；5:50万车型
         BusinessUser bean = new BusinessUser();
         bean.setBuyType(buyType);
-        //记录查询总数
-        int count = businessService.countBusinessUserByBean(bean);
+        //记录查询总数(排队中、已出车)
+        int count = businessService.countBusinessUserWaitOrOut(bean);
         //查询记录
         List<BusinessUser> lstBusinessUser = businessService.listBusinessUser(bean,pageNum,pageSize);
         result.put("code",BaseResult.SUCCESS_CODE);
@@ -890,6 +890,7 @@ public class UsersController {
         if(!"".equals(phone) || ""!=phone) {
             bean.setLoginName(phone);
         }
+        bean.setBuyStatus(0);
         bean.setCheckStatus(1);
         // 查询记录总条数
         int count = businessService.countBusinessUserByBean(bean);

@@ -81,6 +81,11 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
+    public int countBusinessUserWaitOrOut(BusinessUser bean) {
+        return BusinessDao.countBusinessUserWaitOrOut(bean);
+    }
+
+    @Override
     public int countBusinessUserByBean(BusinessUser bean) {
         return BusinessDao.countBusinessUserByBean(bean);
     }

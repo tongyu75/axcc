@@ -306,16 +306,16 @@
     SELECT IF (SUM(
 		CASE A.`level`
 		WHEN 1 THEN
-			A.buy_money * 0.05
+			A.buy_money * 0.1
 		ELSE
-			A.buy_money * 0.03
+			A.buy_money * 0.02
 		END
 	) IS NULL, 0, SUM(
 		CASE A.`level`
 		WHEN 1 THEN
-			A.buy_money * 0.05
+			A.buy_money * 0.1
 		ELSE
-			A.buy_money * 0.03
+			A.buy_money * 0.02
 		END
 	)) sumMoney
     FROM users_relate A
