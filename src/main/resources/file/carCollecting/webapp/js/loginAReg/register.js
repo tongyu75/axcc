@@ -78,7 +78,6 @@
 			data:phoneNum,
 			dataType:"JSON",
 			crossDomain: true,
-			async:false,
 			xhrFields: {withCredentials: true},
 			success:function(result){
 				//$(".zc_btn").prop("disabled",false);
@@ -90,17 +89,17 @@
 						data:phoneNumL,
 						dataType:"JSON",
 						crossDomain: true,
-						async: false,
-			            xhrFields: {withCredentials: true},
+			            xhrFields: {withCredentials: true},                        
 						success:function(result){
 							//$(".zc_btn").prop("disabled",false);
 							console.log(result);
 							if(result.msg == "SUCCESS"&&result.info !=null){
-
+						        
 						          alert("号码已经注册");
 						          $(".mobile1").val("")
 						          return false;
 						    }else if(result.info ==null){
+						    	
 						    	 //注册
 						    	 var regData={};
 									regData.phone=mobile1;
@@ -114,25 +113,21 @@
 										url:url+"/user",
 										data:regData,
 										crossDomain: true,
-										async: false,
 			                            xhrFields: {withCredentials: true},
 										success:function(result1){
 											console.log(result1)
 											console.log(result1.msg);
 											if(result1.msg =="SUCCESS"){
-													if(result1.code != 3) {
-														alert("注册成功");
-														location.href="login.html?loginName="+mobile1;
-													}
-
-											} else{
+													alert("注册成功");
+													location.href="login.html?loginName="+mobile1;
+											}else{
 												Errfun1(result1.msg);
 												if(result1.code=='2'){
 													$(".code1").val("")
 												}
 											}
 										}
-									})
+									})		
 						    }
 					     }
 					})
