@@ -205,7 +205,7 @@
 					<resource>
 						<directory>src/main/resources</directory>
 						<includes>
-							<include>application-prod.yml</include>
+							<include>application-${profileActive}.yml</include>
 						</includes>
 					</resource>
 				</resources>
@@ -217,7 +217,16 @@
 		<!--生成class文件时包含resources下的资源文件-->
 		<resources>
 			<resource>
+				<!-- 是否使用过滤器 如果不填写的话application.yml中的@@不起作为，服务启动时报错-->
+				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources/lib</directory>
+				<targetPath>BOOT-INF/lib/</targetPath>
+				<includes>
+					<include>**/*.jar</include>
+				</includes>
 			</resource>
 		</resources>
 		<plugins>
