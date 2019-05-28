@@ -215,7 +215,7 @@
 
 	<build>
 		<!--显示的打包后的jar包名称，如果不加显示的工程名+版本号了(axcc-0.0.1-SNAPSHOT.jar)-->
-		<finalName>value_api</finalName>
+		<finalName>axcc</finalName>
 		<!--生成class文件时包含resources下的资源文件-->
 		<resources>
 			<resource>
