@@ -27,6 +27,7 @@ public class MessageController {
     @RequestMapping(value="/insertMessageByBean",method = RequestMethod.POST)
     public Map<String,Object> insertMessageByBean(@RequestParam(value="title",required=true) String title,
                                                   @RequestParam(value="contents",required = true) String contents){
+        System.out.println("AAAAAA");
         logger.info("insertMessage---------start");
         //返回值
         Map<String,Object> result;
