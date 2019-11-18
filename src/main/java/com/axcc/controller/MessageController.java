@@ -28,7 +28,7 @@ public class MessageController {
     public Map<String,Object> insertMessageByBean(@RequestParam(value="title",required=true) String title,
                                                   @RequestParam(value="contents",required = true) String contents){
         System.out.println("AAAAAA");
-        System.out.println("BBBBBB");
+        System.out.println("BBBBBB2");
         logger.info("insertMessage---------start");
         //返回值
         Map<String,Object> result;
