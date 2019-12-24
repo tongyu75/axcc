@@ -29,6 +29,7 @@ public class MessageController {
                                                   @RequestParam(value="contents",required = true) String contents){
         System.out.println("AAAAAA");
         System.out.println("BBBBBB1");
+        System.out.println("CCCCCC");
         logger.info("insertMessage---------start");
         //返回值
         Map<String,Object> result;
