@@ -31,6 +31,7 @@ public class MessageController {
         System.out.println("BBBBBB1");
         System.out.println("CCCCCC");
         System.out.println("DDDDDD");
+        System.out.println("EEEEEE");
         logger.info("insertMessage---------start");
         //返回值
         Map<String,Object> result;
