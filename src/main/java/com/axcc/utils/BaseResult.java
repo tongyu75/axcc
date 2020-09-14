@@ -8,10 +8,10 @@ import java.util.Map;
  */
 public class BaseResult {
     /* 短信accessKeyId */
-    public static final String ACCESSKEYID = "LTAI02G6zPxy8yCS";
+    public static final String ACCESSKEYID = "XXXXXXX";
 
     /* 短信accessKeySecret */
-    public static final String ACCESSKEYSECRET = "C5vc64sQSG6xlvKTfOVNLqGzZEJEx9";
+    public static final String ACCESSKEYSECRET = "XXXXXXXXX";
 
     /* 短信签名 */
     public static final String SIGNNAME = "亿宏顺达";
